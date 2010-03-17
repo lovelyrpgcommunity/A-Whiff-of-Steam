@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- This document was created with Syntext Serna Free. --><!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "docbookV4.5/docbookx.dtd" [
+]>
+<book>
+  <bookinfo>
+    <title>A Whiff of Steam: Game Design Document</title>
+    <subtitle>LövelyRPG project</subtitle>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="authors.xml" encoding="XML"/>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="legal.xml" encoding="XML"/>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="revision.data" encoding="XML"/>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="history.data" encoding="XML"/>
+  </bookinfo>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="design/design.xml" encoding="XML"/>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="appendices/appendices.xml" encoding="XML"/>
+</book>

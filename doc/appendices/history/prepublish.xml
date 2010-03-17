@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<section>
+  <title>Changes before project publishing</title>
+  <para>It took two months from project start, to moment when we are ready to publish project page on web. Up to this point, it was mostly lots of work related to deciding goals, concept and focus of game.</para>
+  <section>
+    <title>Early History</title>
+    <para>Project began on 17th-18th January 2010, during these two days it grown from zero to stage of choosing design goals. It was <emphasis>napco</emphasis>&apos;s idea to create an Role-playing Game, as stated by him <emphasis>Final Fantasy VI</emphasis>-like. Same day <emphasis>giniu</emphasis> stated to like the idea to some extent, but we should concentrate on doing something new and fresh, not another clone - but we can stick with idea of making RPG (Role Playing Game). Next day <emphasis>napco</emphasis> agreed and <emphasis>giniu</emphasis> proposed to use <emphasis>10 questions to focus</emphasis> methodology, where key decisions enclosed in 10 important questions answered by the whole community.</para>
+    <para>Two out of ten questions were turned into assumptions, it was assumed that designing would start by choosing genre, and genre would be RPG. It was small assumption to make it keep in original idea.</para>
+    <para>Still on 18th January, first of eight remaining questions was asked publicly.</para>
+  </section>
+  <section>
+    <title>Road to design goals</title>
+    <para>First question asked on 18th January had to decide setting we would work in. After few days, on 22th, by 9 out of 16 votes it was decided that we will use steampunk setting. Next question, asked on 22th January and avaible to vote till 2nd February was about key gameplay elements. Three key gameplay elements were chosen, first and most important, exploration picked by 13 out of 20 people. Story was runner up with 11 out of 20 votes and finally last gameplay element that made it in was non player characters interactions with 10 out of 20 votes. This question also was last to be asked using forum features, following questions were asked using separate third party polling tool.</para>
+    <para>From 2nd to 8th February question about emotions that we want out game to trigger in hero or player was on, results included surprise with 7 out of 11 votes, rejection with 5 out of 11 votes and hope with 4 out of 11 votes. Following two questions were asked in parallel, from 8th to 11th February. During this stage by 5 of 11 votes it was chosen, that magic and technology are in full fusion, with one described in terms of another, and with 5 out of 10 votes, that we would use separate detailed tactical view for fights and consistent view for travel and location exploration, with parts of large world randomly generated.</para>
+    <para>Next two questions again asked in parallel were on from 11th to 14th February. During this stage it was decided on visual stylistics, i.e. that we would use eastern flavoured realistic comics style. 4 out of 8 people voted for it. At same time, there was question about view projection that would be used for travel and location exploration, again 4 out of 8 people voted for one option, the trimetric projection.</para>
+    <para>The last and one of the most important questions was asked on 14th February and was on for whole week, till 21th February. Question was about proposed beginning of storyline, and with 4 out of 10 votes it was decided, to go with story based on amnesia, i.e. &quot;Hero awakes for short while on train crash site, he manage to notice he is highly wounded and someone is trying to rob him. Soon he looses consciousness again to wake up in hospital with amnesia. He is tormented with bad dreams, soon he starts his seek for his own past, uncovering his criminal deeds conflicting with his good subconscious side. His dreams become longer and more clear - seems that he was one that caused train crash. Police starts to take interest in him, but he still cannot remember anything other than causing the crash. Was it really him who did it and is there something behind it?&quot;</para>
+    <para>To sum up, design goals were decided on 21th February, and current form is defined.</para>
+    <section>
+      <title>Design goals</title>
+      <para>We are making 2D RPG game in steampunk setting in a world, where magic is fully fused with technology (magic described in terms of technology or other way around). In hero or player, during and after playing the game we want to trigger emotions like surprise, rejection and hope. Most important role in gameplay building will lead exploration, NPC interactions and story. We will use separate detailed tactical view for fights, but travel and location exploration will use consistent view using trimetric projection, because of size of the world part of it will be automatically generated. The general stylistics of game will be eastern flavoured realistic comics style. Hero awakes for short while on train crash site, he manage to notice he is highly wounded and someone is trying to rob him. Soon he looses consciousness again to wake up in hospital with amnesia. He is tormented with bad dreams, soon he starts his seek for his own past, uncovering his criminal deeds conflicting with his good subconscious side. His dreams become longer and more clear - seems that he was one that caused train crash. Police starts to take interest in him, but he still cannot remember anything other than causing the crash. Was it really him who did it and is there something behind it?</para>
+    </section>
+  </section>
+  <section>
+    <title>From goals to focus</title>
+    <para>After taking short break, followed by massive amount of work and design goals extensions, on 4th March focus was posted for voting.</para>
+    <section>
+      <title>Focus proposition 1</title>
+      <para>THEGAME is a 2D role-playing game settled in steam-punk world. The magic is fully fused with the technology. Technology is explained in terms of magic and considered as one of the fields of magical studies.</para>
+      <para>The view in the game will be divided in two groups - separate detailed tactical view for fights, and consistent view using trimetric projection for travel and location exploration, as seen in Fallout 1 and 2 or Sim City 4. Main locations, like cities, dungeons, quest related places will be created by artists and the rest of the world, i.e. wilderness, is going to be automatically generated, because of size of the world. The general stylistics of game will be eastern ﬂavoured realistic comics style, slightly taking from Chinese Manhua comics tradition.</para>
+      <para>Hero has access to every part of a game world and can travel freely. But it doesn&apos;t mean that he has to walk everywhere. He will be able to choose between using public means of transport, like trains, traveling on foot between artists&apos; created locations or using fast travel option. Fast travel option is available only by using road signs, showing directions between locations connected by roads. Fast traveling is risky, hero and/or his team can randomly encounter hostile creatures. Also not all locations are accessible in fast travel mode, the country is not urbanised enough to get everywhere by train. The protagonist must travel on foot to reach some essential parts or hidden, secluded places. This, in conjunction with size of the world, will encourage player to explore.</para>
+      <para>Another important feature of THEGAME are interactions with NPCs. Hero will have a chance to build a complex interpersonal relationships, while it won&apos;t be easy. He will have to prove being reliable first. The way the hero dresses will have an impact on people&apos;s reactions. They will be more eager to share their thoughts and troubles with wealthy mysterious stranger than the poor one. Generosity also affects their attitude. Protagonist&apos;s lies, while discovered, change the trust people have in him. Hero may team up with someone to complete the task, but it won&apos;t mean that that person will follow him, everywhere he goes. In the game world people have their own lives as well and they won&apos;t sacrifice everything so easily. Unless he proofs them being somehow useful, they won&apos;t support him. Creating such huge number of various personalities wouldn&apos;t be possible, unless minor characters will have generated personalities. For generating personalities we will use personality archetypes, zodiac stereotypes and enneagram, for short time attitude and feelings, we will use biorhythms.</para>
+      <para>Game&apos;s story is built around mysterious events. Protagonist awakes near the crashed train, he&apos;s severe wounded and can&apos;t move but notices that someone is trying to rob him. Soon he looses consciousness again and wakes up in hospital with amnesia. The only hint about his past he has is a note with name and phone number in his pocket. He is tormented with bad dreams. Soon he starts looking for his own past, uncovering his criminal deeds conflicting with his good subconscious side. His dreams become longer and more clear - seems that he was the one who caused the train crash. Police starts to investigate the case and ﬁnds that he was involved in it, while he still cannot remember anything except for causing the crash. The truth won&apos;t be easy to discover.</para>
+      <para>The country, where action takes place, is isolated from rest of the world. It is governed by Community of the Faithful, church led by orthodox mages. The government is afraid that the world&apos;s order is about to change, and carefully watches every revolutionary move. For many years technology, commonly considered as equal to magical science, has been inferior to magic, in fact. But some people fascinated by the power of technology tried to separate those two fields of science. Governors are afraid that technology can eventually became more popular than magic, and people will no longer accept the control and authority of Community of the Faithful. Special services invigilate citizens and report suspicious activities. Single citizen is not aware of the scale of invigilation until he or she is being watched and loses control over his or her life.</para>
+      <para>The hero&apos;s story, although important to him, doesn&apos;t play a big role in the world order, it is just a part of larger picture. It&apos;s going to have an influence on the behaviour of the people struggling with their own concerns but not on the large-scale world events themselves.</para>
+      <para>THEGAME will strongly affect on players&apos; emotions. Story totally supports emotions that we want to show - rejection, surprise, yet still some hope. The protagonist will be cast out of the society and scared to discover his own past, the past of cruel and heartless man.</para>
+      <para>Fights will not be key feature of the game, but will be present. There will be used timed turn based system and action points, that can be spend on movement or other actions. Most skills will evolve by training, the more player use certain skills the better they will get. But there will be more skills than those related to ﬁghts, there will be also plenty of practical skills, and what’s new, social skills. All built to same level of complexity.</para>
+      <figure>
+        <title>Proposed stylistics concept</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="artwork/concept1.png" width="4.4cm"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+    <section>
+      <title>Community reaction</title>
+      <para>This time community was able to vote in Yes/No poll, but every &quot;No&quot; vote must had been given reasons, to make changes possible. For convenience community couldn&apos;t vote against something that had already been decided in process of preparing design goals. Also, people who didn&apos;t have anything against it were asked to vote for it, because if they don&apos;t care what they will do, they will be happy to do what we proposed.</para>
+      <para>At this stage, due to uncertainty, if focus would change or not, game hadn&apos;t given name yet, setting name was postponed to after focus is accepted. There was 7 votes for proposed focus and 0 votes against it. Following comments were made by community:</para>
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>willurd</emphasis>, 4th March, voted: yes.</para>
+          <para><emphasis>I like where this is going. I just have a few thoughts.</emphasis></para>
+          <para><emphasis>I like that NPCs respond to things like lies the hero tells and the clothes he is wearing. The usefulness of that can be illustrated in an example:</emphasis></para>
+          <para><emphasis>After the hero wakes up in the hospital after the train crash he&apos;ll be setting out to find answers. He will soon find that not too many people want to talk to him because his clothes are dirty and torn. He&apos;ll have to find new clothes before he&apos;ll be able to get any answers from anybody that might know something. He was robbed just after the train crash, so he won&apos;t have any money. This quest will require him to get money and then purchase clothes, or do something for someone in return for clothes. This job he&apos;ll have to do could be any number of things: the tried-and-true &quot;rid our village of some monsters&quot; job, the &quot;deliver this package to some person&quot; job, the &quot;deliver this message to another town&quot; job, etc. The point is that a smart AI opens up storyline possibilities.</emphasis></para>
+          <para><emphasis>As far as the train crash goes, maybe this is implied by the fact that the hero was on a train, but I think it&apos;s crucial to the story that the city he&apos;s in when he wakes up is a place he&apos;s never been to. That way no one (probably) will know him. The story will have to advance somehow, so maybe somebody in that city will know something about the crash or send him on a quest that will &quot;luckily&quot; lead him to information about the crash and about who he his. If that&apos;s what happens, our hero might soon discover that nothing is coincidence, that somebody is out there pulling the strings.</emphasis></para>
+          <para><emphasis>Of course, that&apos;s just a thought. I&apos;m trying to take in everything that has been discussed up until this point. The focus doc mentioned something about the hero&apos;s story playing a non-critical role in the overarching story of the game world, which might negate the previous idea.</emphasis></para>
+          <para><emphasis>I also like the fact that the hero has nightmares. If we have the resources, we could use that to play, for instance, moving comic-style animated sequences that would serve to further the story, give more &quot;character&quot; to the characters, and give us a chance to show the world in a more vibrant manor.</emphasis></para>
+          <para><emphasis>I do have a couple of questions as well. You said the hero has access to every part of the game world, but what makes up that game world? You mentioned that the country where the action takes place is secluded from the rest of the world. Does that mean that no other countries beside that one will play a part in this game? Or has that not been decided yet?</emphasis></para>
+          <para><emphasis>Also, the doc says that battles will not be an important part of the game. I&apos;m wondering, then, what is their purpose for existing in the game at all? I&apos;m not suggesting that you can&apos;t have battles in games without them playing a crucial role. I&apos;m just wondering what role they play in &quot;this&quot; game.</emphasis></para>
+          <para><emphasis>My biggest question though is, what really is the point of this game/story? Is it to discover who you once were? Is it to stop some sort of conspiracy (the Community of the Faithful comes to mind...)? Is it to right the wrongs of your past? Is it let go of your past and find a new &quot;you&quot;, maybe by helping the people around you? In other words, what is going to keep the player playing? What is their motivation?</emphasis></para>
+          <para><emphasis>Anyway, I voted yes.</emphasis></para>
+        </listitem>
+      </itemizedlist>
+      <para>On 8th March, focus was accepted in current form, yet based on community comments and late ideas, we decided to include following, non-breaking changes and additions:<itemizedlist>
+          <listitem>
+            <para>nobody knows hero, at least in starting regions,</para>
+          </listitem>
+          <listitem>
+            <para>dreams will be visualised as comic strips,</para>
+          </listitem>
+          <listitem>
+            <para>action will take place on large island or small continent,</para>
+          </listitem>
+          <listitem>
+            <para>obviously fights aren&apos;t key gameplay feature, but they play role in keeping whole game more realistic and balanced, also provide more optional stuff to do while traveling,</para>
+          </listitem>
+          <listitem>
+            <para>added automatic conflict resolution as option for player.</para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+  </section>
+  <section>
+    <title>Naming game</title>
+    <para>On 8th March project naming was initiated. This time, no poll with ready made propositions was made to encourage creativity in people gathered around project. Until 11th March anyone can propose any number of proposed names of project, from which designers pick those that will go into poll and be voted for. Unfortunately no community propositions were made, so on 11th March poll with designers ideas for name was posted.</para>
+    <para>There were following propositions:<itemizedlist>
+        <listitem>
+          <para>Grimoire of Steam</para>
+        </listitem>
+        <listitem>
+          <para>Concealed</para>
+        </listitem>
+        <listitem>
+          <para>Crusade of the Faithful</para>
+        </listitem>
+        <listitem>
+          <para>Steampunked</para>
+        </listitem>
+      </itemizedlist></para>
+    <para>After publishing designer proposed names, 6 more were proposed by community:<itemizedlist>
+        <listitem>
+          <para>A Whiff of Steam (<emphasis>Robin</emphasis>)</para>
+        </listitem>
+        <listitem>
+          <para>Unraveled (<emphasis>willurd</emphasis>)</para>
+        </listitem>
+        <listitem>
+          <para>Fray (<emphasis>willurd</emphasis>)</para>
+        </listitem>
+        <listitem>
+          <para>In the Fray (<emphasis>willurd</emphasis>)</para>
+        </listitem>
+        <listitem>
+          <para>The Flying Scotsman (<emphasis>giniust</emphasis>)</para>
+        </listitem>
+        <listitem>
+          <para>Flash&apos;n&apos;Steam (<emphasis>giniust</emphasis>)</para>
+        </listitem>
+      </itemizedlist></para>
+    <para>Poll stayed open untill 13th March and <emphasis role="italic">A Whiff of Steam</emphasis> was selected with 5 out of 9 votes in total.</para>
+  </section>
+</section>

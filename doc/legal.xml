@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<legalnotice>
+  <title>Legal information</title>
+  <para>This game design documentation is part of LövelyRPG project, community project that aims to create first made and owned by whole LövelyRPG community game of that size. The LövelyRPG community is built around of community of Löve 2D engine. For full definition of The LövelyRPG Community which owns this project, see <xref linkend="appendix.license"/>, <xref linkend="section.license.community"/>.</para>
+  <para>LövelyRPG project (produced game, parts of produced game made especially for this project and this documentation itself) is licensed for The LövelyRPG Community under <emphasis>Lovely Public Community License version 1.3f</emphasis>. See <xref linkend="appendix.license"/> for full license text.</para>
+  <para>In rest of this document, game design documentation will be referred to as &quot;documentation&quot;, LövelyRPG project will be referred to as &quot;project&quot; and The LövelyRPG Community will be referred to as &quot;community&quot;, unless explicitly stated otherwise.</para>
+</legalnotice>

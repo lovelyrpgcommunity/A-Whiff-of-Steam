@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<appendix id="appendix.history">
+  <title>Project history</title>
+  <para>Here is place for whole project history to date. We hope it&apos;s valuable to write down here every important decision for future generations.</para>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="inspirations.xml" encoding="XML"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="prepublish.xml" encoding="XML"/>
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="prototypes.xml" encoding="XML"/>
+</appendix>
