@@ -23,8 +23,8 @@ function FSM:pushState (state)
 		self.state:idleIn(self.ref)
 	end
 	
-	state.soft = true
 	table.insert(self.softStates, state)
+	state.soft = true
 	state:enter(self.ref)
 end
 
@@ -34,8 +34,8 @@ function FSM:popState ()
 	end
 	
 	local popped = table.remove(self.softStates)
-	popped.soft = false
 	popped:exit(self.ref)
+	popped.soft = false
 	
 	if #self.softStates > 0 then
 		local last = table.last(self.softStates)
@@ -45,6 +45,8 @@ function FSM:popState ()
 		self.state:setIdle(false)
 		self.state:idleOut(self.ref)
 	end
+	
+	return popped
 end
 
 function FSM:update (...)

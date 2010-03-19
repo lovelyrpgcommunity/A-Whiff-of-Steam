@@ -1,7 +1,7 @@
 require("lib/essential")
 require("lib/states/fsm")
 
-Game = class("Game", Proxy)
+Game = class("Game")
 
 function Game:initialize (states)
 	self.fsm = FSM:new(self)
@@ -38,7 +38,7 @@ end
 
 function Game:popState ()
 	if not self.fsm then return end
-	self.fsm:popState()
+	return self.fsm:popState()
 end
 
 function Game:mousepressed (x, y, button)

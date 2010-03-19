@@ -4,6 +4,7 @@ require("lib/states/state")
 MapState = class("MapState", State)
 
 function MapState:initialize ()
+	-- this is necessary because State.initialize initializes some properties
 	super.initialize(self)
 end
 
