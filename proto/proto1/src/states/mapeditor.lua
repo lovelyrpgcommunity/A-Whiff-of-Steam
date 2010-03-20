@@ -35,6 +35,8 @@ function MapEditorState:initialize ()
 	self.canDrag = false
 	self.mdp = nil -- mouse down position
 	
+	self.scale = 1
+	
 	self.map = "map1"
 	love.filesystem.load(string.format("resources/maps/%s.lua",self.map))()
 end
@@ -44,7 +46,7 @@ function MapEditorState:update (game, dt)
 	if self.canDrag and self.mdp then
 		local mx, my = love.mouse.getPosition()
 		local mp = Vector2:new(mx, my)
-		self.mapOffset = self.mapOffset - (self.mdp - mp)
+		self.mapOffset = self.mapOffset - ((self.mdp - mp) / self.scale)
 		self.mdp = mp
 	else
 		local move = (love.graphics.getWidth() / 2) * dt
@@ -64,6 +66,8 @@ function MapEditorState:update (game, dt)
 end
 
 function MapEditorState:draw (game)
+	love.graphics.push()
+	love.graphics.scale(self.scale)
 	local mx, my = love.mouse.getPosition()
 	for i = 1,self.mapsize.width do
 		for j = 1,self.mapsize.length do
@@ -115,6 +119,7 @@ function MapEditorState:draw (game)
 			end
 		end
 	end
+	love.graphics.pop()
 	
 	if self.displayHelp then
 		self:drawControls(game)
@@ -123,7 +128,7 @@ end
 
 function MapEditorState:drawControls (game)
 	love.graphics.setColor(255,255,255,80)
-	love.graphics.rectangle("fill",10,10,200,202)
+	love.graphics.rectangle("fill",10,10,200,222)
 	love.graphics.setColor(255,255,255,255)
 	love.graphics.print("Toggle help: t",15,25)
 	
@@ -140,16 +145,22 @@ function MapEditorState:drawControls (game)
 	love.graphics.print("   4 - Stone (solid)",15,175)
 	love.graphics.print("   5 - Water (solid)",15,190)
 	love.graphics.print("   6 - Grass (solid)",15,205)
+	
+	love.graphics.print("Scale: -/+",15,225)
+	
+	love.graphics.printf(string.format("Scale: %s%%", math.floor(100*self.scale)), 10, 25,
+		love.graphics.getWidth()-20, "right")
 end
 
 function MapEditorState:tileIsInView (tx, ty)
-	local t = MapEditorState.IN_VIEW_THRESHOLD
-	local tw = MapEditorState.TILE_WIDTH
-	local th = MapEditorState.TILE_HEIGHT
+	local s = self.scale
+	local t = MapEditorState.IN_VIEW_THRESHOLD/s
+	local tw = MapEditorState.TILE_WIDTH/s
+	local th = MapEditorState.TILE_HEIGHT/s
 	local cx, cy = self:tileToCoords(tx, ty)
 	local w = love.graphics.getWidth()
 	local h = love.graphics.getHeight()
-	return cx >= (-t-tw) and cy >= (-t-th) and cx <= (w+t) and cy <= (h+t)
+	return cx >= (-t-tw) and cy >= (-t-th) and cx <= ((w/s)+t) and cy <= ((h/s)+t)
 end
 
 function MapEditorState:isSelectedTile (x, y)
@@ -177,6 +188,9 @@ end
 
 -- This function is gross. Gotta find a cleaner way of doing this.
 function MapEditorState:coordsIntersectWithTile (px, py, cx, cy)
+	local s = self.scale
+	cx = cx / s
+	cy = cy / s
 	local mp = MapEditorState.TILE_MIDPOINT
 	local t = MapEditorState.TILE_TOP_VERTEX
 	local r = MapEditorState.TILE_RIGHT_VERTEX
@@ -214,16 +228,18 @@ function MapEditorState:mousereleased (game, x, y, button)
 end
 
 function MapEditorState:keypressed (game, key, unicode)
+	print(key)
 	if key == "escape" then
 		love.event.push("q")
-	end
-	if key == "t" then
+	elseif key == "t" then
 		self.displayHelp = not self.displayHelp
-	end
-	if key == " " then
+	elseif key == " " then
 		self.canDrag = true
-	end
-	if self.selectedTile and MAP then
+	elseif key == "=" then
+		self.scale = self.scale + 0.10
+	elseif key == "-" then
+		self.scale = self.scale - 0.10
+	elseif self.selectedTile and MAP then
 		local s = self.selectedTile
 		if key == "backspace" then
 			if MAP and MAP[s.x] then
