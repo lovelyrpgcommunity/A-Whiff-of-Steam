@@ -31,6 +31,7 @@ function MapEditorState:initialize ()
 		love.graphics.newImage("resources/images/tiles/stone_plain.png"),
 		love.graphics.newImage("resources/images/tiles/grass_plain.png"),
 	}
+	self.displayControls = true
 	self.editorEnabled = false
 	self.canDrag = false
 	self.mdp = nil -- mouse down position
@@ -100,7 +101,9 @@ function MapEditorState:draw (game)
 	end
 	love.graphics.pop()
 	
-	self:drawControls(game)
+	if self.displayControls then
+		self:drawControls(game)
+	end
 end
 
 function MapEditorState:drawControls (game)
@@ -108,12 +111,12 @@ function MapEditorState:drawControls (game)
 		love.graphics.setColor(255,255,255,80)
 		love.graphics.rectangle("fill",10,10,200,187)
 		love.graphics.setColor(255,255,255,255)
-		love.graphics.print("Turn editor off: e",15,25)
-		love.graphics.print("Move: arrow keys",15,45)
-		love.graphics.print("     or: space + mouse drag",14,60)
-		love.graphics.print("Quit: escape",15,80)
+		love.graphics.print("Toggle help: h",15,25)
+		love.graphics.print("Toggle editor: e",15,45)
+		love.graphics.print("Move: arrow keys",15,65)
+		love.graphics.print("     or: space + mouse drag",14,80)
 		love.graphics.print("Edit: click a tile and press",15,100)
-		love.graphics.print("   backspace - remove tile",15,115)
+		love.graphics.print("   `/backspace - remove tile",15,115)
 		love.graphics.print("   1 - Stone (textured)",15,130)
 		love.graphics.print("   2 - Grass (textured)",15,145)
 		love.graphics.print("   3 - Stone (solid)",15,160)
@@ -121,11 +124,12 @@ function MapEditorState:drawControls (game)
 		love.graphics.print("Scale: -/+",15,190)
 	else
 		love.graphics.setColor(255,255,255,80)
-		love.graphics.rectangle("fill",10,10,200,57)
+		love.graphics.rectangle("fill",10,10,200,77)
 		love.graphics.setColor(255,255,255,255)
-		love.graphics.print("Turn editor on: e",15,25)
-		love.graphics.print("Move: arrow keys",15,45)
-		love.graphics.print("     or: space + mouse drag",14,60)
+		love.graphics.print("Toggle help: h",15,25)
+		love.graphics.print("Toggle editor: e",15,45)
+		love.graphics.print("Move: arrow keys",15,65)
+		love.graphics.print("     or: space + mouse drag",14,80)
 	end	
 	
 	love.graphics.printf(string.format("Scale: %s%%", math.floor(100*self.scale)), 10, 25,
@@ -216,8 +220,8 @@ function MapEditorState:mousereleased (game, x, y, button)
 end
 
 function MapEditorState:keypressed (game, key, unicode)
-	if key == "escape" then
-		love.event.push("q")
+	if key == "h" then
+		self.displayControls = not self.displayControls
 	elseif key == "e" then
 		self.editorEnabled = not self.editorEnabled
 	elseif key == "=" then
@@ -232,7 +236,9 @@ function MapEditorState:keypressed (game, key, unicode)
 		self.canDrag = true
 	elseif self.selectedTile and MAP then
 		local s = self.selectedTile
-		if key == "backspace" then
+		if key == "`" or key == "delete" then
+			love.event.push("kp", "backspace")
+		elseif key == "backspace" then
 			if MAP and MAP[s.x] then
 				MAP[s.x][s.y] = nil
 			end
