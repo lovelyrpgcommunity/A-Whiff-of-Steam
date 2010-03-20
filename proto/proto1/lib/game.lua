@@ -56,9 +56,9 @@ function Game:keypressed (key, unicode)
 	self.fsm:keypressed(key, unicode)
 end
 
-function Game:keyreleased (key, unicode)
+function Game:keyreleased (key)
 	if not self.fsm then return end
-	self.fsm:keyreleased(key, unicode)
+	self.fsm:keyreleased(key)
 end
 
 function Game:joystickpressed (joystick, button)

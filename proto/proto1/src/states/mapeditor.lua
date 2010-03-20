@@ -258,7 +258,7 @@ function MapEditorState:keypressed (game, key, unicode)
 	end
 end
 
-function MapEditorState:keyreleased (game, key, unicode)
+function MapEditorState:keyreleased (game, key)
 	if key == " " then
 		self.canDrag = false
 		self.mdp = nil

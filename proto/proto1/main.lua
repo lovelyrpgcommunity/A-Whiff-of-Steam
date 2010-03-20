@@ -40,6 +40,6 @@ function love.keypressed (key, unicode)
 	game:keypressed(key, unicode)
 end
 
-function love.keyreleased (key, unicode)
-	game:keyreleased(key, unicode)
+function love.keyreleased (key)
+	game:keyreleased(key)
 end
