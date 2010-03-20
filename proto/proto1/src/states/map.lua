@@ -19,5 +19,5 @@ end
 function MapState:keypressed (game, key, unicode)
 end
 
-function MapState:keypressed (game, key, unicode)
+function MapState:keyreleased (game, key, unicode)
 end
