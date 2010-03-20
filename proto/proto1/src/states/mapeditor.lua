@@ -12,6 +12,8 @@ MapEditorState.TILE_TOP_VERTEX = Vector2:new(91, 0)
 MapEditorState.TILE_RIGHT_VERTEX = Vector2:new(154, 46)
 MapEditorState.TILE_BOTTOM_VERTEX = Vector2:new(62, 69)
 MapEditorState.TILE_LEFT_VERTEX = Vector2:new(0, 22)
+MapEditorState.MAX_SCALE = 2.0
+MapEditorState.MIN_SCALE = 0.1
 
 function MapEditorState:initialize ()
 	-- this is necessary because State.initialize initializes some properties
@@ -19,17 +21,15 @@ function MapEditorState:initialize ()
 	
 	self.mapsize = {width=20, length=20} -- the number of tiles wide and long
 	
-	self.mapOffset = Vector2:new(400, 100)
+	self.mapOffset = Vector2:new(480, 120)
 	self.images = {
-		gridsquare = love.graphics.newImage("resources/mapeditor/images/gridsquare.gif")
+		gridsquare = love.graphics.newImage("resources/mapeditor/images/gridsquare.png")
 	}
 	self.tiles = {
-		love.graphics.newImage("resources/images/tiles/stone_textured.gif"),
-		love.graphics.newImage("resources/images/tiles/water_textured.gif"),
-		love.graphics.newImage("resources/images/tiles/grass_textured.gif"),
-		love.graphics.newImage("resources/images/tiles/stone_plain.gif"),
-		love.graphics.newImage("resources/images/tiles/water_plain.gif"),
-		love.graphics.newImage("resources/images/tiles/grass_plain.gif"),
+		love.graphics.newImage("resources/images/tiles/stone_textured.png"),
+		love.graphics.newImage("resources/images/tiles/grass_textured.png"),
+		love.graphics.newImage("resources/images/tiles/stone_plain.png"),
+		love.graphics.newImage("resources/images/tiles/grass_plain.png"),
 	}
 	self.displayHelp = true
 	self.canDrag = false
@@ -128,7 +128,7 @@ end
 
 function MapEditorState:drawControls (game)
 	love.graphics.setColor(255,255,255,80)
-	love.graphics.rectangle("fill",10,10,200,222)
+	love.graphics.rectangle("fill",10,10,200,187)
 	love.graphics.setColor(255,255,255,255)
 	love.graphics.print("Toggle help: t",15,25)
 	
@@ -140,13 +140,11 @@ function MapEditorState:drawControls (game)
 	love.graphics.print("Edit: click a tile and press",15,100)
 	love.graphics.print("   backspace - remove tile",15,115)
 	love.graphics.print("   1 - Stone (textured)",15,130)
-	love.graphics.print("   2 - Water (textured)",15,145)
-	love.graphics.print("   3 - Grass (textured)",15,160)
-	love.graphics.print("   4 - Stone (solid)",15,175)
-	love.graphics.print("   5 - Water (solid)",15,190)
-	love.graphics.print("   6 - Grass (solid)",15,205)
+	love.graphics.print("   2 - Grass (textured)",15,145)
+	love.graphics.print("   3 - Stone (solid)",15,160)
+	love.graphics.print("   4 - Grass (solid)",15,175)
 	
-	love.graphics.print("Scale: -/+",15,225)
+	love.graphics.print("Scale: -/+",15,190)
 	
 	love.graphics.printf(string.format("Scale: %s%%", math.floor(100*self.scale)), 10, 25,
 		love.graphics.getWidth()-20, "right")
@@ -228,7 +226,6 @@ function MapEditorState:mousereleased (game, x, y, button)
 end
 
 function MapEditorState:keypressed (game, key, unicode)
-	print(key)
 	if key == "escape" then
 		love.event.push("q")
 	elseif key == "t" then
@@ -236,9 +233,13 @@ function MapEditorState:keypressed (game, key, unicode)
 	elseif key == " " then
 		self.canDrag = true
 	elseif key == "=" then
-		self.scale = self.scale + 0.10
+		if self.scale <= (MapEditorState.MAX_SCALE - 0.09) then
+			self.scale = self.scale + 0.1
+		end
 	elseif key == "-" then
-		self.scale = self.scale - 0.10
+		if self.scale >= (MapEditorState.MIN_SCALE + 0.09) then
+			self.scale = self.scale - 0.1
+		end
 	elseif self.selectedTile and MAP then
 		local s = self.selectedTile
 		if key == "backspace" then
