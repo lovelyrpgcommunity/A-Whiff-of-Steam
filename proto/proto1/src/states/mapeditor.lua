@@ -51,16 +51,20 @@ function MapEditorState:update (game, dt)
 	else
 		local move = (love.graphics.getWidth() / 2) * dt
 		if love.keyboard.isDown("up") then
-			self.mapOffset.y = self.mapOffset.y + move
+			self.mapOffset.x = self.mapOffset.x - move*1.5
+			self.mapOffset.y = self.mapOffset.y + move/2.7
 		end
 		if love.keyboard.isDown("down") then
-			self.mapOffset.y = self.mapOffset.y - move
+			self.mapOffset.x = self.mapOffset.x + move*1.5
+			self.mapOffset.y = self.mapOffset.y - move/2.7
 		end
 		if love.keyboard.isDown("left") then
 			self.mapOffset.x = self.mapOffset.x + move
+			self.mapOffset.y = self.mapOffset.y + move/1.34
 		end
 		if love.keyboard.isDown("right") then
 			self.mapOffset.x = self.mapOffset.x - move
+			self.mapOffset.y = self.mapOffset.y - move/1.34
 		end
 	end
 end
@@ -235,10 +239,22 @@ function MapEditorState:keypressed (game, key, unicode)
 	elseif key == "=" then
 		if self.scale <= (MapEditorState.MAX_SCALE - 0.09) then
 			self.scale = self.scale + 0.1
+			local s = self.scale
+			local w = love.graphics.getWidth()
+			local h = love.graphics.getHeight()
+			local d = math.abs(1-s)
+			self.mapOffset.x = self.mapOffset.x - math.floor(w*0.1)
+			self.mapOffset.y = self.mapOffset.y - math.floor(h*0.1)
 		end
 	elseif key == "-" then
 		if self.scale >= (MapEditorState.MIN_SCALE + 0.09) then
 			self.scale = self.scale - 0.1
+			local s = self.scale
+			local w = love.graphics.getWidth()
+			local h = love.graphics.getHeight()
+			local d = math.abs(1-s)
+			self.mapOffset.x = self.mapOffset.x + w*0.1/2*s
+			self.mapOffset.y = self.mapOffset.y + h*0.1/2*s
 		end
 	elseif self.selectedTile and MAP then
 		local s = self.selectedTile
