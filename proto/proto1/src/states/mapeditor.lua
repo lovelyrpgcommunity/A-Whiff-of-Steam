@@ -51,16 +51,16 @@ function MapEditorState:update (game, dt)
 	else
 		local move = (love.graphics.getWidth() / 2) * dt
 		if love.keyboard.isDown("up") then
-			self.mapOffset.y = self.mapOffset.y - move
-		end
-		if love.keyboard.isDown("down") then
 			self.mapOffset.y = self.mapOffset.y + move
 		end
+		if love.keyboard.isDown("down") then
+			self.mapOffset.y = self.mapOffset.y - move
+		end
 		if love.keyboard.isDown("left") then
-			self.mapOffset.x = self.mapOffset.x - move
+			self.mapOffset.x = self.mapOffset.x + move
 		end
 		if love.keyboard.isDown("right") then
-			self.mapOffset.x = self.mapOffset.x + move
+			self.mapOffset.x = self.mapOffset.x - move
 		end
 	end
 end
