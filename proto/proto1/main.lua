@@ -11,6 +11,7 @@ function loadsave()
 end
 
 function love.load (args)
+	title = love.graphics.getCaption()
 	game = Game:new({
 		mapeditor = MapEditorState:new(),
 		map = MapState:new(),
@@ -23,6 +24,7 @@ function love.update (dt)
 end
 
 function love.draw ()
+	love.graphics.setCaption(title .. " (fps " .. love.timer.getFPS() .. ")")
 	game:draw()
 end
 

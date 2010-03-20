@@ -4,6 +4,9 @@ require("lib/math/vector2")
 
 MapEditorState = class("MapEditorState", State)
 
+MapEditorState.TILE_WIDTH = 155
+MapEditorState.TILE_HEIGHT = 70
+MapEditorState.IN_VIEW_THRESHOLD = 50
 MapEditorState.TILE_MIDPOINT = Vector2:new(77, 35)
 MapEditorState.TILE_TOP_VERTEX = Vector2:new(91, 0)
 MapEditorState.TILE_RIGHT_VERTEX = Vector2:new(154, 46)
@@ -13,7 +16,9 @@ MapEditorState.TILE_LEFT_VERTEX = Vector2:new(0, 22)
 function MapEditorState:initialize ()
 	-- this is necessary because State.initialize initializes some properties
 	super.initialize(self)
-	self.mapsize = {width=6, height=6}
+	
+	self.mapsize = {width=20, length=20} -- the number of tiles wide and long
+	
 	self.mapOffset = Vector2:new(400, 100)
 	self.images = {
 		gridsquare = love.graphics.newImage("resources/mapeditor/images/gridsquare.gif")
@@ -42,17 +47,18 @@ function MapEditorState:update (game, dt)
 		self.mapOffset = self.mapOffset - (self.mdp - mp)
 		self.mdp = mp
 	else
+		local move = (love.graphics.getWidth() / 2) * dt
 		if love.keyboard.isDown("up") then
-			self.mapOffset.y = self.mapOffset.y - 5
+			self.mapOffset.y = self.mapOffset.y - move
 		end
 		if love.keyboard.isDown("down") then
-			self.mapOffset.y = self.mapOffset.y + 5
+			self.mapOffset.y = self.mapOffset.y + move
 		end
 		if love.keyboard.isDown("left") then
-			self.mapOffset.x = self.mapOffset.x - 5
+			self.mapOffset.x = self.mapOffset.x - move
 		end
 		if love.keyboard.isDown("right") then
-			self.mapOffset.x = self.mapOffset.x + 5
+			self.mapOffset.x = self.mapOffset.x + move
 		end
 	end
 end
@@ -60,34 +66,45 @@ end
 function MapEditorState:draw (game)
 	local mx, my = love.mouse.getPosition()
 	for i = 1,self.mapsize.width do
-		for j = 1,self.mapsize.height do
-			if not self.canDrag and self:coordsIntersectWithTile(i, j, mx, my) then
-				love.graphics.setColor(255,255,255)
-			else
-				love.graphics.setColor(180,180,180)
+		for j = 1,self.mapsize.length do
+			if not MAP or not MAP[i] or not MAP[i][j] and
+				self:tileIsInView(i, j) then
+				if not self.canDrag and self:coordsIntersectWithTile(i, j, mx, my) then
+					if self:isSelectedTile(i, j) then
+						love.graphics.setColor(230,210,255)
+					else
+						love.graphics.setColor(255,255,255)
+					end
+				else
+					if self:isSelectedTile(i, j) then
+						love.graphics.setColor(255,255,255)
+					else
+						love.graphics.setColor(180,180,180)
+					end
+				end
+				local x, y = self:tileToCoords(i, j)
+				love.graphics.draw(self.images.gridsquare, x, y)
+				love.graphics.setColor(100,100,100)
+				love.graphics.print(string.format("%s,%s",i,j), x+66, y+38)
 			end
-			local x, y = self:tileToCoords(i, j)
-			love.graphics.draw(self.images.gridsquare, x, y)
-			love.graphics.setColor(100,100,100)
-			love.graphics.print(string.format("%s,%s",i,j), x+66, y+38)
 		end
 	end
 	
 	if MAP then
 		for i = 1,self.mapsize.width do
 			if MAP[i] then
-				for j = 1,self.mapsize.height do
-					if MAP[i][j] then
+				for j = 1,self.mapsize.length do
+					if MAP[i][j] and self:tileIsInView(i, j) then
 						local x, y = self:tileToCoords(i, j)
 						if not self.canDrag and self:coordsIntersectWithTile(i, j, mx, my) then
 							if self:isSelectedTile(i, j) then
-								love.graphics.setColor(200,170,255)
+								love.graphics.setColor(230,210,255)
 							else
 								love.graphics.setColor(255,255,255)
 							end
 						else
 							if self:isSelectedTile(i, j) then
-								love.graphics.setColor(150,120,200)
+								love.graphics.setColor(255,255,255)
 							else
 								love.graphics.setColor(180,180,180)
 							end
@@ -106,7 +123,7 @@ end
 
 function MapEditorState:drawControls (game)
 	love.graphics.setColor(255,255,255,80)
-	love.graphics.rectangle("fill",10,10,200,200)
+	love.graphics.rectangle("fill",10,10,200,202)
 	love.graphics.setColor(255,255,255,255)
 	love.graphics.print("Toggle help: t",15,25)
 	
@@ -125,6 +142,16 @@ function MapEditorState:drawControls (game)
 	love.graphics.print("   6 - Grass (solid)",15,205)
 end
 
+function MapEditorState:tileIsInView (tx, ty)
+	local t = MapEditorState.IN_VIEW_THRESHOLD
+	local tw = MapEditorState.TILE_WIDTH
+	local th = MapEditorState.TILE_HEIGHT
+	local cx, cy = self:tileToCoords(tx, ty)
+	local w = love.graphics.getWidth()
+	local h = love.graphics.getHeight()
+	return cx >= (-t-tw) and cy >= (-t-th) and cx <= (w+t) and cy <= (h+t)
+end
+
 function MapEditorState:isSelectedTile (x, y)
 	return self.selectedTile and
 		   self.selectedTile.x == x and
@@ -134,13 +161,13 @@ end
 function MapEditorState:tileToCoords (tx, ty)
 	local cx = self.mapOffset.x + ((tx-1) * 63) - ((ty-1) * 93)
 	local cy = self.mapOffset.y + ((tx-1) * 47) + ((ty-1) * 23)
-	return cx, cy
+	return math.floor(cx), math.floor(cy)
 end
 
 -- This function is super inefficient
 function MapEditorState:coordsToTile (cx, cy)
 	for i = 1,self.mapsize.width do
-		for j = 1,self.mapsize.height do
+		for j = 1,self.mapsize.length do
 			if self:coordsIntersectWithTile(i, j, cx, cy) then
 				return {x=i, y=j}
 			end
@@ -196,16 +223,18 @@ function MapEditorState:keypressed (game, key, unicode)
 	if key == " " then
 		self.canDrag = true
 	end
-	if self.selectedTile then
+	if self.selectedTile and MAP then
 		local s = self.selectedTile
-		print(key)
 		if key == "backspace" then
-			MAP[s.x][s.y] = nil
+			if MAP and MAP[s.x] then
+				MAP[s.x][s.y] = nil
+			end
 		else
 			local byte = string.byte(key)
 			if byte >= 48 and byte <= 57 then
 				local tile = byte - 48 -- to get numbers 0-9
 				if self.tiles[tile] and MAP then
+					if not MAP[s.x] then MAP[s.x] = {} end
 					MAP[s.x][s.y] = tile
 				end
 			end
