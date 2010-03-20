@@ -19,7 +19,7 @@ function MapEditorState:initialize ()
 	-- this is necessary because State.initialize initializes some properties
 	super.initialize(self)
 	
-	self.mapsize = {width=20, length=20} -- the number of tiles wide and long
+	self.mapSize = {width=20, length=20} -- the number of tiles wide and long
 	
 	self.mapOffset = Vector2:new(480, 120)
 	self.images = {
@@ -31,11 +31,11 @@ function MapEditorState:initialize ()
 		love.graphics.newImage("resources/images/tiles/stone_plain.png"),
 		love.graphics.newImage("resources/images/tiles/grass_plain.png"),
 	}
-	self.displayHelp = true
+	self.editorEnabled = false
 	self.canDrag = false
 	self.mdp = nil -- mouse down position
-	
 	self.scale = 1
+	self.selectedTile = {x=1, y=1}
 	
 	self.map = "map1"
 	love.filesystem.load(string.format("resources/maps/%s.lua",self.map))()
@@ -48,23 +48,19 @@ function MapEditorState:update (game, dt)
 		local mp = Vector2:new(mx, my)
 		self.mapOffset = self.mapOffset - ((self.mdp - mp) / self.scale)
 		self.mdp = mp
-	else
+	elseif not self.editorEnabled then
 		local move = (love.graphics.getWidth() / 2) * dt
 		if love.keyboard.isDown("up") then
-			self.mapOffset.x = self.mapOffset.x - move*1.5
-			self.mapOffset.y = self.mapOffset.y + move/2.7
+			self.mapOffset.y = self.mapOffset.y + move
 		end
 		if love.keyboard.isDown("down") then
-			self.mapOffset.x = self.mapOffset.x + move*1.5
-			self.mapOffset.y = self.mapOffset.y - move/2.7
+			self.mapOffset.y = self.mapOffset.y - move
 		end
 		if love.keyboard.isDown("left") then
 			self.mapOffset.x = self.mapOffset.x + move
-			self.mapOffset.y = self.mapOffset.y + move/1.34
 		end
 		if love.keyboard.isDown("right") then
 			self.mapOffset.x = self.mapOffset.x - move
-			self.mapOffset.y = self.mapOffset.y - move/1.34
 		end
 	end
 end
@@ -73,11 +69,11 @@ function MapEditorState:draw (game)
 	love.graphics.push()
 	love.graphics.scale(self.scale)
 	local mx, my = love.mouse.getPosition()
-	for i = 1,self.mapsize.width do
-		for j = 1,self.mapsize.length do
-			if not MAP or not MAP[i] or not MAP[i][j] and
-				self:tileIsInView(i, j) then
-				if not self.canDrag and self:coordsIntersectWithTile(i, j, mx, my) then
+	for i = 1,self.mapSize.width do
+		for j = 1,self.mapSize.length do
+			if self:tileIsInView(i, j) then
+				if self.editorEnabled and not self.canDrag and
+				   self:coordsIntersectWithTile(i, j, mx, my) then
 					if self:isSelectedTile(i, j) then
 						love.graphics.setColor(230,210,255)
 					else
@@ -90,65 +86,47 @@ function MapEditorState:draw (game)
 						love.graphics.setColor(180,180,180)
 					end
 				end
+				
 				local x, y = self:tileToCoords(i, j)
-				love.graphics.draw(self.images.gridsquare, x, y)
-				love.graphics.setColor(100,100,100)
-				love.graphics.print(string.format("%s,%s",i,j), x+66, y+38)
-			end
-		end
-	end
-	
-	if MAP then
-		for i = 1,self.mapsize.width do
-			if MAP[i] then
-				for j = 1,self.mapsize.length do
-					if MAP[i][j] and self:tileIsInView(i, j) then
-						local x, y = self:tileToCoords(i, j)
-						if not self.canDrag and self:coordsIntersectWithTile(i, j, mx, my) then
-							if self:isSelectedTile(i, j) then
-								love.graphics.setColor(230,210,255)
-							else
-								love.graphics.setColor(255,255,255)
-							end
-						else
-							if self:isSelectedTile(i, j) then
-								love.graphics.setColor(255,255,255)
-							else
-								love.graphics.setColor(180,180,180)
-							end
-						end
-						love.graphics.draw(self.tiles[MAP[i][j]], x, y)
-					end
+				if MAP and MAP[i] and MAP[i][j] then
+					love.graphics.draw(self.tiles[MAP[i][j]], x, y)
+				else
+					love.graphics.draw(self.images.gridsquare, x, y)
+					love.graphics.setColor(100,100,100)
+					love.graphics.print(string.format("%s,%s",i,j), x+66, y+38)
 				end
 			end
 		end
 	end
 	love.graphics.pop()
 	
-	if self.displayHelp then
-		self:drawControls(game)
-	end
+	self:drawControls(game)
 end
 
 function MapEditorState:drawControls (game)
-	love.graphics.setColor(255,255,255,80)
-	love.graphics.rectangle("fill",10,10,200,187)
-	love.graphics.setColor(255,255,255,255)
-	love.graphics.print("Toggle help: t",15,25)
-	
-	love.graphics.print("Move: arrow keys",15,45)
-	love.graphics.print("     or: space + mouse drag",14,60)
-	
-	love.graphics.print("Quit: escape",15,80)
-	
-	love.graphics.print("Edit: click a tile and press",15,100)
-	love.graphics.print("   backspace - remove tile",15,115)
-	love.graphics.print("   1 - Stone (textured)",15,130)
-	love.graphics.print("   2 - Grass (textured)",15,145)
-	love.graphics.print("   3 - Stone (solid)",15,160)
-	love.graphics.print("   4 - Grass (solid)",15,175)
-	
-	love.graphics.print("Scale: -/+",15,190)
+	if self.editorEnabled then
+		love.graphics.setColor(255,255,255,80)
+		love.graphics.rectangle("fill",10,10,200,187)
+		love.graphics.setColor(255,255,255,255)
+		love.graphics.print("Turn editor off: e",15,25)
+		love.graphics.print("Move: arrow keys",15,45)
+		love.graphics.print("     or: space + mouse drag",14,60)
+		love.graphics.print("Quit: escape",15,80)
+		love.graphics.print("Edit: click a tile and press",15,100)
+		love.graphics.print("   backspace - remove tile",15,115)
+		love.graphics.print("   1 - Stone (textured)",15,130)
+		love.graphics.print("   2 - Grass (textured)",15,145)
+		love.graphics.print("   3 - Stone (solid)",15,160)
+		love.graphics.print("   4 - Grass (solid)",15,175)
+		love.graphics.print("Scale: -/+",15,190)
+	else
+		love.graphics.setColor(255,255,255,80)
+		love.graphics.rectangle("fill",10,10,200,57)
+		love.graphics.setColor(255,255,255,255)
+		love.graphics.print("Turn editor on: e",15,25)
+		love.graphics.print("Move: arrow keys",15,45)
+		love.graphics.print("     or: space + mouse drag",14,60)
+	end	
 	
 	love.graphics.printf(string.format("Scale: %s%%", math.floor(100*self.scale)), 10, 25,
 		love.graphics.getWidth()-20, "right")
@@ -165,8 +143,13 @@ function MapEditorState:tileIsInView (tx, ty)
 	return cx >= (-t-tw) and cy >= (-t-th) and cx <= ((w/s)+t) and cy <= ((h/s)+t)
 end
 
-function MapEditorState:isSelectedTile (x, y)
-	return self.selectedTile and
+function MapEditorState:isSelectedTile (x, y, checkEditorEnabled)
+	checkEditorEnabled = checkEditorEnabled or true
+	if checkEditorEnabled and not self.editorEnabled then
+		return false
+	end
+	return (checkEditorEnabled and self.editorEnabled or true) and
+		   self.selectedTile and
 		   self.selectedTile.x == x and
 		   self.selectedTile.y == y
 end
@@ -179,8 +162,8 @@ end
 
 -- This function is super inefficient
 function MapEditorState:coordsToTile (cx, cy)
-	for i = 1,self.mapsize.width do
-		for j = 1,self.mapsize.length do
+	for i = 1,self.mapSize.width do
+		for j = 1,self.mapSize.length do
 			if self:coordsIntersectWithTile(i, j, cx, cy) then
 				return {x=i, y=j}
 			end
@@ -217,8 +200,11 @@ function MapEditorState:mousepressed (game, x, y, button)
 		if self.canDrag then
 			local x, y = love.mouse.getPosition()
 			self.mdp = Vector2:new(x, y)
-		else
-			self.selectedTile = self:coordsToTile(x, y)
+		elseif self.editorEnabled then
+			local t = self:coordsToTile(x, y)
+			if t then
+				self.selectedTile = t
+			end
 		end
 	end
 end
@@ -232,10 +218,8 @@ end
 function MapEditorState:keypressed (game, key, unicode)
 	if key == "escape" then
 		love.event.push("q")
-	elseif key == "t" then
-		self.displayHelp = not self.displayHelp
-	elseif key == " " then
-		self.canDrag = true
+	elseif key == "e" then
+		self.editorEnabled = not self.editorEnabled
 	elseif key == "=" then
 		if self.scale <= (MapEditorState.MAX_SCALE - 0.09) then
 			self.scale = self.scale + 0.1
@@ -244,6 +228,8 @@ function MapEditorState:keypressed (game, key, unicode)
 		if self.scale >= (MapEditorState.MIN_SCALE + 0.09) then
 			self.scale = self.scale - 0.1
 		end
+	elseif key == " " then
+		self.canDrag = true
 	elseif self.selectedTile and MAP then
 		local s = self.selectedTile
 		if key == "backspace" then
@@ -258,6 +244,41 @@ function MapEditorState:keypressed (game, key, unicode)
 					if not MAP[s.x] then MAP[s.x] = {} end
 					MAP[s.x][s.y] = tile
 				end
+			end
+		end
+	end
+	
+	if self.editorEnabled then
+		local t = self.selectedTile
+		local m = self.mapOffset
+		-- 63, 93
+		-- 47, 23
+		if key == "up" then
+			if t.y-1 >= 1 then
+				self.selectedTile.y = t.y - 1
+				self.mapOffset.x = self.mapOffset.x - 93
+				self.mapOffset.y = self.mapOffset.y + 23
+			end
+		end
+		if key == "down" then
+			if t.y+1 <= self.mapSize.length then
+				self.selectedTile.y = t.y + 1
+				self.mapOffset.x = self.mapOffset.x + 93
+				self.mapOffset.y = self.mapOffset.y - 23
+			end
+		end
+		if key == "left" then
+			if t.x-1 >= 1 then
+				self.selectedTile.x = t.x - 1
+				self.mapOffset.x = self.mapOffset.x + 63
+				self.mapOffset.y = self.mapOffset.y + 47
+			end
+		end
+		if key == "right" then
+			if t.x+1 <= self.mapSize.width then
+				self.selectedTile.x = t.x + 1
+				self.mapOffset.x = self.mapOffset.x - 63
+				self.mapOffset.y = self.mapOffset.y - 47
 			end
 		end
 	end
