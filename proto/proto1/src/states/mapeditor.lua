@@ -6,7 +6,7 @@ MapEditorState = class("MapEditorState", State)
 
 MapEditorState.TILE_WIDTH = 155
 MapEditorState.TILE_HEIGHT = 70
-MapEditorState.IN_VIEW_THRESHOLD = 50
+MapEditorState.IN_VIEW_THRESHOLD = MapEditorState.TILE_WIDTH
 MapEditorState.TILE_MIDPOINT = Vector2:new(77, 35)
 MapEditorState.TILE_TOP_VERTEX = Vector2:new(91, 0)
 MapEditorState.TILE_RIGHT_VERTEX = Vector2:new(154, 46)
@@ -152,9 +152,9 @@ end
 
 function MapEditorState:tileIsInView (tx, ty)
 	local s = self.scale
-	local t = MapEditorState.IN_VIEW_THRESHOLD/s
-	local tw = MapEditorState.TILE_WIDTH/s
-	local th = MapEditorState.TILE_HEIGHT/s
+	local t = MapEditorState.IN_VIEW_THRESHOLD
+	local tw = MapEditorState.TILE_WIDTH
+	local th = MapEditorState.TILE_HEIGHT
 	local cx, cy = self:tileToCoords(tx, ty)
 	local w = love.graphics.getWidth()
 	local h = love.graphics.getHeight()
