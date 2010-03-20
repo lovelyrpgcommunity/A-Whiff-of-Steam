@@ -133,7 +133,7 @@ function MapEditorState:drawControls (game)
 	love.graphics.print("Quit: escape",15,80)
 	
 	love.graphics.print("Edit: click a tile and press",15,100)
-	love.graphics.print("   delete - remove tile",15,115)
+	love.graphics.print("   backspace - remove tile",15,115)
 	love.graphics.print("   1 - Stone (textured)",15,130)
 	love.graphics.print("   2 - Water (textured)",15,145)
 	love.graphics.print("   3 - Grass (textured)",15,160)
