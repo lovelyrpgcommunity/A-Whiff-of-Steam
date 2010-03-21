@@ -1,6 +1,5 @@
 require("lib/states/fsm")
 require("src/states/mapeditor")
-require("src/states/map")
 
 function loadsave()
 	if not love.filesystem.exists("save.lua") then
@@ -13,8 +12,7 @@ end
 function love.load (args)
 	title = love.graphics.getCaption()
 	game = FSM:new({
-		mapeditor = MapEditorState:new(),
-		map = MapState:new(),
+		mapeditor = MapEditorState:new()
 	})
 	game:changeState("mapeditor")
 end
