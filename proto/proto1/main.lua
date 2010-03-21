@@ -1,4 +1,4 @@
-require("lib/game")
+require("lib/states/fsm")
 require("src/states/mapeditor")
 require("src/states/map")
 
@@ -12,7 +12,7 @@ end
 
 function love.load (args)
 	title = love.graphics.getCaption()
-	game = Game:new({
+	game = FSM:new({
 		mapeditor = MapEditorState:new(),
 		map = MapState:new(),
 	})
