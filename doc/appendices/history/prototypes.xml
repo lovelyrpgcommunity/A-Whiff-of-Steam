@@ -8,8 +8,8 @@
     <section>
       <title>Iteration 1, small hand made area</title>
       <para>This iteration is very small, warm-up activity.</para>
-      <para>Our aim  here is to adjust tile size and scrolling speed, also to see how designed view will behave in practice.</para>
-      <para>We should create part of world view, using only temporary tiles for now. Map should have different tile types and user should be able to scroll it at least one screen up, down, left or right  in fluid, pixel based manner. Projection used should be trimetric, tile size could be around 1/8 of screen height and scrolling whole screen should take about 2 seconds.</para>
+      <para>Our aim here is to adjust tile size and scrolling speed, also to see how designed view will behave in practice.</para>
+      <para>We should create part of world view, using only temporary tiles for now. Map should have different tile types and user should be able to scroll it at least one screen up, down, left or right in fluid, pixel based manner. Projection used should be trimetric, tile size could be around 1/8 of screen height and scrolling whole screen should take about 2 seconds.</para>
       <para>For now we can assume 800x600 in windowed mode.</para>
       <section>
         <title>Results</title>
