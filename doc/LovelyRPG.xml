@@ -11,5 +11,6 @@
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="history.data" encoding="XML"/>
   </bookinfo>
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="design/design.xml" encoding="XML"/>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="story/story.xml" encoding="XML"/>
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="appendices/appendices.xml" encoding="XML"/>
 </book>
