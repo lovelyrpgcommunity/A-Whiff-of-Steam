@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<appendix id="appendix.license">
+  <title>Full license information</title>
+  <para><emphasis role="bold">Lovely Public Community License (LPCL) Version 1.3f, November 1, 2009</emphasis></para>
+  <para><emphasis role="bold">Copyright © 2009 Bart Bes and Osuf Oboys</emphasis></para>
+  <para><emphasis>This license, but not the licensed product, is licensed to &quot;the LCPL Development Team&quot; under LPCL.</emphasis></para>
+  <para>The intention of this license is to provide a means to release a product in a community without any particular user governing the project. In particular, the license should encourage the liberties taken in wiki systems, provide a means to settle disputes, and allow new users to continue a project where every developer has gone inactive. This license imposes NO restrictions on work that is released under other names than the name of this product. If such restrictions are desired, the work may be licensed under more than one license.</para>
+  <section>
+    <title>Definitions.</title>
+    <para>&quot;This product&quot; refers to all work licensed under this license. A &quot;derivative work&quot; is any copyrightable material based on or using this product. &quot;The community of this product&quot; is a body of entities, usually people, which may be defined in an accompanying policy document or section as stated below.</para>
+    <para>A separate document or section defining this product&apos;s community and policy may accompany this license and is treated as constituent of the referenced product as far as this license is concerned. Such a document or section may only define &quot;the community&quot; and how &quot;the community&quot; may exercise Clause 3.2 of this license. In particular, changing such a document does not demand a new release of this license but it does demand a new release of the product. If no such document or clause accompanies the product, then &quot;the community&quot; is the empty set.</para>
+  </section>
+  <section>
+    <title>Terms and Conditions.</title>
+    <para>All rights including, but not restricted to, copyright and trademark rights are reserved to this product&apos;s copyright holders.</para>
+    <para>This product comes without any warranty, expressed or otherwise. Under no circumstances will the creators of this product be held responsible for any negative effects arising from the use of this product or derivative works.</para>
+    <para>Permission is granted to use this product in any fashion and for any purpose, including commercial, with or without this license, provided the following conditions are met.</para>
+    <orderedlist>
+      <listitem>
+        <para>Do whatever you want as long as you do not advertise anything as a version of this product.</para>
+      </listitem>
+      <listitem>
+        <para>Any derivative work or copy of this product released under the same name and the same version as this product must constitute a complete unaltered copy of this product without any additions and be accompanied by an unaltered copy of this license. A product may contain an unaltered copy of this product without labelling the copy a derivative work under a different name.</para>
+      </listitem>
+      <listitem>
+        <para>If a derivative work is advertised under the same name as this product but under a different version, then the following additional conditions apply.</para>
+        <orderedlist>
+          <listitem>
+            <para>The derivative work must clearly state that it is a derivative of this product and the license of the derivative work must include a clause equivalent to this clause had this license been used.</para>
+          </listitem>
+          <listitem>
+            <para>The community of this product has the right to demand that any derivative work, or any derivative work of a derivative in any number of steps, changes the name of the derivative work to a name other than the name of this product or else be subject to copyright and/or trademark infringement. The owners of the derivative work must in such an event be notified about the decision. The community has no right in choosing the new name.</para>
+          </listitem>
+          <listitem>
+            <para>Clause 3.2 may be invoked any number of times permitted by the accompanying policy.</para>
+          </listitem>
+        </orderedlist>
+      </listitem>
+    </orderedlist>
+  </section>
+  <section>
+    <title>The LPCL Development Team.</title>
+    <para>This section does not apply to work licensed under LPCL other than the license itself. The LPCL Development Team can NOT invoke Clause 3.2 for any work other than the license and the license only.</para>
+    <para>The LPCL Development Team consists of every real person with an unbanned account on any forum hosted by <ulink url="http://love2d.org">love2d.org</ulink> with at least ten posts made a week or more ago.</para>
+    <para>To invoke Clause 3.2, a post must be made by a team member in a new thread hosted by the domain <ulink url="http://love2d.org">love2d.org</ulink>. This post must clearly state the opening of a vote, the expected format of votes, and the effect of the respective answers.</para>
+    <para>A valid vote is any post in this thread made by a member of the LPCL development team which</para>
+    <itemizedlist>
+      <listitem>
+        <para>contains &quot;yes.&quot; or &quot;no.&quot;, but not both, as a subword of any capitalization,</para>
+      </listitem>
+      <listitem>
+        <para>does not have any other valid vote cast by the same member of the same or a newer time,</para>
+      </listitem>
+      <listitem>
+        <para>is stamped at most 604800 seconds (one week) older than the post that opened the vote.</para>
+      </listitem>
+    </itemizedlist>
+    <para>After one week, the votes are tallied with the winning being either &apos;yes.&apos; or &apos;no.&apos;, whichever received the most answers. In the case of a draw, clause 3.2 is not invoked.</para>
+    <para>At most three votes per can be made about the same product and at least one week apart. A vote may concern more than one product. No legal person may open more than four votes per month.</para>
+  </section>
+  <section id="section.license.community">
+    <title>The LövelyRPG Community.</title>
+    <para>This section defines the community which this product is owned by.</para>
+    <para>The LövelyRPG Community consists of every real person with an unbanned account on any forum hosted by <ulink url="http://love2d.org">love2d.org</ulink> with at least ten posts made a week or more ago and the LövelyRPG developers, as described in separate clause in <xref linkend="appendix.contribution"/>.</para>
+    <para>To invoke clause 3.2, a post must be made by a team member in a new thread hosted by the domain <ulink url="http://love2d.org">love2d.org</ulink>. This post must clearly state the opening of a vote, the expected format of votes, and the effect of the respective answers.</para>
+    <para>A valid vote is any post in this thread made by a member of the LövelyRPG Community which</para>
+    <itemizedlist>
+      <listitem>
+        <para>contains &quot;yes.&quot; or &quot;no.&quot;, but not both, as a subword of any capitalization,</para>
+      </listitem>
+      <listitem>
+        <para>does not have any other valid vote cast by the same member of the same or a newer time,</para>
+      </listitem>
+      <listitem>
+        <para>is stamped at most 604800 seconds (one week) older than the post that opened the vote.</para>
+      </listitem>
+    </itemizedlist>
+    <para>After one week, the votes are tallied with the winning being either &apos;yes.&apos; or &apos;no.&apos;, whichever received the most answers. In the case of a draw, clause 3.2 is not invoked.</para>
+    <para>At most three votes per can be made about the same product and at least one week apart. A vote may concern more than one product. No legal person may open more than four votes per month.</para>
+  </section>
+</appendix>

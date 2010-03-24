@@ -1,0 +1,194 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<appendix id="appendix.contribution">
+  <title>Contribution guide and project rules</title>
+  <para>If you want to contribute to LövelyRPG project, this is good place to start.</para>
+  <section id="section.contribution.page">
+    <title>Project page</title>
+    <para>Project page is hosted at Codaset (<ulink url="http://www.codaset.com/">codaset.com</ulink>). Project was created using virtual user <emphasis>lovelyrpgcommunity</emphasis>, so full link to it is <ulink url="http://codaset.com/lovelyrpgcommunity/a-whiff-of-steam">codaset.com/lovelyrpgcommunity/a-whiff-of-steam</ulink>. Community also have virtual Google Gmail account registered with same name (<email>lovelyrpgcommunity@gmail.com</email>) and Google Wave account connected with above e-mail.</para>
+    <para>Project page includes blog, wiki, milestones, tickets and Git (<ulink url="http://www.git-scm.com/">git-scm.com</ulink>) source hosting. All developers have access to page and can freely modify posted content depending on role they fulfil. All contributors and community will have read-only access to project page.</para>
+    <para>There is also official topic on Löve 2D forum, <ulink url="http://love2d.org/forum/viewtopic.php?f=5&amp;t=1422">love2d.org/forum/viewtopic.php?f=5&amp;t=1422</ulink>, named <emphasis>Official &quot;A Whiff of Steam&quot;, the LövelyRPG project topic</emphasis>.</para>
+  </section>
+  <section>
+    <title>Project roles and permissions</title>
+    <para>Non-members in project have very limited permission set. All not logged in persons have right to only comment on blog and tickets. After logging in into Codaset, they can also create tickets, attach files to tickets and create code comments. This still is very basic set of permissions.</para>
+    <para>Each member can have one or more roles assigned. In reality, because of current Codaset limitations, on page one will have only one role assigned, one with highest privileges. Here is list of available special roles:<itemizedlist>
+        <listitem>
+          <para><emphasis role="bold">Chuck</emphasis> - Supervisor and moderator. Uses special roundhouse kick to motivate lazy members of the team or get rid of unwanted stuff. Can be selected from people with Lead Developer roles on developers meetings. For security reasons, all Chucks have access to virtual <emphasis role="italic">lovelyrpgcommunity</emphasis> Codaset, Gmail and Wave accounts.</para>
+        </listitem>
+        <listitem>
+          <para>Lead Developer roles:<itemizedlist>
+              <listitem>
+                <para><emphasis role="bold">Lead Designer</emphasis> - Person responsible for design work and controlling work of designers. Can be selected from people with Designer roles on developers meetings.</para>
+              </listitem>
+              <listitem>
+                <para><emphasis role="bold">Lead Artist</emphasis> - Person responsible for artistic work and controlling work of artists. Can be selected from people with Artist roles on developers meetings.</para>
+              </listitem>
+              <listitem>
+                <para><emphasis role="bold">Lead Coder</emphasis> - Person responsible for coding work and controlling work of coders. Can be selected from people with Coder roles on developers meetings.</para>
+              </listitem>
+            </itemizedlist></para>
+        </listitem>
+      </itemizedlist></para>
+    <para>Above special, honorable roles cannot exist alone. If someone has one of those, he needs to have also at least one of standard developer roles below, thus honorable title is connected with usually more work than plain developers tends to normally do.</para>
+    <para>Developer roles include:<itemizedlist>
+        <listitem>
+          <para>Designer roles:</para>
+          <itemizedlist>
+            <listitem>
+              <para><emphasis role="bold">Game Designer</emphasis> - Person taking care of design of the game.</para>
+            </listitem>
+            <listitem>
+              <para><emphasis role="bold">Writer</emphasis> - Person responsible for creating history and scenario of the game, quests and dialogs.</para>
+            </listitem>
+            <listitem>
+              <para><emphasis role="bold">Level Designer</emphasis> - Person who creates levels for the game.</para>
+            </listitem>
+            <listitem>
+              <para><emphasis role="bold">Content Editor</emphasis> - Person assembling work of others inside game editor into working game, still have to do lots of decisions when doing this.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+          <para>Artist roles:</para>
+          <itemizedlist>
+            <listitem>
+              <para><emphasis role="bold">Concept Artist</emphasis> - Person who creates concept arts for documentation. By his or her influence on resulting project, this role is similar to designers role.</para>
+            </listitem>
+            <listitem>
+              <para><emphasis role="bold">Content Artist</emphasis> - Artist responsible for animations, terrain and items in final released game.</para>
+            </listitem>
+            <listitem>
+              <para><emphasis role="bold">Sound Engineer</emphasis> - Person who creates sound effects.</para>
+            </listitem>
+            <listitem>
+              <para><emphasis role="bold">Musician</emphasis> - Person who creates music of the game, both background and theme.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+          <para>Coder roles:</para>
+          <itemizedlist>
+            <listitem>
+              <para><emphasis role="bold">Gameplay Coder</emphasis> - Person who codes gameplay and/or prototypes. By his or her influence on resulting project, this role is again similar to designers role.</para>
+            </listitem>
+            <listitem>
+              <para><emphasis role="bold">Engine Coder</emphasis> - Person who program efficient and complex algorithms for engine, mainly stuff related to graphics and sound.</para>
+            </listitem>
+            <listitem>
+              <para><emphasis role="bold">AI Coder</emphasis> - Person dedicated to code NPC behaviour in game.</para>
+            </listitem>
+            <listitem>
+              <para><emphasis role="bold">Editor Coder</emphasis> - Person responsible for program editor for final version of the game.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist></para>
+    <para>Each role comes with basic developer permissions set:<itemizedlist>
+        <listitem>
+          <para>source commits and pushes,</para>
+        </listitem>
+        <listitem>
+          <para>update wiki pages and upload page attachments,</para>
+        </listitem>
+        <listitem>
+          <para>create and update tickets and upload ticket attachments,</para>
+        </listitem>
+        <listitem>
+          <para>create and update code comments,</para>
+        </listitem>
+        <listitem>
+          <para>create and update ticket comments,</para>
+        </listitem>
+        <listitem>
+          <para>create and update blog comments.</para>
+        </listitem>
+      </itemizedlist></para>
+    <para>Additionally, Lead Developer roles and Chuck have right to:<itemizedlist>
+        <listitem>
+          <para>create, update, complete and reopen milestones,</para>
+        </listitem>
+        <listitem>
+          <para>create and update blog posts,</para>
+        </listitem>
+        <listitem>
+          <para>create wiki pages,</para>
+        </listitem>
+        <listitem>
+          <para>assign code, ticket and blog comments or tickets as spam.</para>
+        </listitem>
+      </itemizedlist></para>
+    <para>Chuck have also rights to:<itemizedlist>
+        <listitem>
+          <para>delete tickets, tickets attachments and comments,</para>
+        </listitem>
+        <listitem>
+          <para>delete wiki pages and page attachments,</para>
+        </listitem>
+        <listitem>
+          <para>delete blog posts and comments,</para>
+        </listitem>
+        <listitem>
+          <para>delete milestones,</para>
+        </listitem>
+        <listitem>
+          <para>delete code comments,</para>
+        </listitem>
+        <listitem>
+          <para>admin project page.</para>
+        </listitem>
+      </itemizedlist></para>
+    <para>In role section of developer data, highest and lowest role should be specified in form &quot;role/role&quot;. For example, &quot;Chuck/Musician&quot;, means that someone have all rights of Chuck, Lead Artist and Musician. If both roles are same, it can be specified alone, i.e. &quot;Musician&quot; is musician without special permissions of Lead Artist. Lead developer or Chuck role shouldn&apos;t be specified without lower role, i.e. someone cannot be Lead Artist without being Concept Artist, Content Artist, Sound Engineer or Musician. It&apos;s also possible to provide few lower roles if they fit same higher role, like &quot;Lead Artist/Concept Artist, Musician&quot;. If someone belongs to two or more Lead Developer roles, he is automatically promoted into Chuck.</para>
+  </section>
+  <section>
+    <title>Repository structure</title>
+    <para>Repository hosted on Codaset is split into three elements, each in separate directory.</para>
+    <section>
+      <title>Documentation (./doc)</title>
+      <para>Documentation that you are reading, resides in directory <emphasis role="bold">./doc</emphasis>. Documentation is made in DocBook V4.5 (<ulink url="http://www.docbook.org/">docbook.org</ulink>), with main file named <emphasis role="bold">LovelyRPG.xml</emphasis>. PDF file is made out of sources periodically, using provided <emphasis role="bold">Makefile</emphasis> and <emphasis role="bold">generate.sh</emphasis> scripts. Generation scripts, use Git logging features and DBLaTeX (<ulink url="http://dblatex.sourceforge.net/">dblatex.sf.net</ulink>) to produce resulting file with automatically inserted latest revision and whole history of commits into detailed revision table. Scripts for now work only on Linux, but PDF file resulting from compilation will be regularly posted to download section on project page.</para>
+      <para>To edit DocBook file, we recommend open source WYSIWYG XML editor Serna (<ulink url="http://www.syntext.com/products/serna-free/">syntext.com/products/serna-free</ulink>). All documentation artwork, that goes into directory <emphasis role="bold">./doc/artwork</emphasis>, is best made with applications like Gimp (<ulink url="http://www.gimp.org/">gimp.org</ulink>), or MyPaint (<ulink url="http://mypaint.intilinux.com/">mypaint.intilinux.com</ulink>), both of which support ORA/Open Raster (.ora) file format - but we don&apos;t force specific graphical toolchain, it&apos;s best left to artist decision. It is recommended to submit your work in ORA and PNG format, where first will be used to modify picture if needed, and second will be for inclusion in documentation itself.</para>
+    </section>
+    <section>
+      <title>Prototypes (./proto)</title>
+      <para>Before we start working on final version, series of prototypes will be made. Each prototype will show small parts of functionality, later small prototypes will be merged and tested, to finally build large prototype of whole game. Prototypes will be built in smaller iterations, each forming larger part of prototype functionality. All prototypes will be stored inside separate subdirectories, that in turn will contain subdirectories related to iterations.</para>
+      <para>By using prototypes, we can concentrate on one part of functionality at time, and balance it early, allowing for quick adjustments in design before it&apos;s fully done. Each prototype should have it&apos;s own milestone with it&apos;s own set of tickets, and after it is done, whole history of how it was changing and forming should be written in <xref linkend="appendix.history"/> of this document.</para>
+      <para>Prototypes are one of first project aims, they should evolve at same time as design documentation. Later, when all gameplay elements will be described and tested by prototypes, it will be known what can be made and what is available to content authors.</para>
+    </section>
+    <section>
+      <title>Final Game (./src)</title>
+      <para>All files related to final game, that of course will be made using Löve 2D engine (<ulink url="http://love2d.org/">love2d.org</ulink>), are stored in <emphasis role="bold">./src</emphasis> directory. This directory can hold only what is known to go into final release of game. All prototypes related work, should go into separate directory.</para>
+      <para>Work on final game, that include final artistic content and optimized, specialized engine with editor, should start after design part of documentation and prototypes are finished. That way, we can reach for a lot more playable and consistent scenario and content, that when it wouldn&apos;t be known what features will game have. It will also spare us need to rework what&apos;s already done. Scenario, artwork, engine and editor should be finished at same time, to allow content editor to assemble whole project into final game, that will be then rigorously tested.</para>
+    </section>
+  </section>
+  <section id="section.contribution.contribution">
+    <title>Contributions</title>
+    <para>All contributions are welcome. If you have no idea what you can do, you can check milestones on project page (see <xref linkend="section.contribution.page"/>), but you are free to make up something else. To do your first contribution, you need to send your work to one of developers, best responsible for certain role, for example if you are sending art, send it to artist. If you don&apos;t know who send to your work, send it to developers with role set as &quot;Designer&quot;.</para>
+    <para>You might also create ticket with your contribution, you must be logged in to Codaset to do so, but it would allow you to keep track on state of your contribution. Other way of getting in touch with developers about your contribution, is trough official forum topic (see <xref linkend="section.contribution.page"/>).</para>
+    <para>If it will be accepted, it will be fused into main repository and credited to you. For crediting your work, you will be asked for your Löve 2D forum nick, role you want to be listed with, and your real name. You, as long as you are contributor, don&apos;t have to provide Codaset nick - even if you have one - that&apos;s the way we distinct developers from contributors in author list. Instead, in place of Codaset nick, number of your contributions will be listed (up to 3 it will be marked as stars, then as star with number of contributions).</para>
+    <para>Contributions are best sent as patches generated from Git or as pull request from your version of repository. We accept all ways to contribute to project, that are described and recommended in Git documentation (see <ulink url="http://book.git-scm.com/">book.git-scm.com</ulink>, <ulink url="http://progit.org/book/">progit.org/book</ulink>, or others documentation linked from <ulink url="http://www.git-scm.com/documentation">git-scm.org/documentation</ulink>).</para>
+    <para>Data of contributors and developers are stored in <emphasis role="bold">authors.xml</emphasis> file as <emphasis role="bold">othercredit</emphasis> tags. Most important fields there are <emphasis role="bold">contrib</emphasis> tag containing role and <emphasis role="bold">firstname</emphasis> and <emphasis role="bold">surname</emphasis> tags describing real personal data. All nicks and contributions are listed in <emphasis role="bold">othercredit</emphasis> nick. In case only one nick is given, it&apos;s used as both forum and Codaset nick. If different data are required for both, slash must be used. For example, &quot;nick/**&quot; describes contributor with two contributions and &quot;nick1/nick2&quot; describes developer with different nicks on forum and Codaset.</para>
+  </section>
+  <section>
+    <title>Developers</title>
+    <para>To become developer, you need to have valid accounts on both, Löve 2D forum and Codaset project hosting (see <xref linkend="section.contribution.page"/>), and get three accepted contributions (see <xref linkend="section.contribution.contribution"/>) - then opt in to become official developer. Alternatively, if you have 10 or more posts on forum older than week, it is enough to have one accepted contribution instead of three. You will be asked for your Codaset nick and given write access to main repository.</para>
+    <para>Each week most of developers are asked to attend to on-line meeting, where most hot stuff is discussed. For meeting Google Wave or IRC will be used, with first preferred because of it&apos;s history features. Date and hour of next meeting is set on previous, to fit plans of most developers. Those meetings are also important for people wanting promotions, this is moment, when developer can become Lead developer, or Lead developer can become Chuck. Voting should be done using Yes/No poll to which each developer can answer, to receive promotion, more than 50% of votes is required.</para>
+    <para>Meetings should always be announced and reminded about in official forum topic.</para>
+  </section>
+  <section>
+    <title>Ticketing system</title>
+    <para>All work should be controlled and described in ticketing system.</para>
+    <para>When creating ticket, title and exact description should be entered. There is also need to set owner, milestone, priority and type of ticket. All fields are obligatory in our project. If you don&apos;t know who should implement certain ticket, in owner field enter <emphasis role="italic">lovelyrpgcommunity</emphasis> from drop-down list of users. If there is no milestone you can assign ticket to, assign it to <emphasis role="italic">unsorted</emphasis> milestone. Available priorities for tickets are <emphasis role="italic">High</emphasis>, <emphasis role="italic">Medium</emphasis> and <emphasis role="italic">Low</emphasis>. High priority should be set to all tasks that milestones cleanly depend on, or there are high priority tickets depending on this one. Low priority should be set to all tasks that aren&apos;t important for current milestone and could be postponed until next milestone. There are also four types of tickets: <emphasis role="italic">Task</emphasis>, <emphasis role="italic">Enhancement</emphasis>, <emphasis role="italic">Bug</emphasis> and <emphasis role="italic">Idea</emphasis>. Ticket type should be assigned depending on ticket content in descriptive manner. If ticket doesn&apos;t cleanly fall into any particular category, it should be classified as task.</para>
+    <para>When working on ticket, first look if no one is working on it already. You can easily check it by looking at owner of ticket. If it&apos;s owner is set to <emphasis role="italic">lovelyrpgcommunity</emphasis>, you can easily assign it to yourself and start working on it. If you are taking ticket as contributor without full access, leave comment under ticket or ask someone to do it, but ticket should stay assigned to <emphasis role="italic">lovelyrpgcommunity</emphasis>. Tickets have five states, when ticket is created it is assigned <emphasis role="italic">new</emphasis> state. When you start working on it, you should change state into <emphasis role="italic">working_on_it</emphasis>. If you require additional information to complete given ticket, assign state <emphasis role="italic">require_info</emphasis>. When you finish working on it, you should set it to <emphasis role="italic">closed</emphasis>. Closed ticket can be reopened by setting it&apos;s state to <emphasis role="italic">reopened</emphasis>. Reopened ticket should be reviewed by owner of ticket and assigned appropriate status depending on action taken. At any time, ticket can be assigned state <emphasis role="italic">new</emphasis>, at same time it should have assigned owner of <emphasis role="italic">lovelyrpgcommunity</emphasis>, as it means you no longer implement given ticket.</para>
+  </section>
+  <section>
+    <title>Decision procedures</title>
+    <para>Sometimes there are some decisions to be made, when developers cannot decide on what option to pick, or just want to hear community opinion, poll should be created.</para>
+    <para>At such polls, anyone with account on Löve 2D forum can vote. Poll should stay on at least 3 days, and closing day should be posted along with poll opening. Fact of opening poll should be noted in <xref linkend="appendix.history"/>. To all such polls, developers should vote last to not influence results, and they should note down their votes in project history documentation.</para>
+    <para>In case of ties, any Developer vote for option that tied, counts as two. In case it doesn&apos;t resolve ties, Lead Developers decisions for votes that tied, counts as four votes. In case this still doesn&apos;t resolve conflict, option is picked by Chucks from tied options, again if this doesn&apos;t bring resolution, final decision is randomly taken from all that tied. Whole procedure of selecting result, should be appropriately noted in project history documentation.</para>
+    <para>Sometimes, if community wants certain feature, or doesn&apos;t like certain feature, it can opt in with poll proposing certain change with Yes/No options, and if enough votes is gathered, the feature should be integrated in some way into project. Only thing that shouldn&apos;t be changed that way is focus, but it can be extended if it still fits on two pages.</para>
+  </section>
+  <section>
+    <title>Coding standards</title>
+    <para><emphasis role="bold">TODO: Decide on first developer meeting.</emphasis></para>
+    <para>Till then, for documentation apply to what is default for WYSIWYG editor of choice, Serna, i.e. current docs style. What is sure, we should use only UTF-8 character encoding and UNIX-style line endings.</para>
+  </section>
+</appendix>

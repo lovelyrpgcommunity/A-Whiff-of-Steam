@@ -1,0 +1,146 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{style}[2010/03/01 Docbook style modification for LovelyRPG]
+\RequirePackageWithOptions{docbook}
+
+% strings
+\def\DBKrole{ROLE}
+\def\DBKlineage{L\"OVE CLUB NICK}
+\def\DBKothername{CODASET NICK / CONTRIBUTIONS}
+\def\DBKrealname{REAL NAME}
+\def\DBKrevhistorychapter{Detailed Revision History}
+
+% images
+\def\DBKartName{artwork/name.png}
+\def\DBKartCover{artwork/coverart.png}
+
+% we set numbering of enumerations to include parent enumeration number, like 1.,
+% 1.1., 1.1.1, etc.
+\setenumerate{label*=\arabic*.}
+
+% set penalty se we don't leave single lines if possible
+\widowpenalty=300
+\clubpenalty=300
+
+% remove revision history table from begin of document, and prepare to add
+% pictures on title page, also more space for title in header
+\chead[]{%
+  \begin{tabular}{
+    >{\raggedright}p{5.6cm} >{\centering}p{5.6cm} >{\raggedleft}p{5.6cm}} %
+    \multirow{3}{7cm}{\DBKtitle}
+    & & \tabularnewline%
+    & \releasebox
+    & \textsf{\thepage} \tabularnewline %
+    & & \tabularnewline%
+  \end{tabular}%
+} %
+\def\DBKcheadfront{%
+  \begin{tabular}{
+    >{\raggedright}p{5.6cm} >{\centering}p{5.6cm} >{\raggedleft}p{5.6cm}} %
+    \multirow{3}{7cm}{\DBKtitle}
+    & & \textsf{\DBKreference{} \edhead} \tabularnewline%
+    & \releasebox & \tabularnewline %
+    & & \textsf{\thepage}
+  \tabularnewline%
+  \end{tabular}%
+}
+\def\DBKcheadbody{%
+  \begin{tabular}{
+    >{\raggedright}p{5.6cm} >{\centering}p{5.6cm} >{\raggedleft}p{5.6cm}} %
+    \multirow{3}{7cm}{\DBKtitle}
+    & & \textsf{\DBKreference{} \edhead} \tabularnewline%
+    & \releasebox & \tabularnewline %
+    & & \textsf{\thepage{} / \getpagerefnumber{LastPage}}
+  \tabularnewline%
+  \end{tabular}%
+}
+\def\maketitle{
+  \ifthenelse{\equal{\DBKedition}{}}{\def\edhead{}}{\def\edhead{Ed. \DBKedition}}
+  \setlength{\oldbaselineskip}{\baselineskip}
+  \setlength{\baselineskip}{2\oldbaselineskip}
+  \textsf{
+  \vfill
+  \begin{center}
+    \includegraphics[height=3cm]{\DBKartName}\\
+    \vspace{1cm}
+    \huge{\textbf{\DBKtitle}}\\ %
+    \ifx\DBKsubtitle\relax\else%
+      \underline{\ \ \ \ \ \ \ \ \ \ \ }\\ %
+      \ \\ %
+      \huge{\textbf{\DBKsubtitle}}\\ %
+    \fi
+    \vspace{1cm}
+    \includegraphics[height=11cm]{\DBKartCover}
+  \end{center}
+  \vfill
+  \setlength{\baselineskip}{\oldbaselineskip}
+  \hspace{1cm}
+  \vspace{1cm}
+  \begin{center}
+  \begin{tabular}{p{7cm} p{7cm}}
+  \Large{\DBKreference{} \edhead} & \\
+  \end{tabular}
+  \end{center}
+  }
+  \newpage
+  \setlength{\baselineskip}{\oldbaselineskip}
+  \chead[]{\DBKcheadfront}
+  \lfoot[]{}
+  \ifx\DBKcopyright\relax\else
+    \DBKcopyright \\
+  \fi
+  \ifx\DBKlegalblock\relax\else
+    \DBKlegalblock
+  \fi
+  \newpage
+  \begin{sffamily}
+  \DBKindexation
+  \end{sffamily}
+}
+
+% make it possible to use role, nicks and real name instead of action, name,
+% date and signature...
+\def\DBKinditem#1#2#3{% more complicated macro so needs some comments
+\def\DBK@split##1/##2\till@this{% we will split both nicknames from single othername
+\def\DBK@unslash####1/{####1}% to remove slash from end
+\gdef\DBK@left{##1}% first nick
+\ifx\DBK@right\@empty\gdef\DBK@left{-}\fi% if empty replace with "-"
+\gdef\DBK@right{##2}% second nick
+\ifx\DBK@right\@empty\gdef\DBK@right{\DBK@left}% if empty replace with first nick
+\else% but if wasn't empty, we have redutant shash at end to remove
+\expandafter\gdef\expandafter\DBK@right\expandafter{\DBK@unslash##2}\fi% so we do it in place
+}% and call splitting rutine
+\DBK@split#2/\till@this% to get both nicks in DBK@left and DBK@right!
+    &    &    &                       & \tabularnewline
+ #1 & \DBK@left & \DBK@right & \multicolumn{2}{c|}{#3} \tabularnewline
+    &    &    &                       & \tabularnewline
+\hline
+}
+
+% and label the table right (change in two lines, see below)
+\renewenvironment{DBKindtable}{
+\begin{center}
+\begin{tabular}{ |>{\centering}p{3cm} |>{\centering}p{3cm}
+|>{\centering}p{3.5cm}
+  |>{\centering}p{3cm} >{\centering}p{3cm} | }
+  \hline
+  \multicolumn{5}{|c|}{\textbf{\DBKindtitle}} \tabularnewline
+  \hline
+  \multicolumn{5}{c}{\ } \tabularnewline
+  \hline
+  & \multicolumn{2}{l|}{} & \multicolumn{2}{l|}{} \tabularnewline
+  \multicolumn{1}{|p{3cm}|}{} & \multicolumn{2}{p{6.5cm}|}{\DBKtitle}
+  & \multicolumn{2}{p{3cm}|}{\DBKreference}\tabularnewline
+  & \multicolumn{2}{l|}{} & \multicolumn{2}{l|}{} \tabularnewline
+  \hline
+  \hline
+   & & & & \tabularnewline
+  \emph{\DBKrole} & \emph{\DBKlineage} & \emph{\DBKothername} &  % change here
+\multicolumn{2}{c|}{\emph{\DBKrealname}} % and there
+  \tabularnewline 
+   & & & & \tabularnewline
+  \hline
+}{
+\end{tabular}
+\end{center}
+}
+

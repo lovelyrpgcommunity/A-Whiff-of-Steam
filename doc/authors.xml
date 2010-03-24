@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<authorgroup>
+  <othercredit>
+    <contrib>Concept Artist</contrib>
+    <firstname>Krzysztof</firstname>
+    <othername>giniust/*</othername>
+    <surname>Giniewicz</surname>
+  </othercredit>
+  <othercredit>
+    <contrib>Engine Coder</contrib>
+    <firstname>Bart</firstname>
+    <othername>bartbes</othername>
+    <surname>van Strien</surname>
+  </othercredit>
+  <othercredit>
+    <contrib>Chuck/Game Designer</contrib>
+    <firstname>Andrzej</firstname>
+    <othername>giniu</othername>
+    <surname>Giniewicz</surname>
+  </othercredit>
+  <othercredit>
+    <contrib>Chuck/Game Designer</contrib>
+    <firstname>Małgorzata</firstname>
+    <othername>xnellex/nelle</othername>
+    <surname>Napiontek</surname>
+  </othercredit>
+  <othercredit>
+    <contrib>Gameplay Coder</contrib>
+    <firstname>William</firstname>
+    <othername>willurd</othername>
+    <surname>Bowers</surname>
+  </othercredit>
+    <othercredit>
+    <contrib>Writer</contrib>
+    <firstname>Bartłomiej</firstname>
+    <othername>jester/*</othername>
+    <surname>Knapik</surname>
+  </othercredit>
+</authorgroup>
