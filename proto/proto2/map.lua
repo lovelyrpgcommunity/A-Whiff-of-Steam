@@ -37,19 +37,23 @@ Map.TILE_BOTTOM_VERTEX = Vector2:new(62, 69)
 Map.TILE_LEFT_VERTEX = Vector2:new(0, 22)
 Map.MAX_SCALE = 2.0
 Map.MIN_SCALE = 0.1
+Map.RUN_SPEED = 1
+Map.WALK_SPEED = 0.5
+Map.SNEAK_SPEED = 0.25
+
+Map.IMAGES = {
+	gridsquare = love.graphics.newImage("resources/mapeditor/gridsquare.png"),
+	tiles = {
+		love.graphics.newImage("resources/images/tiles/stone_textured.png"),
+		love.graphics.newImage("resources/images/tiles/grass_textured.png"),
+		love.graphics.newImage("resources/images/tiles/stone_plain.png"),
+		love.graphics.newImage("resources/images/tiles/grass_plain.png"),
+	}
+}
 
 function Map:initialize ()
 	self.size = {width=21, length=21}
 	self.offset = Vector2:new(480, 120)
-	self.images = {
-		gridsquare = love.graphics.newImage("resources/mapeditor/gridsquare.png"),
-		tiles = {
-			love.graphics.newImage("resources/images/tiles/stone_textured.png"),
-			love.graphics.newImage("resources/images/tiles/grass_textured.png"),
-			love.graphics.newImage("resources/images/tiles/stone_plain.png"),
-			love.graphics.newImage("resources/images/tiles/grass_plain.png"),
-		}
-	}
 	self.displayControls = true
 	self.editorEnabled = false
 	self.canDrag = false
@@ -59,6 +63,13 @@ function Map:initialize ()
 end
 
 function Map:update (dt)
+	local speed = Map.RUN_SPEED
+	if love.keyboard.isDown("lshift") then
+		speed = Map.WALK_SPEED
+	elseif love.keyboard.isDown("lctrl") then
+		speed = Map.SNEAK_SPEED
+	end
+	
 	-- Update the map offset
 	if self.canDrag and self.mdp then
 		local mx, my = love.mouse.getPosition()
@@ -66,17 +77,17 @@ function Map:update (dt)
 		self.offset = self.offset - ((self.mdp - mp) / self.scale)
 		self.mdp = mp
 	elseif not self.editorEnabled then
-		local move = (love.graphics.getWidth() / 2) * dt
-		if love.keyboard.isDown("up") then
+		local move = (love.graphics.getWidth() / 3) * dt * speed
+		if love.keyboard.isDown("w") then
 			self.offset.y = self.offset.y + move
 		end
-		if love.keyboard.isDown("down") then
+		if love.keyboard.isDown("s") then
 			self.offset.y = self.offset.y - move
 		end
-		if love.keyboard.isDown("left") then
+		if love.keyboard.isDown("a") then
 			self.offset.x = self.offset.x + move
 		end
-		if love.keyboard.isDown("right") then
+		if love.keyboard.isDown("d") then
 			self.offset.x = self.offset.x - move
 		end
 	end
@@ -106,9 +117,9 @@ function Map:draw ()
 				
 				local x, y = self:tileToCoords(i, j)
 				if Map.TILES[i] and Map.TILES[i][j] then
-					love.graphics.draw(self.images.tiles[Map.TILES[i][j]], x, y)
+					love.graphics.draw(Map.IMAGES.tiles[Map.TILES[i][j]], x, y)
 				else
-					love.graphics.draw(self.images.gridsquare, x, y)
+					love.graphics.draw(Map.IMAGES.gridsquare, x, y)
 					love.graphics.setColor(100,100,100)
 					love.graphics.print(string.format("%s,%s",i,j), x+66, y+38)
 				end
@@ -124,7 +135,7 @@ function Map:draw ()
 			love.graphics.setColor(255,255,255,255)
 			love.graphics.print("Toggle help: h",15,25)
 			love.graphics.print("Toggle editor: e",15,45)
-			love.graphics.print("Move: arrow keys",15,65)
+			love.graphics.print("Move: w/a/s/d",15,65)
 			love.graphics.print("     or: space + mouse drag",14,80)
 			love.graphics.print("Edit: click a tile and press",15,100)
 			love.graphics.print("   `/backspace - remove tile",15,115)
@@ -139,7 +150,7 @@ function Map:draw ()
 			love.graphics.setColor(255,255,255,255)
 			love.graphics.print("Toggle help: h",15,25)
 			love.graphics.print("Toggle editor: e",15,45)
-			love.graphics.print("Move: arrow keys",15,65)
+			love.graphics.print("Move: w/a/s/d",15,65)
 			love.graphics.print("     or: space + mouse drag",14,80)
 		end	
 
@@ -258,7 +269,7 @@ function Map:keypressed (key, unicode)
 			local byte = string.byte(key)
 			if byte >= 48 and byte <= 57 then
 				local tile = byte - 48 -- to get numbers 0-9
-				if self.images.tiles[tile] and Map.TILES then
+				if Map.IMAGES.tiles[tile] and Map.TILES then
 					if not Map.TILES[s.x] then Map.TILES[s.x] = {} end
 					Map.TILES[s.x][s.y] = tile
 				end

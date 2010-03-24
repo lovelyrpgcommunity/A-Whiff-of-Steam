@@ -1,19 +1,21 @@
 require("map")
+require("character")
 
 function love.load (args)
 	title = love.graphics.getCaption()
 	map = Map:new()
+	character = Character:new()
 end
 
 function love.update (dt)
-	map:update(dt)
-	--character:update(dt)
+	map:update(dt, character)
+	character:update(dt, map)
 end
 
 function love.draw ()
 	love.graphics.setCaption(title .. " (fps " .. love.timer.getFPS() .. ")")
 	map:draw()
-	--character:draw()
+	character:draw()
 end
 
 function love.mousepressed (x, y, button)
