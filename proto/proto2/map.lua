@@ -62,7 +62,7 @@ function Map:initialize ()
 	self.selectedTile = {x=1, y=1}
 end
 
-function Map:update (dt)
+function Map:update (dt, character)
 	local speed = Map.RUN_SPEED
 	if love.keyboard.isDown("lshift") then
 		speed = Map.WALK_SPEED
@@ -77,18 +77,40 @@ function Map:update (dt)
 		self.offset = self.offset - ((self.mdp - mp) / self.scale)
 		self.mdp = mp
 	elseif not self.editorEnabled then
-		local move = (love.graphics.getWidth() / 3) * dt * speed
+		local move = (love.graphics.getHeight() / 4) * dt * speed
+		local d = Vector2:new(0,0)
 		if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
-			self.offset.y = self.offset.y + move
+			d.y = move
 		end
 		if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
-			self.offset.y = self.offset.y - move
+			d.y = -move
 		end
 		if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
-			self.offset.x = self.offset.x + move
+			d.x = move
 		end
 		if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
-			self.offset.x = self.offset.x - move
+			d.x = -move
+		end
+		local c = character
+		local cp = c.position + Vector2:new(c.size.width/2, c.size.height/2)
+		local reverse = Vector2:new(-d.x,-d.y)
+		local s = self.scale
+		local b = c.bounds
+		local bp = b.position/s
+		local p = cp + reverse
+		if p.x > bp.x + b.width/s or p.x < bp.x then
+			-- Move the map along the x axis
+			self.offset.x = self.offset.x + d.x
+		else
+			-- Move the character along the x axis
+			c.position.x = c.position.x + reverse.x
+		end
+		if p.y > bp.y + b.height/s or p.y < bp.y then
+			-- Move the map along the y axis
+			self.offset.y = self.offset.y + d.y
+		else
+			-- Move the character along the y axis
+			c.position.y = c.position.y + reverse.y
 		end
 	end
 end

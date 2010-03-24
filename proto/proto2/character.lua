@@ -1,4 +1,5 @@
 require("lib/essential")
+require("lib/math/rect")
 
 Character = class("Character")
 
@@ -11,6 +12,7 @@ function Character:initialize ()
 	local w = love.graphics.getWidth()
 	local h = love.graphics.getHeight()
 	self.position = Vector2:new(w/2-self.size.width/2, h/2-self.size.height/2)
+	self.bounds = Rect:new(200, 200, w-400, h-400)
 end
 
 function Character:update (dt, map)
