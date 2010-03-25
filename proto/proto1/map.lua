@@ -91,6 +91,30 @@ function Map:update (dt, character)
 		if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
 			d.x = -move
 		end
+		if d.y ~= 0 and d.x ~= 0 then
+			local rX = (d.x < 0) and -1 or 1
+			local rY = (d.y < 0) and -1 or 1
+			local moveX = 0
+			local moveY = 0
+			if (rX == -1 and rY == 1) or (rX == 1 and rY == -1) then
+				moveX = love.graphics.getHeight() / 4 * dt * speed
+				moveY = love.graphics.getHeight() / 4 * 23 / 93 * dt * speed
+			end
+			if (rX == 1 and rY == 1) or (rX == -1 and rY == -1) then
+				moveX = love.graphics.getHeight() / 4 * 63 / 93 * dt * speed
+				moveY = love.graphics.getHeight() / 4 * 47 / 93 * dt * speed
+			end
+			if rY == -1 then
+				d.y = -moveY
+			else
+				d.y = moveY
+			end
+			if rX == -1 then
+				d.x = -moveX
+			else
+				d.x = moveX
+			end
+		end
 		local c = character
 		local cp = c.position + Vector2:new(c.size.width/2, c.size.height/2)
 		local reverse = Vector2:new(-d.x,-d.y)
