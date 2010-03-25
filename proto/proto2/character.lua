@@ -5,7 +5,7 @@ Character = class("Character")
 
 Character.IMAGES = {
 	cone = love.graphics.newImage("resources/images/characters/cone.png"),
-	rectprism = love.graphics.newImage("resources/images/characters/rectprism.png")
+	rectprism = love.graphics.newImage("resources/images/characters/rectprism.png"),
 }
 
 Character.QUADS = {
@@ -41,11 +41,13 @@ function Character:update (dt, map)
 	if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
 		d = "s"
 	end
-	if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
-		d = d .. "w"
-	end
 	if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
 		d = d .. "e"
+	end
+	if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
+		if #d < 2 then
+			d = d .. "w"
+		end
 	end
 	if d ~= "" then
 		self.direction = d
