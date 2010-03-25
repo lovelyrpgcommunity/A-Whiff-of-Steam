@@ -43,11 +43,8 @@ function Character:update (dt, map)
 	end
 	if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
 		d = d .. "e"
-	end
-	if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
-		if #d < 2 then
-			d = d .. "w"
-		end
+	elseif love.keyboard.isDown("a") or love.keyboard.isDown("left") then
+		d = d .. "w"
 	end
 	if d ~= "" then
 		self.direction = d
