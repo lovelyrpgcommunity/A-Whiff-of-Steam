@@ -21,6 +21,7 @@ end
 
 function love.mousepressed (x, y, button)
 	map:mousepressed(x, y, button)
+	character:mousepressed(x, y, button)
 end
 
 function love.mousereleased (x, y, button)

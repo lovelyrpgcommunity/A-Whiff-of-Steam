@@ -82,8 +82,22 @@ function Vector2:perp ()
 end
 
 function Vector2:angle (other)
-	--print(math.atan2(other.y - self.y, other.x - self.x))
-	--return math.atan2(self:perpdot(other), self:dot(other))
 	local rad = math.acos(self:dot(other) / (self:length() * other:length()))
 	return rad * 180 / math.pi
+end
+
+function Vector2:truncate (max)
+	if self:length() > max then
+		self:normalize()
+		self.x = self.x * max
+		self.y = self.y * max
+	end
+end
+
+function Vector2:min (min)
+	if self:length() < min then
+		self:normalize()
+		self.x = self.x * min
+		self.y = self.y * min
+	end
 end

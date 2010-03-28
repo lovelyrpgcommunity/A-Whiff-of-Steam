@@ -13,6 +13,12 @@ function Rect:initialize (x, y, width, height)
 	self.height   = height    or Rect.DEFAULT_HEIGHT
 end
 
+function Rect:__tostring ()
+	local p = self.position
+	return string.format("<Rect %f, %f, %f, %f>", p.x, p.y,
+		self.width, self.height)
+end
+
 function Rect:intersectsWithPoint (x, y)
 	if type("x") ~= "number" then
 		y = x.y
