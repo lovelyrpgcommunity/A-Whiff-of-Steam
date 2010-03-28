@@ -5,6 +5,7 @@ function love.load (args)
 	title = love.graphics.getCaption()
 	map = Map:new()
 	character = Character:new()
+	character:gotoState('ArrowKeysMovement')
 end
 
 function love.update (dt)

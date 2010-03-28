@@ -53,7 +53,8 @@ Map.IMAGES = {
 
 function Map:initialize ()
 	self.size = {width=21, length=21}
-	self.offset = Vector2:new(480, 120)
+	self.position = Vector2:new(480, 120)
+	self.velocity = Vector2:new(0, 0)
 	self.displayControls = true
 	self.editorEnabled = false
 	self.canDrag = false
@@ -63,79 +64,25 @@ function Map:initialize ()
 end
 
 function Map:update (dt, character)
-	local speed = Map.RUN_SPEED
-	if love.keyboard.isDown("lshift") then
-		speed = Map.WALK_SPEED
-	elseif love.keyboard.isDown("lctrl") then
-		speed = Map.SNEAK_SPEED
-	end
-	
-	-- Update the map offset
+	-- Update the map position
 	if self.canDrag and self.mdp then
 		local mx, my = love.mouse.getPosition()
 		local mp = Vector2:new(mx, my)
-		self.offset = self.offset - ((self.mdp - mp) / self.scale)
-		self.mdp = mp
-	elseif not self.editorEnabled then
-		local move = (love.graphics.getHeight() / 4) * dt * speed
-		local d = Vector2:new(0,0)
-		if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
-			d.y = move
+		self.position = self.position - ((self.mdp - mp) / self.scale)
+		self.mdp = mp	
+	end
+	
+	if not self.velocity:isZero() then
+		-- Get the rate of movement
+		local speed = Map.RUN_SPEED
+		if love.keyboard.isDown("lctrl") then
+			speed = Map.SNEAK_SPEED
+		elseif love.keyboard.isDown("lshift") then
+			speed = Map.WALK_SPEED
 		end
-		if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
-			d.y = -move
-		end
-		if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
-			d.x = move
-		end
-		if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
-			d.x = -move
-		end
-		if d.y ~= 0 and d.x ~= 0 then
-			local rX = (d.x < 0) and -1 or 1
-			local rY = (d.y < 0) and -1 or 1
-			local moveX = 0
-			local moveY = 0
-			if (rX == -1 and rY == 1) or (rX == 1 and rY == -1) then
-				moveX = love.graphics.getHeight() / 4 * dt * speed
-				moveY = love.graphics.getHeight() / 4 * 23 / 93 * dt * speed
-			end
-			if (rX == 1 and rY == 1) or (rX == -1 and rY == -1) then
-				moveX = love.graphics.getHeight() / 4 * 63 / 93 * dt * speed
-				moveY = love.graphics.getHeight() / 4 * 47 / 93 * dt * speed
-			end
-			if rY == -1 then
-				d.y = -moveY
-			else
-				d.y = moveY
-			end
-			if rX == -1 then
-				d.x = -moveX
-			else
-				d.x = moveX
-			end
-		end
-		local c = character
-		local cp = c.position + Vector2:new(c.size.width/2, c.size.height/2)
-		local reverse = Vector2:new(-d.x,-d.y)
-		local s = self.scale
-		local b = c.bounds
-		local bp = b.position/s
-		local p = cp + reverse
-		if p.x > bp.x + b.width/s or p.x < bp.x then
-			-- Move the map along the x axis
-			self.offset.x = self.offset.x + d.x
-		else
-			-- Move the character along the x axis
-			c.position.x = c.position.x + reverse.x
-		end
-		if p.y > bp.y + b.height/s or p.y < bp.y then
-			-- Move the map along the y axis
-			self.offset.y = self.offset.y + d.y
-		else
-			-- Move the character along the y axis
-			c.position.y = c.position.y + reverse.y
-		end
+		self.velocity = self.velocity * speed
+		self.position = self.position + self.velocity
+		self.velocity:zero()
 	end
 end
 
@@ -232,8 +179,8 @@ function Map:isSelectedTile (x, y, checkEditorEnabled)
 end
 
 function Map:tileToCoords (tx, ty)
-	local cx = self.offset.x + ((tx-1) * 63) - ((ty-1) * 93)
-	local cy = self.offset.y + ((tx-1) * 47) + ((ty-1) * 23)
+	local cx = self.position.x + ((tx-1) * 63) - ((ty-1) * 93)
+	local cy = self.position.y + ((tx-1) * 47) + ((ty-1) * 23)
 	return math.floor(cx), math.floor(cy)
 end
 
@@ -329,35 +276,35 @@ function Map:keypressed (key, unicode)
 
 	if self.editorEnabled then
 		local t = self.selectedTile
-		local m = self.offset
+		local m = self.position
 		-- 63, 93
 		-- 47, 23
 		if key == "up" then
 			if t.y-1 >= 1 then
 				self.selectedTile.y = t.y - 1
-				self.offset.x = self.offset.x - 93
-				self.offset.y = self.offset.y + 23
+				self.position.x = self.position.x - 93
+				self.position.y = self.position.y + 23
 			end
 		end
 		if key == "down" then
 			if t.y+1 <= self.size.length then
 				self.selectedTile.y = t.y + 1
-				self.offset.x = self.offset.x + 93
-				self.offset.y = self.offset.y - 23
+				self.position.x = self.position.x + 93
+				self.position.y = self.position.y - 23
 			end
 		end
 		if key == "left" then
 			if t.x-1 >= 1 then
 				self.selectedTile.x = t.x - 1
-				self.offset.x = self.offset.x + 63
-				self.offset.y = self.offset.y + 47
+				self.position.x = self.position.x + 63
+				self.position.y = self.position.y + 47
 			end
 		end
 		if key == "right" then
 			if t.x+1 <= self.size.width then
 				self.selectedTile.x = t.x + 1
-				self.offset.x = self.offset.x - 63
-				self.offset.y = self.offset.y - 47
+				self.position.x = self.position.x - 63
+				self.position.y = self.position.y - 47
 			end
 		end
 	end
