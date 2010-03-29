@@ -120,6 +120,8 @@ local ArrowKeysMovement = Character:addState('ArrowKeysMovement', Base)
 function ArrowKeysMovement:update (dt, map)
 	self.scale = map.scale
 	
+	if map.editorEnabled then return end
+	
 	local move = (love.graphics.getHeight() / 4) * dt
 	local d = Vector2:new(0,0)
 	if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
@@ -174,18 +176,19 @@ local MoveToPosition = Character:addState('MoveToPosition', Base)
 function MoveToPosition:update (dt, map)
 	self.scale = map.scale
 	
-	if self.goal then
+	if map.editorEnabled then return end
+	if not self.goal then return end
+	
+	local p = self.position
+	local test = Rect:new(p.x-5, p.y-5, 10, 10)
+	
+	if test:intersectsWithPoint(self.goal) then
+		self:gotoState('ArrowKeysMovement')
+	else
 		local d = (self.goal - self.position) * dt
 		d:truncate(Character.MAX_SPEED)
 		d:min(Character.MIN_SPEED)
 		self.velocity = d
-	end
-	
-	super.update(self, dt, map)
-	
-	local p = self.position
-	local test = Rect:new(p.x - 47/2, p.y - 23/2, 47, 23)
-	if test:intersectsWithPoint(self.goal) then
-		self:gotoState('ArrowKeysMovement')
+		super.update(self, dt, map)
 	end
 end
