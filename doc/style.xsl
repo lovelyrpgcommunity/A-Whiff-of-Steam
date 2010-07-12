@@ -20,8 +20,14 @@
 </xsl:template>
 
 <xsl:template match="appendix[@id='appendix.rev']">
+  <xsl:if test="not (preceding-sibling::appendix)">
+    <xsl:text>\begin{appendices}&#10;</xsl:text>
+  </xsl:if>
   <xsl:text>\chapter{\DBKrevhistorychapter}\begin{sffamily}\DBKrevhistory\end{sffamily}</xsl:text>
   <xsl:call-template name="label.id"/>
+  <xsl:if test="not (following-sibling::appendix)">
+  <xsl:text>&#10;\end{appendices}&#10;</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>

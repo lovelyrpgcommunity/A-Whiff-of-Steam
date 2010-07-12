@@ -1,4 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!-- This document was created with Syntext Serna Free. --><!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % entities SYSTEM "../common.ent">
+  %entities;
+]>
 <chapter>
   <title>Focus</title>
   <para><emphasis role="italic">A Whiff of Steam</emphasis> is a 2D role-playing game settled in steam-punk world. The magic is fully fused with the technology. Technology is explained in terms of magic and considered as one of the fields of magical studies.</para>
@@ -15,7 +19,7 @@
     <title>Stylistics concept</title>
     <mediaobject>
       <imageobject>
-        <imagedata fileref="artwork/concept1.png" width="12cm"/>
+        <imagedata fileref="../artwork/concept1.png" width="12cm"/>
       </imageobject>
     </mediaobject>
   </figure>

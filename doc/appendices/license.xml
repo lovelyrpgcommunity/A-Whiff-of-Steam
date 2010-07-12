@@ -1,4 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!-- This document was created with Syntext Serna Free. --><!DOCTYPE appendix PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % entities SYSTEM "../common.ent">
+  %entities;
+]>
 <appendix id="appendix.license">
   <title>Full license information</title>
   <para><emphasis role="bold">Lovely Public Community License (LPCL) Version 1.3f, November 1, 2009</emphasis></para>
@@ -59,11 +63,11 @@
     <para>At most three votes per can be made about the same product and at least one week apart. A vote may concern more than one product. No legal person may open more than four votes per month.</para>
   </section>
   <section id="section.license.community">
-    <title>The LövelyRPG Community.</title>
+    <title>The &lovelyrpg; Community.</title>
     <para>This section defines the community which this product is owned by.</para>
-    <para>The LövelyRPG Community consists of every real person with an unbanned account on any forum hosted by <ulink url="http://love2d.org">love2d.org</ulink> with at least ten posts made a week or more ago and the LövelyRPG developers, as described in separate clause in <xref linkend="appendix.contribution"/>.</para>
+    <para>The &lovelyrpg; Community consists of every real person with an unbanned account on any forum hosted by <ulink url="http://love2d.org">love2d.org</ulink> with at least ten posts made a week or more ago and the &lovelyrpg; developers, as described in separate clause in <xref linkend="appendix.contribution"/>.</para>
     <para>To invoke clause 3.2, a post must be made by a team member in a new thread hosted by the domain <ulink url="http://love2d.org">love2d.org</ulink>. This post must clearly state the opening of a vote, the expected format of votes, and the effect of the respective answers.</para>
-    <para>A valid vote is any post in this thread made by a member of the LövelyRPG Community which</para>
+    <para>A valid vote is any post in this thread made by a member of the &lovelyrpg; Community which</para>
     <itemizedlist>
       <listitem>
         <para>contains &quot;yes.&quot; or &quot;no.&quot;, but not both, as a subword of any capitalization,</para>

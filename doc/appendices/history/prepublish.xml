@@ -1,4 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!-- This document was created with Syntext Serna Free. --><!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % entities SYSTEM "../../common.ent">
+  %entities;
+]>
 <section>
   <title>Changes before project publishing</title>
   <para>It took two months from project start, to moment when we are ready to publish project page on web. Up to this point, it was mostly lots of work related to deciding goals, concept and focus of game.</para>
@@ -38,7 +42,7 @@
         <title>Proposed stylistics concept</title>
         <mediaobject>
           <imageobject>
-            <imagedata fileref="artwork/concept1.png" width="4.4cm"/>
+            <imagedata fileref="../../artwork/concept1.png" width="4.4cm"/>
           </imageobject>
         </mediaobject>
       </figure>

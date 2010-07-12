@@ -1,9 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!-- This document was created with Syntext Serna Free. --><!DOCTYPE part PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % entities SYSTEM "../common.ent">
+  %entities;
+]>
 <part>
   <title>Appendices</title>
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="history/history.xml" encoding="XML"/>
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="contributions.xml" encoding="XML"/>
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="license.xml" encoding="XML"/>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="contributions.xml" encoding="XML"/>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="license.xml" encoding="XML"/>
   <appendix id="appendix.rev">
     <title>Detailed revision table</title>
     <para>(Auto generated table, you shouldn&apos;t see this unless you edit files in some editor! Don&apos;t change <emphasis>id</emphasis> of this appendix or you break transformation rules for revision table.)</para>

@@ -1,10 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!-- This document was created with Syntext Serna Free. --><!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "docbookV4.5/docbookx.dtd" [
+<!-- This document was created with Syntext Serna Free. --><!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  <!ENTITY % entities SYSTEM "common.ent">
+  %entities;
 ]>
 <book>
   <bookinfo>
     <title>A Whiff of Steam: Game Design Document</title>
-    <subtitle>LövelyRPG project</subtitle>
+    <subtitle>&lovelyrpg; project</subtitle>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="authors.xml" encoding="XML"/>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="legal.xml" encoding="XML"/>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="revision.data" encoding="XML"/>
