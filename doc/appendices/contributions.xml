@@ -9,13 +9,13 @@
   <section id="section.contribution.page">
     <title>Project page</title>
     <para>Project page is hosted at GitHub (<ulink url="http://www.github.com/">github.com</ulink>). Project was created using virtual user <emphasis>lovelyrpgcommunity</emphasis>, so full link to it is <ulink url="http://github.com/lovelyrpgcommunity/a-whiff-of-steam">github.com/lovelyrpgcommunity/a-whiff-of-steam</ulink>. Community also have virtual Google Gmail account registered with same name (<email>lovelyrpgcommunity@gmail.com</email>) and Google Wave account connected with above e-mail.</para>
-    <para>Project page includes blog, wiki, milestones, tickets and Git (<ulink url="http://www.git-scm.com/">git-scm.com</ulink>) source hosting. All developers have access to page and can freely modify posted content depending on role they fulfil. All contributors and community will have read-only access to project page.</para>
+    <para>Project page includes tickets, downloads, wiki and Git (<ulink url="http://www.git-scm.com/">git-scm.com</ulink>) source hosting. All developers have access to page and can freely modify posted content. All contributors and community will have read-only access to project page.</para>
     <para>There is also official topic on &love; forum, <ulink url="http://love2d.org/forum/viewtopic.php?f=5&amp;t=1422">love2d.org/forum/viewtopic.php?f=5&amp;t=1422</ulink>, named <emphasis>Official &quot;A Whiff of Steam&quot;, the &lovelyrpg; project topic</emphasis>.</para>
   </section>
   <section>
     <title>Project roles and permissions</title>
-    <para>Non-members in project have very limited permission set. All not logged in persons have right to only comment on blog and tickets. After logging in into GitHub, they can also create tickets, attach files to tickets and create code comments. This still is very basic set of permissions.</para>
-    <para>Each member can have one or more roles assigned. In reality, because of current GitHub limitations, on page one will have only one role assigned, one with highest privileges. Here is list of available special roles:<itemizedlist>
+    <para>Non-members in project have very limited permission set. To do anything other than reading you need to be logged in. After logging in, you are allowed to create code comments, create and comment in tickets, and create-edit wiki pages. All developers have full rights, including uploading of downloads, etc. Our previous hosting service (Codaset) offered more control-level, but currently it is only enforced by developers, not restricted by system.</para>
+    <para>Each member can have one or more roles assigned. Here is list of available special roles:<itemizedlist>
         <listitem>
           <para><emphasis role="bold">Chuck</emphasis> - Supervisor and moderator. Uses special roundhouse kick to motivate lazy members of the team or get rid of unwanted stuff. Can be selected from people with Lead Developer roles on developers meetings. For security reasons, all Chucks have access to virtual <emphasis role="italic">lovelyrpgcommunity</emphasis> GitHub, Gmail and Wave accounts.</para>
         </listitem>
@@ -85,60 +85,6 @@
               <para><emphasis role="bold">Editor Coder</emphasis> - Person responsible for program editor for final version of the game.</para>
             </listitem>
           </itemizedlist>
-        </listitem>
-      </itemizedlist></para>
-    <para>Each role comes with basic developer permissions set:<itemizedlist>
-        <listitem>
-          <para>source commits and pushes,</para>
-        </listitem>
-        <listitem>
-          <para>update wiki pages and upload page attachments,</para>
-        </listitem>
-        <listitem>
-          <para>create and update tickets and upload ticket attachments,</para>
-        </listitem>
-        <listitem>
-          <para>create and update code comments,</para>
-        </listitem>
-        <listitem>
-          <para>create and update ticket comments,</para>
-        </listitem>
-        <listitem>
-          <para>create and update blog comments.</para>
-        </listitem>
-      </itemizedlist></para>
-    <para>Additionally, Lead Developer roles and Chuck have right to:<itemizedlist>
-        <listitem>
-          <para>create, update, complete and reopen milestones,</para>
-        </listitem>
-        <listitem>
-          <para>create and update blog posts,</para>
-        </listitem>
-        <listitem>
-          <para>create wiki pages,</para>
-        </listitem>
-        <listitem>
-          <para>assign code, ticket and blog comments or tickets as spam.</para>
-        </listitem>
-      </itemizedlist></para>
-    <para>Chuck have also rights to:<itemizedlist>
-        <listitem>
-          <para>delete tickets, tickets attachments and comments,</para>
-        </listitem>
-        <listitem>
-          <para>delete wiki pages and page attachments,</para>
-        </listitem>
-        <listitem>
-          <para>delete blog posts and comments,</para>
-        </listitem>
-        <listitem>
-          <para>delete milestones,</para>
-        </listitem>
-        <listitem>
-          <para>delete code comments,</para>
-        </listitem>
-        <listitem>
-          <para>admin project page.</para>
         </listitem>
       </itemizedlist></para>
     <para>In role section of developer data, highest and lowest role should be specified in form &quot;role/role&quot;. For example, &quot;Chuck/Musician&quot;, means that someone have all rights of Chuck, Lead Artist and Musician. If both roles are same, it can be specified alone, i.e. &quot;Musician&quot; is musician without special permissions of Lead Artist. Lead developer or Chuck role shouldn&apos;t be specified without lower role, i.e. someone cannot be Lead Artist without being Concept Artist, Content Artist, Sound Engineer or Musician. It&apos;s also possible to provide few lower roles if they fit same higher role, like &quot;Lead Artist/Concept Artist, Musician&quot;. If someone belongs to two or more Lead Developer roles, he is automatically promoted into Chuck.</para>
