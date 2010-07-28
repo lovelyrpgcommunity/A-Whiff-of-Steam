@@ -17,6 +17,12 @@
     <surname>van Strien</surname>
   </othercredit>
   <othercredit>
+    <contrib>Lead Coder/Gameplay Coder</contrib>
+    <firstname>William</firstname>
+    <othername>willurd</othername>
+    <surname>Bowers</surname>
+  </othercredit>
+  <othercredit>
     <contrib>Chuck/Game Designer</contrib>
     <firstname>Andrzej</firstname>
     <othername>giniu</othername>
@@ -25,19 +31,25 @@
   <othercredit>
     <contrib>Chuck/Game Designer</contrib>
     <firstname>Małgorzata</firstname>
-    <othername>xnellex/(unknown)</othername>
+    <othername>xnellex/nelle</othername>
     <surname>Napiontek</surname>
   </othercredit>
   <othercredit>
-    <contrib>Gameplay Coder</contrib>
-    <firstname>William</firstname>
-    <othername>willurd</othername>
-    <surname>Bowers</surname>
+    <contrib>Webmaster</contrib>
+    <firstname>Robin</firstname>
+    <othername>Robin/gvx</othername>
+    <surname>Wellner</surname>
   </othercredit>
-    <othercredit>
+  <othercredit>
     <contrib>Writer</contrib>
     <firstname>Bartłomiej</firstname>
     <othername>jester/*</othername>
     <surname>Knapik</surname>
+  </othercredit>
+  <othercredit>
+    <contrib>?</contrib>
+    <firstname>?</firstname>
+    <othername>kalle2990/*</othername>
+    <surname>?</surname>
   </othercredit>
 </authorgroup>
