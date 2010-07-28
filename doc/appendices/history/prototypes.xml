@@ -17,22 +17,22 @@
       <para>For now we can assume 800x600 in windowed mode.</para>
       <section>
         <title>Results</title>
-        <para>Most work on prototype was done by <emphasis>willurd</emphasis> with support from <emphasis>bartbes</emphasis>. They spent lots of time on this one, and created even more than described here. Description was extended with zoom functionality that allowed to test/simulate look with different resolutions and editor features for making map creation easier. First iteration can be marked as success. Work on this iteration started at 18th March and ended at 21th March.</para>
+        <para>Most works on the prototype was done by <emphasis>willurd</emphasis> with support from <emphasis>bartbes</emphasis>. They spent lots of time on this one, and created even more than described here. Description was extended with zoom functionality that allowed to test/simulate look with different resolutions and editor features for making map creation easier. First iteration can be marked as success. Work on this iteration started at 18th March and ended at 21th March.</para>
       </section>
     </section>
     <section>
       <title>Iteration 2, here comes our hero</title>
-      <para>This iteration will add scale to world, foliage and road sign, but most important - it will add hero. This time we will try to make the character move around and catch proper proportions.<itemizedlist>
+      <para>This iteration will add scale to world, foliage and road sign, but most important - it will add the hero. This time we will try to make the character move around and catch proper proportions.<itemizedlist>
           <listitem>
             <para><emphasis>Scale</emphasis> - lets for now assume for need of this prototype, that tile as we have it now, have side of 2 meters, making it screen height about 18 meters - lets create character with height of about 60 pixels. We should have 8 sprites for now of character facing 8 different directions. Character could be made of cone or cylinder, with somehow marked direction it&apos;s pointing.</para>
           </listitem>
         </itemizedlist><itemizedlist>
           <listitem>
-            <para><emphasis>Character movement</emphasis> - character movement should be fluent, for now no collisions are needed, let&apos;s assume that walking from bottom to top of screen should take about 4 seconds running, 8 walking and 16 sneaking. For prototype it should be enough to implement one speed, say running. We should use two methods of walking, one based on keyboard, second by using mouse.</para>
+            <para><emphasis>Character movement</emphasis> - character movement should be fluent, for now no collisions are needed, let&apos;s assume that walking from bottom to top of screen should take about 4 seconds running, 8 walking and 16 sneaking. For the prototype it should be enough to implement one speed, say running. We should use two methods of walking, one based on a keyboard, second by using a mouse.</para>
           </listitem>
         </itemizedlist><itemizedlist>
           <listitem>
-            <para><emphasis>Foliage and sign</emphasis> - let&apos;s create simple higher brush grass asset to place around - reaching character&apos;s knees and one road sign a bit higher than character. Purpose of this is to test out drawing order and stuff assets placement, no collisions required yet. Assets should be placed on pixel based manner, i.e. it should be possible to place sign on left or right part of certain tile.</para>
+            <para><emphasis>Foliage and sign</emphasis> - let&apos;s create simple higher brush grass asset to place around - reaching character&apos;s knees and one road sign a bit higher than character. Purpose of this is to test out drawing order and stuff assets placement, no collisions required yet. Assets should be placed on a pixel based manner, i.e., it should be possible to place sign on left or right part of certain tile.</para>
           </listitem>
         </itemizedlist></para>
     </section>
