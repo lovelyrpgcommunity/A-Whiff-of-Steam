@@ -14,7 +14,7 @@
   </section>
   <section>
     <title>Road to design goals</title>
-    <para>First question asked on 18th January had to decide setting we would work in. After few days, on 22th, by 9 out of 16 votes it was decided that we will use steampunk setting. Next question, asked on 22th January and avaible to vote till 2nd February was about key gameplay elements. Three key gameplay elements were chosen, first and most important, exploration picked by 13 out of 20 people. Story was runner up with 11 out of 20 votes and finally last gameplay element that made it in was non player characters interactions with 10 out of 20 votes. This question also was last to be asked using forum features, following questions were asked using separate third party polling tool.</para>
+    <para>First question asked on 18th January had to decide setting we would work in. After few days, on 22th, by 9 out of 16 votes it was decided that we will use steampunk setting. Next question, asked on 22th January and available to vote till 2nd February was about key gameplay elements. Three key gameplay elements were chosen, first and most important, exploration picked by 13 out of 20 people. Story was runner up with 11 out of 20 votes and finally last gameplay element that made it in was non player characters interactions with 10 out of 20 votes. This question also was last to be asked using forum features, following questions were asked using separate third party polling tool.</para>
     <para>From 2nd to 8th February question about emotions that we want out game to trigger in hero or player was on, results included surprise with 7 out of 11 votes, rejection with 5 out of 11 votes and hope with 4 out of 11 votes. Following two questions were asked in parallel, from 8th to 11th February. During this stage by 5 of 11 votes it was chosen, that magic and technology are in full fusion, with one described in terms of another, and with 5 out of 10 votes, that we would use separate detailed tactical view for fights and consistent view for travel and location exploration, with parts of large world randomly generated.</para>
     <para>Next two questions again asked in parallel were on from 11th to 14th February. During this stage it was decided on visual stylistics, i.e. that we would use eastern flavoured realistic comics style. 4 out of 8 people voted for it. At same time, there was question about view projection that would be used for travel and location exploration, again 4 out of 8 people voted for one option, the trimetric projection.</para>
     <para>The last and one of the most important questions was asked on 14th February and was on for whole week, till 21th February. Question was about proposed beginning of storyline, and with 4 out of 10 votes it was decided, to go with story based on amnesia, i.e. &quot;Hero awakes for short while on train crash site, he manage to notice he is highly wounded and someone is trying to rob him. Soon he looses consciousness again to wake up in hospital with amnesia. He is tormented with bad dreams, soon he starts his seek for his own past, uncovering his criminal deeds conflicting with his good subconscious side. His dreams become longer and more clear - seems that he was one that caused train crash. Police starts to take interest in him, but he still cannot remember anything other than causing the crash. Was it really him who did it and is there something behind it?&quot;</para>
@@ -42,7 +42,7 @@
         <title>Proposed stylistics concept</title>
         <mediaobject>
           <imageobject>
-            <imagedata fileref="../../artwork/concept1.png" width="4.4cm"/>
+            <imagedata width="4.4cm" fileref="../../artwork/concept1.png"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -122,6 +122,6 @@
           <para>Flash&apos;n&apos;Steam (<emphasis>giniust</emphasis>)</para>
         </listitem>
       </itemizedlist></para>
-    <para>Poll stayed open untill 13th March and &whiff; was selected with 5 out of 9 votes in total.</para>
+    <para>Poll stayed open until 13th March and &whiff; was selected with 5 out of 9 votes in total.</para>
   </section>
 </section>
