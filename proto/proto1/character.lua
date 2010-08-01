@@ -88,13 +88,17 @@ function Base:update (dt, map)
 	if p.x > bp.x + b.width/s or p.x < bp.x then
 		-- Move the map along the x axis instead
 		map.velocity.x = -self.velocity.x
-		self.goal.x = self.goal.x - self.velocity.x
+    if self.goal then
+  		self.goal.x = self.goal.x - self.velocity.x
+    end
 		self.velocity.x = 0
 	end
 	if p.y > bp.y + b.height/s or p.y < bp.y then
 		-- Move the map along the y axis instead
 		map.velocity.y = -self.velocity.y
-		self.goal.y = self.goal.y - self.velocity.y
+    if self.goal then
+  		self.goal.y = self.goal.y - self.velocity.y
+    end
 		self.velocity.y = 0
 	end
 	
