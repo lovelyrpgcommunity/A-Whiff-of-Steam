@@ -139,7 +139,6 @@
     <para>Sometimes there are some decisions to be made, when developers cannot decide on what option to pick, or just want to hear community opinion, poll should be created.</para>
     <para>At such polls, anyone with account on &love; forum can vote. Poll should stay on at least 3 days, and closing day should be posted along with poll opening. Fact of opening poll should be noted in <xref linkend="appendix.history"/>. To all such polls, developers should vote last to not influence results, and they should note down their votes in project history documentation.</para>
     <para>In case of ties, any Developer vote for option that tied, counts as two. In case it doesn&apos;t resolve ties, Lead Developers decisions for votes that tied, counts as four votes. In case this still doesn&apos;t resolve conflict, option is picked by Chucks from tied options, again if this doesn&apos;t bring resolution, final decision is randomly taken from all that tied. Whole procedure of selecting result, should be appropriately noted in project history documentation.</para>
-    <para>Sometimes, if community wants a certain feature, or doesn&apos;t like certain feature, it can opt in with a poll proposing certain change with Yes/No options, and if enough votes is gathered, the feature should be integrated in some way into project. Only thing that shouldn&apos;t be changed that way is focus, but it can be extended if it still fits on two pages.</para>
   </section>
   <section>
     <title>Coding standards</title>
