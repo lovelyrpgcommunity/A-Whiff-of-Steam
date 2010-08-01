@@ -35,6 +35,51 @@
             <para><emphasis>Foliage and sign</emphasis> - let&apos;s create simple higher brush grass asset to place around - reaching character&apos;s knees and one road sign a bit higher than character. Purpose of this is to test out drawing order and stuff assets placement, no collisions required yet. Assets should be placed on a pixel based manner, i.e., it should be possible to place sign on left or right part of certain tile.</para>
           </listitem>
         </itemizedlist></para>
+      <section>
+        <title>Important events during iteration 2</title>
+        <para>During this phase project had hard days. After some work, most people had troubles finding time to work. It resulted in long break. After this, project had to be refreshed. To bring new life to it again, some decisions were made.</para>
+        <itemizedlist>
+          <listitem>
+            <para>We moved to GitHub, so more people can contribute.</para>
+          </listitem>
+          <listitem>
+            <para>We welcomed a new Developer and issued one promotion to Lead Developer role.</para>
+          </listitem>
+          <listitem>
+            <para>We implemented new ticketing system using GitHub labels.</para>
+          </listitem>
+          <listitem>
+            <para>First developer meeting was held (on 1st August 2010, 15:00-16:00 GMT), with some important decisions made:</para>
+            <para><itemizedlist>
+                <listitem>
+                  <para>We restrict the way community can force in destructive changes to current project, it is no longer possible to force developers to change nearly finished game and rewrite all of it, even if 100% of community wants it and provides patches, unless developers agree to this. It was necessary to protect developers work, who gave a lot of themselves to project.</para>
+                </listitem>
+                <listitem>
+                  <para>It was decided to prepare description of next iterations of prototype 1, and some sketch of what they could be was made.</para>
+                </listitem>
+                <listitem>
+                  <para>Based on prepared iterations for prototype one, we will prepare open task-tickets for community to take on, giving some directions to potential contributors.</para>
+                </listitem>
+                <listitem>
+                  <para>Finally, it was decided to repeat meeting, probably during next week.</para>
+                </listitem>
+              </itemizedlist></para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+    <section>
+      <title>Iteration 3, start bumping into things</title>
+      <para>After previous iteration, the world will have already proper scale, hero and some foliage and road signs. This iteration will concentrate on collisions.</para>
+      <para>We should add some larger stones, a tree with big trunk and (currently closed, probably very similar to a box) house. Different things that will stop our hero from movement.</para>
+    </section>
+    <section>
+      <title>Iteration 4, Willma - I&apos;m home</title>
+      <para>With all this done, we will open the previously added house. Add ability to enter it and move around. The building should still have only one floor available. We should decide how to show the interior. For this prototype, the building can be empty box with holes for windows or doors. Proper doors will be added in later prototypes, when working on interactions.</para>
+    </section>
+    <section>
+      <title>Iteration 5, Stairway to Heaven</title>
+      <para>When character will have freedom to walk around on the map and into buildings, we will add stairs to second floor, and probably basement too. We need to make sure, that the transition of view between floors works, especially while still on stairs, and that collisions are working too, so character does not get stuck. Both keyboard and mouse movement should work.</para>
     </section>
   </section>
 </section>
