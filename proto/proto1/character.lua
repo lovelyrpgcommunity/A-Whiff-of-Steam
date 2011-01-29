@@ -75,17 +75,17 @@ local Base = Character:addState('Base')
 local alpha=math.pi/6
 local beta=math.pi/7
 local step=math.pi/8
-local ca=1/math.cos(alpha)
-local cb=1/math.cos(beta)
+local ca=math.cos(alpha)
+local cb=math.cos(beta)
+local sasb=math.sin(alpha)*math.sin(beta)
 local tatb=math.tan(alpha)*math.tan(beta)
 
 function Base:update (dt, map)
 	-- set the direction
-  x2=self.velocity.x*cb
-  y2=tatb*self.velocity.x-self.velocity.y*ca
-  dir=math.atan2(y2,x2)
-  
+  x2=self.velocity.x/cb
+  y2=tatb*self.velocity.x-self.velocity.y/ca
 	if math.abs(x2)+math.abs(y2)>0 then
+    dir=math.atan2(y2,x2)
   	local d = ""
   	if (dir>step) and (dir<7*step) then
   		d = "n"
@@ -209,8 +209,13 @@ function MoveToPosition:update (dt, map)
 		self:gotoState('ArrowKeysMovement')
 	else
 		local d = (self.goal - self.position) * dt
-		d:truncate(Character.MAX_SPEED)
-		d:min(Character.MIN_SPEED)
+    local orig = d
+    orig.x=d.x/cb
+    orig.y=d.y/ca-tatb*d.x
+		orig:truncate(Character.MAX_SPEED)
+		orig:min(Character.MIN_SPEED)
+    d.x = cb*orig.x
+    d.y = sasb*orig.x+ca*orig.y
 		self.velocity = d
 		super.update(self, dt, map)
 	end
