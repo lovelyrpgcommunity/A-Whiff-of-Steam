@@ -64,20 +64,39 @@ end
 
 local Base = Character:addState('Base')
 
+-- movement constants helpers
+-- to convert world to screen we do:
+--  1) rotate by beta along Y
+--  2) rorate by alpha along X
+--  3) project to plane Z=0
+-- that way to convert (x,y,z) to (x',y') we do
+--  x' = cos(beta)*x + sin(beta)*z
+--  y' = sin(alpha)*sin(beta)*x + cos(alpha)*y -sin(alpha)*cos(beta)*z
+local alpha=math.pi/6
+local beta=math.pi/7
+local step=math.pi/8
+local ca=1/math.cos(alpha)
+local cb=1/math.cos(beta)
+local tatb=math.tan(alpha)*math.tan(beta)
+
 function Base:update (dt, map)
 	-- set the direction
-	local d = ""
-	if self.velocity.y < 0 then
-		d = "n"
-	elseif self.velocity.y > 0 then
-		d = "s"
-	end
-	if self.velocity.x < 0 then
-		d = d .. "w"
-	elseif self.velocity.x > 0 then
-		d = d .. "e"
-	end
-	if d ~= "" then
+  x2=self.velocity.x*cb
+  y2=tatb*self.velocity.x-self.velocity.y*ca
+  dir=math.atan2(y2,x2)
+  
+	if math.abs(x2)+math.abs(y2)>0 then
+  	local d = ""
+  	if (dir>step) and (dir<7*step) then
+  		d = "n"
+  	elseif (dir<-step) and (dir>-7*step) then
+  		d = "s"
+  	end
+  	if (dir>5*step) or (dir<-5*step) then
+  		d = d .. "w"
+  	elseif (dir<3*step) and (dir>-3*step) then
+  		d = d .. "e"
+  	end
 		self.direction = d
 	end
 	
