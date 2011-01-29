@@ -127,11 +127,11 @@ function Base:update (dt, map)
   
   if not temp:isZero() then
     -- Get the rate of movement
-    local speed = Map.RUN_SPEED
+    local speed = Map.WALK_SPEED
     if love.keyboard.isDown("lctrl") then
       speed = Map.SNEAK_SPEED
     elseif love.keyboard.isDown("lshift") then
-      speed = Map.WALK_SPEED
+      speed = Map.RUN_SPEED
     end
     temp = temp * speed
     self.position = self.position + temp

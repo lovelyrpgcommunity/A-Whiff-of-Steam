@@ -37,9 +37,9 @@ Map.TILE_BOTTOM_VERTEX = Vector2:new(62, 69)
 Map.TILE_LEFT_VERTEX = Vector2:new(0, 22)
 Map.MAX_SCALE = 2.0
 Map.MIN_SCALE = 0.1
-Map.RUN_SPEED = 1
-Map.WALK_SPEED = 0.5
-Map.SNEAK_SPEED = 0.25
+Map.WALK_SPEED = 1
+Map.RUN_SPEED = 2
+Map.SNEAK_SPEED = 0.5
 
 Map.IMAGES = {
 	gridsquare = love.graphics.newImage("resources/mapeditor/gridsquare.png"),
@@ -74,11 +74,11 @@ function Map:update (dt, character)
 	
 	if not self.velocity:isZero() then
 		-- Get the rate of movement
-		local speed = Map.RUN_SPEED
+		local speed = Map.WALK_SPEED
 		if love.keyboard.isDown("lctrl") then
 			speed = Map.SNEAK_SPEED
 		elseif love.keyboard.isDown("lshift") then
-			speed = Map.WALK_SPEED
+			speed = Map.RUN_SPEED
 		end
 		self.velocity = self.velocity * speed
 		self.position = self.position + self.velocity
