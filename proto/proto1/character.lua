@@ -82,10 +82,8 @@ local tatb=math.tan(alpha)*math.tan(beta)
 
 function Base:update (dt, map)
   -- set the direction
-  x2=self.velocity.x/cb
-  y2=tatb*self.velocity.x-self.velocity.y/ca
-  if math.abs(x2)+math.abs(y2)>0 then
-    dir=math.atan2(y2,x2)
+  if math.abs(self.velocity.x)+math.abs(self.velocity.y)>0 then
+    dir=math.atan2(-self.velocity.y,self.velocity.x)
     local d = ""
     if (dir>step) and (dir<7*step) then
       d = "n"
@@ -100,28 +98,34 @@ function Base:update (dt, map)
     self.direction = d
   end
   
-  local p = self.position + Vector2:new(self.size.width/2, self.size.height/2) + self.velocity
+  local temp = Vector2:new(0,0)
+
+  temp.x = cb*self.velocity.x
+  temp.y = sasb*self.velocity.x+ca*self.velocity.y
+
+
+  local p = self.position + Vector2:new(self.size.width/2, self.size.height/2) + temp
   local s = self.scale
   local b = self.bounds
   local bp = b.position/s
   if p.x > bp.x + b.width/s or p.x < bp.x then
     -- Move the map along the x axis instead
-    map.velocity.x = -self.velocity.x
+    map.velocity.x = -temp.x
     if self.goal then
-      self.goal.x = self.goal.x - self.velocity.x
+      self.goal.x = self.goal.x - temp.x
     end
-    self.velocity.x = 0
+    temp.x = 0
   end
   if p.y > bp.y + b.height/s or p.y < bp.y then
     -- Move the map along the y axis instead
-    map.velocity.y = -self.velocity.y
+    map.velocity.y = -temp.y
     if self.goal then
-      self.goal.y = self.goal.y - self.velocity.y
+      self.goal.y = self.goal.y - temp.y
     end
-    self.velocity.y = 0
+    temp.y = 0
   end
   
-  if not self.velocity:isZero() then
+  if not temp:isZero() then
     -- Get the rate of movement
     local speed = Map.RUN_SPEED
     if love.keyboard.isDown("lctrl") then
@@ -129,9 +133,9 @@ function Base:update (dt, map)
     elseif love.keyboard.isDown("lshift") then
       speed = Map.WALK_SPEED
     end
-    self.velocity = self.velocity * speed
-    self.position = self.position + self.velocity
-    self.velocity:zero()
+    temp = temp * speed
+    self.position = self.position + temp
+    temp:zero()
   end
 end
 
@@ -142,9 +146,9 @@ local ArrowKeysMovement = Character:addState('ArrowKeysMovement', Base)
 
 function ArrowKeysMovement:update (dt, map)
   self.scale = map.scale
-  
+ 
   if map.editorEnabled then return end
-  
+
   local move = (love.graphics.getHeight() / 4) * dt
   local d = Vector2:new(0,0)
   if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
@@ -165,12 +169,8 @@ function ArrowKeysMovement:update (dt, map)
     d.y = d.y/math.sqrt(2)
   end
 
-  local temp = Vector2:new(0,0)
-  temp.x = -cb*d.x
-  temp.y = -sasb*d.x-ca*d.y
-
-  self.velocity.x = math.sqrt(2)/2*(temp.x+temp.y)
-  self.velocity.y = math.sqrt(2)/2*(temp.y-temp.x)
+  self.velocity.x = -math.sqrt(2)/2*(d.x+d.y)
+  self.velocity.y = math.sqrt(2)/2*(d.x-d.y)
 
   super.update(self, dt, map)
 end
@@ -192,15 +192,10 @@ function MoveToPosition:update (dt, map)
   if test:intersectsWithPoint(self.goal) then
     self:gotoState('ArrowKeysMovement')
   else
-    local d = (self.goal - self.position) * dt
-    local orig = Vector2:new(0,0)
-    orig.x=d.x/cb
-    orig.y=d.y/ca-tatb*d.x
-    orig:truncate(Character.MAX_SPEED)
-    orig:min(Character.MIN_SPEED)
-    d.x = cb*orig.x
-    d.y = sasb*orig.x+ca*orig.y
-    self.velocity = d
+    local d = (self.goal - self.position)
+    d=d/math.sqrt(d.x^2+d.y^2) * (love.graphics.getHeight() / 4) * dt
+    self.velocity.x=d.x/cb
+    self.velocity.y=d.y/ca-tatb*d.x
     super.update(self, dt, map)
   end
 end
