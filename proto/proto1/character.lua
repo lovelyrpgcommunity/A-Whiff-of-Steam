@@ -1,5 +1,6 @@
 require("lib/essential")
 require("lib/math/rect")
+require("projection")
 
 Character = class("Character", StatefulObject)
 
@@ -61,63 +62,21 @@ end
 
 local Base = Character:addState('Base')
 
--- movement constants helpers
--- to convert world to screen we do:
---    1) rotate by beta along Z (up)
---    2) rorate by alpha along X
---    3) project to plane Z=0
--- that way to convert (x,y,z) to (x',y') we do
---    x' = cos(beta)*x + sin(beta)*y
---    y' = sin(alpha)*sin(beta)*x + cos(alpha)*z - sin(alpha)*cos(beta)*y
-local alpha=math.pi/6
-local beta=math.atan(1/2)
--- local size = 20*sqrt(5) -- math.sin(math.atan(x)) == x/sqrt(x^2 + 1) !!!
--- then to get tile, we scale square of given size and obtain 2 vectors:
---     x1 = size*cos(beta) = 20*sqrt(5)*cos(atan(1/2)) = 20*sqrt(t)*2/5*sqrt(5) = 40
---     y1 = size*sin(alpha)*sin(beta) = 20*sqrt(5)*1/2*1/5*sqrt(5) = 10
---     x2 = size*sin(beta) = 20*sqrt(5)*1/5*sqrt(5) = 20
---     y2 = size*sin(alpha)*cos(beta) = 20*sqrt(5)*1/2*2/5*sqrt(5) = 20
-local ca=math.sqrt(3)/2 -- math.cos(alpha)
-local cb=2*math.sqrt(5)/5 -- math.cos(beta)
-local sasb=math.sqrt(5)/10 -- math.sin(alpha)*math.sin(beta)
-local tatb=math.sqrt(3)/6 -- math.tan(alpha)*math.tan(beta)
+local dict = {"ne", "n", "nw", "w", "sw", "s", "se", "e"}
 
-local function worldToScreen(d) -- assuming z=0
-    local temp = Vector2:new(0,0)
-    temp.x = cb*(d.x - d.y/2)
-    temp.y = -sasb*(d.x + d.y*2)
-    return temp
+local function getOrientation(vec)
+    dir = math.floor(4*math.atan2(-vec.y,vec.x)/math.pi+0.5)%8+1
+    return dict[dir]
 end
-
-local function screenToWorld(d)
-    local temp = Vector2:new(0,0)
-    temp.x = (4*d.x*sasb-d.y*cb)/(5*sasb*cb)
-    temp.y = -(d.y+sasb*temp.x)/(2*sasb)
-    return temp -- assuming z=0
-end 
-
-local step=math.pi/8
 
 function Base:update (dt, map)
     -- set the direction
     if math.abs(self.velocity.x)+math.abs(self.velocity.y)>0 then
-        dir=math.atan2(self.velocity.y,self.velocity.x)+math.pi/4
-        if dir>math.pi then dir=dir-2*math.pi end
-        local d = ""
-        if (dir>step) and (dir<7*step) then
-            d = "n"
-        elseif (dir<-step) and (dir>-7*step) then
-            d = "s"
-        end
-        if (dir>5*step) or (dir<-5*step) then
-            d = d .. "w"
-        elseif (dir<3*step) and (dir>-3*step) then
-            d = d .. "e"
-        end
-        self.direction = d
+        self.direction = getOrientation(self.velocity)
     end
     
-    local temp = worldToScreen(self.velocity)
+    local coords = projection.worldToScreen({x=self.velocity.x,y=0,z=self.velocity.y})
+    local temp = Vector2:new(coords.x,coords.y)
 
     local p = self.position + Vector2:new(self.size.width/2, self.size.height/2) + temp
     local s = self.scale
@@ -164,13 +123,13 @@ function ArrowKeysMovement:update (dt, map)
  
     if map.editorEnabled then return end
 
-    local move = (love.graphics.getHeight() / 4) * dt
+    local move = map.BASE_SPEED * dt
     local d = Vector2:new(0,0)
     if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
-        d.y = move
+        d.y = -move
     end
     if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
-        d.y = -move
+        d.y = move
     end
     if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
         d.x = -move
@@ -207,8 +166,10 @@ function MoveToPosition:update (dt, map)
         self:gotoState('ArrowKeysMovement')
     else
         local d = (self.goal - self.position)
-        d=d/math.sqrt(d.x^2+d.y^2) * (love.graphics.getHeight() / 4) * dt
-        self.velocity=screenToWorld(d)
+        local temp = projection.screenToWorld(d)
+        d = Vector2:new(temp.x,temp.z)
+        d=d/math.sqrt(d.x^2+d.y^2)*map.BASE_SPEED*dt
+        self.velocity=d
         super.update(self, dt, map)
     end
 end

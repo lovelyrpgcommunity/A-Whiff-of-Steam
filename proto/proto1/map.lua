@@ -1,5 +1,6 @@
 require("lib/essential")
 require("lib/math/vector2")
+require("projection")
 
 Map = class("Map")
 
@@ -27,19 +28,20 @@ Map.TILES = {
 	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
 }
 
-Map.TILE_WIDTH = 60
-Map.TILE_HEIGHT = 30
-Map.IN_VIEW_THRESHOLD = 60
-Map.TILE_MIDPOINT = Vector2:new(30, 15)
-Map.TILE_TOP_VERTEX = Vector2:new(40, 0)
-Map.TILE_RIGHT_VERTEX = Vector2:new(60,20)
-Map.TILE_BOTTOM_VERTEX = Vector2:new(20,30)
-Map.TILE_LEFT_VERTEX = Vector2:new(0, 10)
+Map.TILE_WIDTH = projection.SPAN_V1_x+projection.SPAN_V2_x
+Map.TILE_HEIGHT = projection.SPAN_V2_x-projection.SPAN_V1_y
+Map.IN_VIEW_THRESHOLD = Map.TILE_WIDTH
+Map.TILE_MIDPOINT = Vector2:new(Map.TILE_WIDTH/2,Map.TILE_HEIGHT/2)
+Map.TILE_TOP_VERTEX = Vector2:new(projection.SPAN_V1_x, 0)
+Map.TILE_RIGHT_VERTEX = Vector2:new(projection.SPAN_V1_x+projection.SPAN_V2_x,projection.SPAN_V2_y)
+Map.TILE_BOTTOM_VERTEX = Vector2:new(projection.SPAN_V2_x,projection.SPAN_V2_x-projection.SPAN_V1_y)
+Map.TILE_LEFT_VERTEX = Vector2:new(0,-projection.SPAN_V1_y)
 Map.MAX_SCALE = 2.0
 Map.MIN_SCALE = 0.1
 Map.WALK_SPEED = 1
 Map.RUN_SPEED = 2
 Map.SNEAK_SPEED = 0.5
+Map.BASE_SPEED = 3 -- m/s in world coords
 
 Map.IMAGES = {
 	gridsquare = love.graphics.newImage("resources/mapeditor/gridsquare.png"),
