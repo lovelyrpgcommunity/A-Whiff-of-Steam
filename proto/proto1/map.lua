@@ -27,14 +27,14 @@ Map.TILES = {
 	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
 }
 
-Map.TILE_WIDTH = 155
-Map.TILE_HEIGHT = 70
-Map.IN_VIEW_THRESHOLD = 155
-Map.TILE_MIDPOINT = Vector2:new(77, 35)
-Map.TILE_TOP_VERTEX = Vector2:new(91, 0)
-Map.TILE_RIGHT_VERTEX = Vector2:new(154, 46)
-Map.TILE_BOTTOM_VERTEX = Vector2:new(62, 69)
-Map.TILE_LEFT_VERTEX = Vector2:new(0, 22)
+Map.TILE_WIDTH = 60
+Map.TILE_HEIGHT = 30
+Map.IN_VIEW_THRESHOLD = 60
+Map.TILE_MIDPOINT = Vector2:new(30, 15)
+Map.TILE_TOP_VERTEX = Vector2:new(40, 0)
+Map.TILE_RIGHT_VERTEX = Vector2:new(60,20)
+Map.TILE_BOTTOM_VERTEX = Vector2:new(20,30)
+Map.TILE_LEFT_VERTEX = Vector2:new(0, 10)
 Map.MAX_SCALE = 2.0
 Map.MIN_SCALE = 0.1
 Map.WALK_SPEED = 1
@@ -53,7 +53,7 @@ Map.IMAGES = {
 
 function Map:initialize ()
 	self.size = {width=21, length=21}
-	self.position = Vector2:new(480, 120)
+	self.position = Vector2:new(-350, 350)
 	self.velocity = Vector2:new(0, 0)
 	self.displayControls = true
 	self.editorEnabled = false
@@ -179,9 +179,9 @@ function Map:isSelectedTile (x, y, checkEditorEnabled)
 end
 
 function Map:tileToCoords (tx, ty)
-	local cx = self.position.x + ((tx-1) * 63) - ((ty-1) * 93)
-	local cy = self.position.y + ((tx-1) * 47) + ((ty-1) * 23)
-	return math.floor(cx), math.floor(cy)
+	local cx = self.position.x + ((tx-1)*Map.TILE_TOP_VERTEX.x) + ((ty-1)*Map.TILE_BOTTOM_VERTEX.x)
+	local cy = self.position.y - ((tx-1)*Map.TILE_LEFT_VERTEX.y) + ((ty-1)*Map.TILE_RIGHT_VERTEX.y)
+  	return math.floor(cx), math.floor(cy)
 end
 
 -- This is inefficient.
@@ -282,29 +282,29 @@ function Map:keypressed (key, unicode)
 		if key == "up" then
 			if t.y-1 >= 1 then
 				self.selectedTile.y = t.y - 1
-				self.position.x = self.position.x - 93
-				self.position.y = self.position.y + 23
+				self.position.x = self.position.x + Map.TILE_BOTTOM_VERTEX.x
+				self.position.y = self.position.y + Map.TILE_RIGHT_VERTEX.y
 			end
 		end
 		if key == "down" then
 			if t.y+1 <= self.size.length then
 				self.selectedTile.y = t.y + 1
-				self.position.x = self.position.x + 93
-				self.position.y = self.position.y - 23
+				self.position.x = self.position.x - Map.TILE_BOTTOM_VERTEX.x
+				self.position.y = self.position.y - Map.TILE_RIGHT_VERTEX.y
 			end
 		end
 		if key == "left" then
 			if t.x-1 >= 1 then
 				self.selectedTile.x = t.x - 1
-				self.position.x = self.position.x + 63
-				self.position.y = self.position.y + 47
+				self.position.x = self.position.x + Map.TILE_TOP_VERTEX.x
+				self.position.y = self.position.y - Map.TILE_LEFT_VERTEX.y
 			end
 		end
 		if key == "right" then
 			if t.x+1 <= self.size.width then
 				self.selectedTile.x = t.x + 1
-				self.position.x = self.position.x - 63
-				self.position.y = self.position.y - 47
+				self.position.x = self.position.x - Map.TILE_TOP_VERTEX.x
+				self.position.y = self.position.y + Map.TILE_LEFT_VERTEX.y
 			end
 		end
 	end
@@ -316,3 +316,4 @@ function Map:keyreleased (key)
 		self.mdp = nil
 	end
 end
+
