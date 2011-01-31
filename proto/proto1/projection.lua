@@ -121,5 +121,5 @@ projection.SPAN_V1_y = -sasb -- -10
 projection.SPAN_V2_x = sb -- 20
 projection.SPAN_V2_y = sacb -- 20
 projection.SPAN_V3_x = 0 -- 0
-projection.SPAN_V3_y = ca -- 40
+projection.SPAN_V3_y = rca -- 40
 
