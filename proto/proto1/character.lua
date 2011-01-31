@@ -5,20 +5,19 @@ require("projection")
 Character = class("Character", StatefulObject)
 
 Character.IMAGES = {
-    cone = love.graphics.newImage("resources/images/characters/cone.png"),
     rectprism = love.graphics.newImage("resources/images/characters/rectprism.png"),
 }
 
 Character.QUADS = {
     rectprism = {
-        se = love.graphics.newQuad(0, 0, 66, 100, 432, 100),
-        ne = love.graphics.newQuad(66, 0, 66, 100, 432, 100),
-        nw = love.graphics.newQuad(132, 0, 66, 100, 432, 100),
-        sw = love.graphics.newQuad(198, 0, 66, 100, 432, 100),
-        s = love.graphics.newQuad(264, 0, 42, 100, 432, 100),
-        e = love.graphics.newQuad(306, 0, 42, 100, 432, 100),
-        n = love.graphics.newQuad(348, 0, 42, 100, 432, 100),
-        w = love.graphics.newQuad(390, 0, 42, 100, 432, 100),
+        se = love.graphics.newQuad(0, 0, 64, 128, 512, 128),
+        ne = love.graphics.newQuad(64, 0, 64, 128, 512, 128),
+        nw = love.graphics.newQuad(128, 0, 64, 128, 512, 128),
+        sw = love.graphics.newQuad(192, 0, 64, 128, 512, 128),
+        s = love.graphics.newQuad(256, 0, 64, 128, 512, 128),
+        e = love.graphics.newQuad(320, 0, 64, 128, 512, 128),
+        n = love.graphics.newQuad(384, 0, 64, 128, 512, 128),
+        w = love.graphics.newQuad(448, 0, 64, 128, 512, 128),
     }
 }
 
@@ -51,8 +50,8 @@ function Character:draw ()
 end
 
 function Character:mousepressed (x, y, button)
-    x = x - 63/2
-    y = y - 23/2 - self.size.height
+    x = x - 30
+    y = y - 15 - self.size.height
     self.goal = Vector2:new(x, y)
     self:gotoState('MoveToPosition')
 end

@@ -77,6 +77,13 @@ which is equal to
 
 v3' = (0, -40)
 
+The projection can be written in matrix form using:
+
+| x'|   | 40   0  20   0| |x|
+| y'| = |-10 -40  20   0|*|y|
+| 0 |   |  0   0   0   0| |z|
+| 1 |   |  0   0   0   1| |1|
+
 ]]
 
 -- projection setup
