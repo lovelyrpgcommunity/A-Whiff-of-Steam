@@ -80,7 +80,7 @@ v3' = (0, -40)
 The projection can be written in matrix form using:
 
 | x'|   | 40   0  20   0| |x|
-| y'| = |-10 -40  20   0|*|y|
+| y'| = |-10 -39  20   0|*|y|
 | 0 |   |  0   0   0   0| |z|
 | 1 |   |  0   0   0   1| |1|
 
@@ -88,7 +88,7 @@ The projection can be written in matrix form using:
 
 -- projection setup
 local scale = 20*math.sqrt(5)
-local yrescale = 4/math.sqrt(15) -- make everything 3.28% higher
+local yrescale = 13*math.sqrt(15)/50 -- make everything 0.7% higher
 local alpha = math.pi/6
 local beta = math.atan(1/2)
 
@@ -97,7 +97,7 @@ local cb = 40 -- scale*math.cos(beta)
 local sb = 20 -- scale*math.sin(beta)
 local sasb = 10 -- scale*math.sin(alpha)*math.sin(beta)
 local sacb = 20 -- scale*math.sin(alpha)*math.cos(beta)
-local rca = 40 -- rescale*scale*math.cos(alpha)
+local rca = 39 -- rescale*scale*math.cos(alpha)
 local sa2 = 1000 -- scale^2*math.sin(alpha)
 
 projection = {}
@@ -128,5 +128,5 @@ projection.SPAN_V1_y = -sasb -- -10
 projection.SPAN_V2_x = sb -- 20
 projection.SPAN_V2_y = sacb -- 20
 projection.SPAN_V3_x = 0 -- 0
-projection.SPAN_V3_y = rca -- 40
+projection.SPAN_V3_y = -rca -- -39
 
