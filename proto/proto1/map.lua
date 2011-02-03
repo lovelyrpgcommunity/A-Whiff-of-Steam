@@ -28,14 +28,8 @@ Map.TILES = {
 	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
 }
 
-Map.TILE_WIDTH = projection.SPAN_V1_x+projection.SPAN_V2_x
-Map.TILE_HEIGHT = projection.SPAN_V2_x-projection.SPAN_V1_y
-Map.IN_VIEW_THRESHOLD = Map.TILE_WIDTH
-Map.TILE_MIDPOINT = Vector2:new(Map.TILE_WIDTH/2,Map.TILE_HEIGHT/2)
-Map.TILE_TOP_VERTEX = Vector2:new(projection.SPAN_V1_x, 0)
-Map.TILE_RIGHT_VERTEX = Vector2:new(projection.SPAN_V1_x+projection.SPAN_V2_x,projection.SPAN_V2_y)
-Map.TILE_BOTTOM_VERTEX = Vector2:new(projection.SPAN_V2_x,projection.SPAN_V2_x-projection.SPAN_V1_y)
-Map.TILE_LEFT_VERTEX = Vector2:new(0,-projection.SPAN_V1_y)
+Map.TILE_WIDTH = projection.vz.x+projection.vx.x
+Map.TILE_HEIGHT = projection.vz.y-projection.vx.y
 Map.MAX_SCALE = 2.0
 Map.MIN_SCALE = 0.1
 Map.WALK_SPEED = 1
@@ -160,7 +154,7 @@ end
 
 function Map:tileIsInView (tx, ty)
 	local s = self.scale
-	local t = Map.IN_VIEW_THRESHOLD
+	local t = Map.TILE_WIDTH
 	local tw = Map.TILE_WIDTH
 	local th = Map.TILE_HEIGHT
 	local cx, cy = self:tileToCoords(tx, ty)
@@ -181,9 +175,8 @@ function Map:isSelectedTile (x, y, checkEditorEnabled)
 end
 
 function Map:tileToCoords (tx, ty)
-	local cx = self.position.x + ((tx-1)*Map.TILE_TOP_VERTEX.x) + ((ty-1)*Map.TILE_BOTTOM_VERTEX.x)
-	local cy = self.position.y - ((tx-1)*Map.TILE_LEFT_VERTEX.y) + ((ty-1)*Map.TILE_RIGHT_VERTEX.y)
-  	return math.floor(cx), math.floor(cy)
+    local temp = self.position + projection.vx*(tx-1) + projection.vz*(ty-1)
+  	return math.floor(temp.x), math.floor(temp.y)
 end
 
 -- This is inefficient.
@@ -202,16 +195,14 @@ function Map:coordsIntersectWithTile (px, py, cx, cy)
 	local s = self.scale
 	cx = cx / s
 	cy = cy / s
-	local mp = Map.TILE_MIDPOINT
-	local t = Map.TILE_TOP_VERTEX
-	local r = Map.TILE_RIGHT_VERTEX
-	local b = Map.TILE_BOTTOM_VERTEX
-	local l = Map.TILE_LEFT_VERTEX
+	local t = projection.vx
+	local r = projection.vx+projection.vz
+	local b = projection.vz
 	local acx, acy = self:tileToCoords(px, py) -- actual coords x and y of the tile
 	local at = Vector2:new(acx+t.x, acy+t.y) -- actual mid point
 	local ar = Vector2:new(acx+r.x, acy+r.y) -- actual mid point
 	local ab = Vector2:new(acx+b.x, acy+b.y) -- actual mid point
-	local al = Vector2:new(acx+l.x, acy+l.y) -- actual mid point
+	local al = Vector2:new(acx, acy) -- actual mid point
 	local m = Vector2:new(cx, cy) -- the position to test
 	local vt = at - m
 	local vr = ar - m
@@ -279,34 +270,28 @@ function Map:keypressed (key, unicode)
 	if self.editorEnabled then
 		local t = self.selectedTile
 		local m = self.position
-		-- 63, 93
-		-- 47, 23
 		if key == "up" then
 			if t.y-1 >= 1 then
 				self.selectedTile.y = t.y - 1
-				self.position.x = self.position.x + Map.TILE_BOTTOM_VERTEX.x
-				self.position.y = self.position.y + Map.TILE_RIGHT_VERTEX.y
+        self.position = self.position + projection.vz
 			end
 		end
 		if key == "down" then
 			if t.y+1 <= self.size.length then
 				self.selectedTile.y = t.y + 1
-				self.position.x = self.position.x - Map.TILE_BOTTOM_VERTEX.x
-				self.position.y = self.position.y - Map.TILE_RIGHT_VERTEX.y
+        self.position = self.position - projection.vz
 			end
 		end
 		if key == "left" then
 			if t.x-1 >= 1 then
 				self.selectedTile.x = t.x - 1
-				self.position.x = self.position.x + Map.TILE_TOP_VERTEX.x
-				self.position.y = self.position.y - Map.TILE_LEFT_VERTEX.y
+        self.position = self.position + projection.vx
 			end
 		end
 		if key == "right" then
 			if t.x+1 <= self.size.width then
 				self.selectedTile.x = t.x + 1
-				self.position.x = self.position.x - Map.TILE_TOP_VERTEX.x
-				self.position.y = self.position.y + Map.TILE_LEFT_VERTEX.y
+        self.position = self.position - projection.vx
 			end
 		end
 	end
