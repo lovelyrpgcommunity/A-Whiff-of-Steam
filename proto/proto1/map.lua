@@ -40,10 +40,10 @@ Map.BASE_SPEED = 3 -- m/s in world coords
 Map.IMAGES = {
 	gridsquare = love.graphics.newImage("resources/mapeditor/gridsquare.png"),
 	tiles = {
-		love.graphics.newImage("resources/images/tiles/stone_textured.png"),
-		love.graphics.newImage("resources/images/tiles/grass_textured.png"),
-		love.graphics.newImage("resources/images/tiles/stone_plain.png"),
-		love.graphics.newImage("resources/images/tiles/grass_plain.png"),
+		love.graphics.newImage("resources/images/tiles/tile_concrete.png"),
+		love.graphics.newImage("resources/images/tiles/grass_dark.png"),
+		love.graphics.newImage("resources/images/tiles/grass_light.png"),
+		love.graphics.newImage("resources/images/tiles/grass_fall.png"),
 	}
 }
 
@@ -125,26 +125,25 @@ function Map:draw ()
 			love.graphics.print("Toggle help: h",15,25)
 			love.graphics.print("Toggle editor: e",15,45)
 			love.graphics.print("Move: w/a/s/d or arrows",15,65)
-			love.graphics.print("     or: space + mouse drag",14,80)
-			love.graphics.print("Walk: lshift + move",15,100)
-			love.graphics.print("Sneak: lctrl + move",15,120)
-			love.graphics.print("Edit: click a tile and press",15,140)
-			love.graphics.print("   `/backspace - remove tile",15,155)
-			love.graphics.print("   1 - Stone (textured)",15,170)
-			love.graphics.print("   2 - Grass (textured)",15,185)
-			love.graphics.print("   3 - Stone (solid)",15,200)
-			love.graphics.print("   4 - Grass (solid)",15,215)
-			love.graphics.print("Scale: -/+",15,235)
+			love.graphics.print("Walk: lshift + move",15,85)
+			love.graphics.print("Sneak: lctrl + move",15,105)
+			love.graphics.print("Edit: click a tile and press",15,125)
+			love.graphics.print("   `/backspace - remove tile",15,145)
+			love.graphics.print("   1 - Concrete",15,160)
+			love.graphics.print("   2 - Grass (dark)",15,175)
+			love.graphics.print("   3 - Grass (light)",15,190)
+			love.graphics.print("   4 - Grass (fall)",15,205)
+			love.graphics.print("Scale: -/+",15,225)
 		else
 			love.graphics.setColor(255,255,255,80)
-			love.graphics.rectangle("fill",10,10,200,117)
+			love.graphics.rectangle("fill",10,10,200,137)
 			love.graphics.setColor(255,255,255,255)
 			love.graphics.print("Toggle help: h",15,25)
 			love.graphics.print("Toggle editor: e",15,45)
 			love.graphics.print("Move: w/a/s/d or arrows",15,65)
-			love.graphics.print("     or: space + mouse drag",14,80)
-			love.graphics.print("Walk: lshift + move",15,100)
-			love.graphics.print("Sneak: lctrl + move",15,120)
+			love.graphics.print("Walk: lshift + move",15,85)
+			love.graphics.print("Sneak: lctrl + move",15,105)
+			love.graphics.print("Scale: -/+",15,125)
 		end	
 
 		love.graphics.printf(string.format("Scale: %s%%", math.floor(100*self.scale)), 10, 25,
