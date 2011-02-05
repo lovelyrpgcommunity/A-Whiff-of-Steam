@@ -53,20 +53,20 @@ function Map:initialize ()
 	self.velocity = Vector2:new(0, 0)
 	self.displayControls = true
 	self.editorEnabled = false
-	self.canDrag = false
-	self.mdp = nil -- mouse down position
+--	self.canDrag = false
+--	self.mdp = nil -- mouse down position
 	self.scale = 1
 	self.selectedTile = {x=1, y=1}
 end
 
 function Map:update (dt, character)
 	-- Update the map position
-	if self.canDrag and self.mdp then
-		local mx, my = love.mouse.getPosition()
-		local mp = Vector2:new(mx, my)
-		self.position = self.position - ((self.mdp - mp) / self.scale)
-		self.mdp = mp	
-	end
+--	if self.canDrag and self.mdp then
+--		local mx, my = love.mouse.getPosition()
+--		local mp = Vector2:new(mx, my)
+--		self.position = self.position - ((self.mdp - mp) / self.scale)
+--		self.mdp = mp	
+--	end
 	
 	if not self.velocity:isZero() then
 		-- Get the rate of movement
@@ -89,7 +89,7 @@ function Map:draw ()
 	for i = 1,self.size.width do
 		for j = 1,self.size.length do
 			if self:tileIsInView(i, j) then
-				if self.editorEnabled and not self.canDrag and
+				if self.editorEnabled and --not self.canDrag and
 				   self:coordsIntersectWithTile(i, j, mx, my) then
 					if self:isSelectedTile(i, j) then
 						love.graphics.setColor(230,210,255)
@@ -214,10 +214,11 @@ end
 
 function Map:mousepressed (x, y, button)
 	if button == "l" then
-		if self.canDrag then
-			local x, y = love.mouse.getPosition()
-			self.mdp = Vector2:new(x, y)
-		elseif self.editorEnabled then
+--		if self.canDrag then
+--			local x, y = love.mouse.getPosition()
+--			self.mdp = Vector2:new(x, y)
+--		elseif self.editorEnabled then
+		if self.editorEnabled then
 			local t = self:coordsToTile(x, y)
 			if t then
 				self.selectedTile = t
@@ -227,9 +228,9 @@ function Map:mousepressed (x, y, button)
 end
 
 function Map:mousereleased (x, y, button)
-	if self.canDrag and button == "l" then
-		self.mdp = nil
-	end
+--	if self.canDrag and button == "l" then
+--		self.mdp = nil
+--	end
 end
 
 function Map:keypressed (key, unicode)
@@ -245,8 +246,8 @@ function Map:keypressed (key, unicode)
 		if self.scale >= (Map.MIN_SCALE + 0.09) then
 			self.scale = self.scale - 0.1
 		end
-	elseif key == " " then
-		self.canDrag = true
+--	elseif key == " " then
+--		self.canDrag = true
 	elseif self.selectedTile and Map.TILES then
 		local s = self.selectedTile
 		if key == "`" or key == "delete" then
@@ -298,9 +299,9 @@ function Map:keypressed (key, unicode)
 end
 
 function Map:keyreleased (key)
-	if key == " " then
-		self.canDrag = false
-		self.mdp = nil
-	end
+--	if key == " " then
+--		self.canDrag = false
+--		self.mdp = nil
+--	end
 end
 
