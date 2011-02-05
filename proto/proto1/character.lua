@@ -166,8 +166,9 @@ function MoveToPosition:update (dt, map)
     else
         local d = (self.goal - self.position)
         local temp = projection.screenToWorld(d)
-        d = Vector2:new(temp.x,temp.z)
-        d=d/math.sqrt(d.x^2+d.y^2)*map.BASE_SPEED*dt
+        local angle = math.floor(math.atan2(temp.x,temp.z)/math.pi*4)*math.pi/4
+        d = Vector2:new(math.sin(angle),math.cos(angle))
+        d=d*map.BASE_SPEED*dt
         self.velocity=d
         super.update(self, dt, map)
     end
