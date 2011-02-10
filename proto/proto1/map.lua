@@ -110,7 +110,7 @@ function Map:draw ()
 				else
 					love.graphics.draw(Map.IMAGES.gridsquare, x, y)
 					love.graphics.setColor(100,100,100)
-					love.graphics.print(string.format("%s,%s",i,j), x+66, y+38)
+					love.graphics.print(string.format("%s,%s",i,j), x+10, y+5)
 				end
 			end
 		end

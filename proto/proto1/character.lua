@@ -142,7 +142,8 @@ function ArrowKeysMovement:update (dt, map)
         d.y = d.y/math.sqrt(2)
     end
 
-    self.velocity = d
+    self.velocity.x = (d.x-d.y)/math.sqrt(2)
+    self.velocity.y = (d.x+d.y)/math.sqrt(2)
 
     super.update(self, dt, map)
 end

@@ -42,37 +42,37 @@ vz' = (scale*sin(beta), scale*sin(alpha)*cos(beta))
 
 When we take:
 
-scale = 20*math.sqrt(5)
-yrescale = 4/math.sqrt(15) -- (3.28% higher)
-alpha = math.pi/6
-beta = math.atan(1/2)
+scale = 30*math.sqrt(2)
+yrescale = 1 -- exact projection
+alpha = math.asin(1/3)
+beta = math.pi/4 -- dimetric
 
 we have
 
-sin(beta)  = 1/math.sqrt(5)
-cos(beta)  = 2/math.sqrt(5)
-sin(alpha) = 1/2
-cos(alpha) = math.sqrt(3)/2
+sin(beta)  = 1/2*math.sqrt(2)
+cos(beta)  = 1/2*math.sqrt(2)
+sin(alpha) = 1/3
+cos(alpha) = 2/3*math.sqrt(2)
 
 which leads to
 
-vx'.x = scale*cos(beta) = 20*math.sqrt(5)*2/math.sqrt(5) = 40
-vx'.y = -scale*sin(alpha)*sin(beta) = -20*math.sqrt(5)*1/2*1/math.sqrt(5) = -10
+vx'.x = scale*cos(beta) = 30*math.sqrt(2)*1/2*math.sqrt(2) = 30
+vx'.y = -scale*sin(alpha)*sin(beta) = -30*math.sqrt(2)*1/3*1/2*math.sqrt(2) = -10
 vy'.x = 0
-vy'.y = -scale*yrescale*cos(alpha) = -20*math.sqrt(5)*4/sqrt(15)*math.sqrt(3)/2 = -40
-vz'.x = scale*sin(beta) = 20*math.sqrt(5)*1/math.sqrt(5) = 20
-vz'.y = scale*sin(alpha)*cos(beta) = 20*math.sqrt(5)*1/2*2/math.sqrt(5) = 20
+vy'.y = -scale*yrescale*cos(alpha) = -30*math.sqrt(2)*1*2/3*math.sqrt(2) = -40
+vz'.x = scale*sin(beta) = 30*math.sqrt(2)*1/2*math.sqrt(2) = 30
+vz'.y = scale*sin(alpha)*cos(beta) = 30*math.sqrt(2)*1/3*1/2*math.sqrt(2) = 10
 
 So
 
-vx' = (40, -10)
+vx' = (30, -10)
 vz' = ( 0, -40)
-vz' = (20,  20)
+vz' = (30,  10)
 
 and the projection can be written in matrix form using only integer values:
 
-| x'|   | 40   0  20   0| |x|
-| y'| = |-10 -40  20   0|*|y|
+| x'|   | 30   0  30   0| |x|
+| y'| = |-10 -40  10   0|*|y|
 | 0 |   |  0   0   0   0| |z|
 | 1 |   |  0   0   0   1| |1|
 
@@ -82,9 +82,9 @@ require("lib/math/vector2")
 
 projection = {}
 
-local vx = Vector2:new(40,-10)
+local vx = Vector2:new(30,-10)
 local vy = Vector2:new( 0,-40)
-local vz = Vector2:new(20, 20)
+local vz = Vector2:new(30, 10)
 local perpdot = vx:perpdot(vz)
 
 -- spanning vectors
