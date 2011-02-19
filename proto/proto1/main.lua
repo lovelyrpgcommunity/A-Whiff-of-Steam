@@ -30,8 +30,10 @@ end
 
 function love.keypressed (key, unicode)
 	map:keypressed(key, unicode)
+  character:keypressed(key, unicode)
 end
 
 function love.keyreleased (key)
 	map:keyreleased(key)
+  character:keyreleased(key)
 end

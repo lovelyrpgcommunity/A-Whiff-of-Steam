@@ -22,6 +22,8 @@ Character.QUADS = {
     }
 }
 
+Character.canDrag = false;
+
 function Character:initialize ()
     self.image = "rectprism"
     self.size = {width=51, height=77}
@@ -50,10 +52,24 @@ function Character:draw ()
 end
 
 function Character:mousepressed (x, y, button)
-    x = x - 30
-    y = y - 15 - self.size.height
-    self.goal = Vector2:new(x, y)
-    self:gotoState('MoveToPosition')
+    if not self.canDrag then
+      x = x - 30
+      y = y - 15 - self.size.height
+      self.goal = Vector2:new(x, y)
+      self:gotoState('MoveToPosition')
+    end
+end
+
+function Character:keyreleased (key)
+	if key == " " then
+		self.canDrag = false
+	end
+end
+
+function Character:keypressed (key, unicode)
+	if key == " " then
+		self.canDrag = true
+	end
 end
 
 --------------------------------------------------------------------------------
