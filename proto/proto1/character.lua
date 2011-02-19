@@ -161,7 +161,7 @@ function ArrowKeysMovement:update (dt, map)
     self.velocity.x = (d.x-d.y)/math.sqrt(2)
     self.velocity.y = (d.x+d.y)/math.sqrt(2)
 
-    super.update(self, dt, map)
+    Base.update(self, dt, map)
 end
 
 --------------------------------------------------------------------------------
@@ -187,7 +187,7 @@ function MoveToPosition:update (dt, map)
         d = Vector2:new(math.sin(angle),math.cos(angle))
         d=d*map.BASE_SPEED*dt
         self.velocity=d
-        super.update(self, dt, map)
+        Base.update(self, dt, map)
     end
 end
 
