@@ -1,122 +1,117 @@
------------------------------------------------------------------------------------
--- MiddleClass.lua
--- Enrique GarcÃ­a ( enrique.garcia.cota [AT] gmail [DOT] com ) - 19 Oct 2009
--- Based on YaciCode, from Julien Patte and LuaObject, from SÃ©bastien Rocca-Serra
------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+-- middleclass.lua - v1.3
+-- Enrique García ( enrique.garcia.cota [AT] gmail [DOT] com ) - 19 Oct 2009
+-- Based on YaciCode, from Julien Patte and LuaObject, from Sébastien Rocca-Serra
+-----------------------------------------------------------------------------------------------------------------------
 
-local _classes = setmetatable({}, {__mode = "k"})   -- weak table storing references to all declared _classes
+local _nilf = function() end -- empty function
 
--- The 'Object' class
-Object = { name = "Object" }
+local _classes = setmetatable({}, {__mode = "kv"})   -- weak table storing references to all declared classes
 
-_classes[Object]=Object -- adds Object to the list of _classes
+local _metamethods = { -- all metamethods except __index
+  '__add', '__call', '__concat', '__div', '__le', '__lt', '__mod', '__mul', '__pow', '__sub', '__tostring', '__unm' 
+}
 
-  -- creates a new instance
-Object.new = function(theClass, ...)
-  assert(_classes[theClass]~=nil, "Use class:new instead of class.new")
+Object = { name = "Object", __modules = {} }
 
-  local instance = setmetatable({ class = theClass }, theClass.__classDict) -- the class dictionary is the instance's metatable
+Object.__classDict = {
+  initialize = _nilf, destroy = _nilf, subclassed = _nilf,
+  __tostring = function(instance) return ("instance of ".. instance.class.name) end -- root of __tostring method
+}
+Object.__classDict.__index = Object.__classDict -- instances of Object need this
+
+setmetatable(Object, { 
+  __index = Object.__classDict,    -- look up methods in the classDict
+  __newindex = Object.__classDict, -- any new Object methods will be defined in classDict
+  __call = Object.new,             -- allows instantiation via Object()
+  __tostring = function() return "class Object" end -- allows tostring(obj)
+})
+
+_classes[Object] = Object -- register Object on the list of classes.
+
+-- creates a new instance
+function Object.new(theClass, ...)
+  assert(_classes[theClass]~=nil, "Use Class:new instead of Class.new")
+
+  local instance = setmetatable({ class = theClass }, theClass.__classDict)
   instance:initialize(...)
   return instance
 end
 
 -- creates a subclass
-Object.subclass = function(theClass, name)
-  assert(_classes[theClass]~=nil, "Use class:subclass instead of class.subclass")
-  if type(name)~="string" then name = "Unnamed" end
+function Object.subclass(theClass, name)
+  assert(_classes[theClass]~=nil, "Use Class:subclass instead of Class.subclass")
+  assert( type(name)=="string", "You must provide a name(string) for your class")
 
-  local theSubclass = { name = name, superclass = theClass, __classDict = {} }
-  local classDict = theSubclass.__classDict
+  local theSubClass = { name = name, superclass = theClass, __classDict = {}, __modules={} }
+  
+  local dict = theSubClass.__classDict   -- classDict contains all the [meta]methods of the class
+  dict.__index = dict                    -- It "points to itself" so instances can use it as a metatable.
+  local superDict = theClass.__classDict -- The superclass' classDict
 
-  -- This one is weird. Since:
-  -- a) the class dict is the instances' metatable (so it must have an __index for looking up the methods) and
-  -- b) The instance methods are in the class dict itself, then ...
-  classDict.__index = classDict
-  -- if a method isn't found on the class dict, look on its super class
-  setmetatable(classDict, {__index = theClass.__classDict} )
+  setmetatable(dict, superDict) -- when a method isn't found on classDict, 'escalate upwards'.
 
-  setmetatable(theSubclass, {   -- theSubclass' metamethods
-    __index = function(_,methodName)
-        local localMethod = classDict[methodName] -- this allows using classDic as a class method AND instance method dict
-        if localMethod ~= nil then return localMethod end
-        return theClass[methodName]
+  for _,mmName in ipairs(_metamethods) do -- Creates the initial metamethods
+    dict[mmName]= function(...)           -- by default, they just 'look up' for an implememtation
+      local method = superDict[mmName]    -- and if none found, they throw an error
+      assert( type(method)=='function', tostring(theSubClass) .. " doesn't implement metamethod '" .. mmName .. "'" )
+      return method(...)
+    end
+  end
+
+  setmetatable(theSubClass, {
+    __index = dict,                              -- look for stuff on the dict
+    __newindex = function(_, methodName, method) -- ensure that __index isn't modified by mistake
+        assert(methodName ~= '__index', "Can't modify __index. Include middleclass-extras.Indexable and use 'index' instead")
+        rawset(dict, methodName , method)
       end,
-    -- FIXME add support for __index method here
-    __newindex = function(_, methodName, method) -- when adding new methods, include a "super" function
-        if type(method) == 'function' then
-          local fenv = getfenv(method)
-          local newenv = setmetatable( {super = theClass.__classDict},  {__index = fenv, __newindex = fenv} )
-          setfenv( method, newenv )
-        end
-        rawset(classDict, methodName, method)
-      end,
-    __tostring = function() return ("class ".. name) end,
-    __call = function(_, ...) return theSubclass:new(...) end
+    __tostring = function() return ("class ".. name) end,      -- allows tostring(MyClass)
+    __call = function(_, ...) return theSubClass:new(...) end  -- allows MyClass(...) instead of MyClass:new(...)
   })
-  -- instance methods go after the setmetatable, so we can use "super"
-  theSubclass.initialize = function(instance,...) super.initialize(instance) end
 
-  _classes[theSubclass]=theSubclass --registers the new class on the list of _classes
+  theSubClass.initialize = function(instance,...) theClass.initialize(instance, ...) end -- default initialize method
+  _classes[theSubClass]= theSubClass -- registers the new class on the list of _classes
+  theClass:subclassed(theSubClass)   -- hook method. By default it does nothing
 
-  return theSubclass
+  return theSubClass
 end
 
--- Mixin extension function - simulates very basically ruby's include(module)
--- module is a lua table of functions. The functions will be copied to the class
--- if present in the module, the included() method will be called
-Object.includes = function(theClass, module, ... )
-  assert(_classes[theClass]~=nil, "Use class:includes instead of class.includes")
+-- Mixin extension function - simulates very basically ruby's include. Receives a table table, probably with functions.
+-- Its contents are copied to theClass, with one exception: the included() method will be called instead of copied
+function Object.include(theClass, module, ... )
+  assert(_classes[theClass]~=nil, "Use class:include instead of class.include")
+  assert(type(module=='table'), "module must be a table")
   for methodName,method in pairs(module) do
     if methodName ~="included" then theClass[methodName] = method end
   end
   if type(module.included)=="function" then module:included(theClass, ... ) end
-end
-
--- root of initialize and __tostring methods
-Object.__classDict = {
-  initialize = function(instance, ...) end,   -- end of the initialize() call chain
-  __tostring = function(instance) return ("instance of ".. instance.class.name) end
-}
-
--- This allows doing tostring(obj) and Object() instead of Object:new()
-setmetatable(Object, { __index = Object.__classDict, __newindex = Object.__classDict,
-  __tostring = function() return ("class Object") end,
-  __call = Object.new
-})
-
--- Getter/Setter related methods
-function Object.getterFor(theClass, attr) return 'get' .. attr:gsub("^%l", string.upper) end
-function Object.setterFor(theClass, attr) return 'set' .. attr:gsub("^%l", string.upper) end
-function Object.getter(theClass, attributeName, defaultValue)
-  theClass[theClass:getterFor(attributeName)] = function(self) 
-    if(self[attributeName]~=nil) then return self[attributeName] end
-    return defaultValue
-  end
-end
-function Object.setter(theClass, attributeName)
-  theClass[theClass:setterFor(attributeName)] = function(self, value) self[attributeName] = value end
-end
-function Object.getterSetter(theClass, attributeName, defaultValue)
-  theClass:getter(attributeName, defaultValue)
-  theClass:setter(attributeName)
+  theClass.__modules[module] = module
+  return theClass
 end
 
 -- Returns true if aClass is a subclass of other, false otherwise
 function subclassOf(other, aClass)
-  if aClass == nil or other==nil then return false end
+  if _classes[aClass]==nil or _classes[other]==nil then return false end
   if aClass.superclass==nil then return false end -- aClass is Object, or a non-class
   return aClass.superclass == other or subclassOf(other, aClass.superclass)
 end
 
 -- Returns true if obj is an instance of aClass (or one of its subclasses) false otherwise
 function instanceOf(aClass, obj)
-  if obj==nil or _classes[aClass]==nil or _classes[obj.class]==nil then return false end
+  if _classes[aClass]==nil or type(obj)~='table' or _classes[obj.class]==nil then return false end
   if obj.class==aClass then return true end
   return subclassOf(aClass, obj.class)
 end
 
--- Creates a new class named 'name'. It uses baseClass as the parent (Object if none specified)
-function class(name, baseClass)
+-- Returns true if the a module has already been included on a class (or a superclass of that class)
+function includes(module, aClass)
+  if _classes[aClass]==nil then return false end
+  if aClass.__modules[module]==module then return true end
+  return includes(module, aClass.superclass)
+end
+
+-- Creates a new class named 'name'. Uses Object if no baseClass is specified. Additional parameters for compatibility
+function class(name, baseClass, ...)
   baseClass = baseClass or Object
-  return baseClass:subclass(name)
+  return baseClass:subclass(name, ...)
 end

@@ -1,6 +1,6 @@
 require("lib/essential")
 require("lib/math/vector2")
-require("projection")
+require("lib/projection")
 
 Map = class("Map")
 

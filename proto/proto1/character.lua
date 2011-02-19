@@ -1,8 +1,9 @@
 require("lib/essential")
 require("lib/math/rect")
-require("projection")
+require("lib/projection")
 
-Character = class("Character", StatefulObject)
+Character = class("Character")
+Character:include(Stateful)
 
 Character.IMAGES = {
     rectprism = love.graphics.newImage("resources/images/characters/rectprism.png"),
@@ -22,7 +23,6 @@ Character.QUADS = {
 }
 
 function Character:initialize ()
-    super.initialize(self)
     self.image = "rectprism"
     self.size = {width=51, height=77}
     local w = love.graphics.getWidth()

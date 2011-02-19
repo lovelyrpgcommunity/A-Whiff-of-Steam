@@ -1,3 +1,3 @@
 require("lib/utils")
 require("lib/oop/middleclass")
-require("lib/states/MindState")
+require("lib/states/Stateful")
