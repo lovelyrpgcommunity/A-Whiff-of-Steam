@@ -50,11 +50,12 @@ function Character:draw (map)
     love.graphics.pop()
 end
 
-function Character:mousepressed (x, y, button)
+function Character:mousepressed (x, y, button, map)
     if not self.canDrag then
-      x = x - 30
-      y = y - 15 - self.size.height
-      self.goal = Vector2:new(x, y)
+      temp = Vector2:new(x-map.position.x-projection.vx.x
+		,y-map.position.y)
+      temp2 = projection.screenToWorld(temp)
+      self.goal = Vector2:new(temp2.x, temp2.z)
       self:gotoState('MoveToPosition')
     end
 end
@@ -118,8 +119,6 @@ end
 local ArrowKeysMovement = Character:addState('ArrowKeysMovement', Base)
 
 function ArrowKeysMovement:update (dt, map)
-    self.scale = map.scale
- 
     if map.editorEnabled then return end
 
     local move = map.BASE_SPEED * dt
@@ -154,20 +153,18 @@ end
 local MoveToPosition = Character:addState('MoveToPosition', Base)
 
 function MoveToPosition:update (dt, map)
-    self.scale = map.scale
-    
     if map.editorEnabled then return end
     if not self.goal then return end
     
     local p = self.position
-    local test = Rect:new(p.x-5, p.y-5, 10, 10)
+    local test = Rect:new(p.x-0.05, p.y-0.05, 0.1, 0.1)
     
     if test:intersectsWithPoint(self.goal) then
+	self.goal = nil
         self:gotoState('ArrowKeysMovement')
     else
         local d = (self.goal - self.position)
-        local temp = projection.screenToWorld(d)
-        local angle = math.floor(8+math.atan2(temp.x,temp.z)/math.pi*4)%8*math.pi/4
+        local angle = math.floor(8+math.atan2(d.x,d.y)/math.pi*4)%8*math.pi/4
         d = Vector2:new(math.sin(angle),math.cos(angle))
         d=d*map.BASE_SPEED*dt
         self.velocity=d

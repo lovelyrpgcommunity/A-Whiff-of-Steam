@@ -229,7 +229,7 @@ function Map:mousepressed (x, y, button)
 			end
 		end
 	end
-	self.character:mousepressed(x, y, button)
+	self.character:mousepressed(x, y, button, self)
 end
 
 function Map:mousereleased (x, y, button)
