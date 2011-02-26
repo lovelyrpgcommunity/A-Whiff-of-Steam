@@ -93,8 +93,8 @@ function Base:update (dt, map)
     local p = self.position + temp
     local s = self.scale
     local b = self.bounds
-    local bp = b.position/s
-    if p.x > bp.x + b.width/s or p.x < bp.x then
+    local bp = b.position
+    if p.x < b.position.x or p.x > b.width then
         -- Move the map along the x axis instead
         map.velocity.x = -temp.x
         if self.goal then
@@ -102,7 +102,7 @@ function Base:update (dt, map)
         end
         temp.x = 0
     end
-    if p.y > bp.y + b.height/s or p.y < bp.y then
+    if p.y < b.position.y or p.y > b.height then
         -- Move the map along the y axis instead
         map.velocity.y = -temp.y
         if self.goal then
