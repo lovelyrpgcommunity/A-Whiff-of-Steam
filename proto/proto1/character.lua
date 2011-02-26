@@ -26,7 +26,6 @@ Character.canDrag = false;
 
 function Character:initialize ()
     self.image = "rectprism"
-    self.size = {width=51, height=77}
     self.position = Vector2:new(10, 10)
     self.velocity = Vector2:new(0, 0)
     self.bounds = Rect:new(0, 0, 21-1, 21-1)
@@ -52,8 +51,7 @@ end
 
 function Character:mousepressed (x, y, button, map)
     if not self.canDrag then
-      temp = Vector2:new(x-map.position.x-projection.vx.x
-		,y-map.position.y)
+      temp = Vector2:new(x-map.position.x-projection.vx.x,y-map.position.y)
       temp2 = projection.screenToWorld(temp)
       self.goal = Vector2:new(temp2.x, temp2.z)
       self:gotoState('MoveToPosition')
