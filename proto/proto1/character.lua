@@ -99,9 +99,11 @@ function Base:update (dt, map)
     local b = self.bounds
     if temp.x < b.position.x or temp.x > b.width then
         self.velocity.x = 0
+	if self.goal then self.goal.x = self.position.x end
     end
     if temp.y < b.position.y or temp.y > b.height then
         self.velocity.y = 0
+	if self.goal then self.goal.y = self.position.y end
     end
    
     -- finally determine direction...
