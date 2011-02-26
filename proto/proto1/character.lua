@@ -36,10 +36,10 @@ function Character:draw (map)
     local image = Character.IMAGES[self.image]
     local quads = Character.QUADS[self.image]
     love.graphics.push()
-    love.graphics.scale(self.scale)
-    local coords = map.position + projection.worldToScreen({x=self.position.x,y=0,z=self.position.y})
-    local x = math.floor(coords.x)
-    local y = math.floor(coords.y-128+projection.vz.y-projection.vx.y)
+    love.graphics.scale(map.scale)
+    local temp = projection.worldToScreen({x=self.position.x,y=0,z=self.position.y})
+    local x = math.floor(map.position.x+temp.x*map.scale)
+    local y = math.floor(map.position.y+(temp.y-128+projection.vz.y-projection.vx.y)*map.scale)
     if quads then
         local quad = quads[self.direction]
         love.graphics.drawq(image, quad, x, y)
@@ -51,7 +51,8 @@ end
 
 function Character:mousepressed (x, y, button, map)
     if not self.canDrag then
-      temp = Vector2:new(x-map.position.x-projection.vx.x,y-map.position.y)
+      temp =
+Vector2:new(x/map.scale-map.position.x-projection.vx.x*map.scale,y/map.scale-map.position.y)
       temp2 = projection.screenToWorld(temp)
       self.goal = Vector2:new(temp2.x, temp2.z)
       self:gotoState('MoveToPosition')
