@@ -24,7 +24,7 @@ Character.QUADS = {
 
 Character.canDrag = false;
 
-function Character:initialize ()
+function Character:initialize (x0, y0)
     self.image = "rectprism"
     self.size = {width=51, height=77}
     local w = love.graphics.getWidth()

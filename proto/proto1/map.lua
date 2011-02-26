@@ -59,7 +59,7 @@ function Map:initialize ()
 	self.selectedTile = {x=1, y=1}
 end
 
-function Map:addCharacter(character, x0, y0)
+function Map:addCharacter(character)
 	self.character = character
 end
 
