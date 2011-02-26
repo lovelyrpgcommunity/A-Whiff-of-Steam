@@ -27,9 +27,9 @@ Character.canDrag = false;
 function Character:initialize ()
     self.image = "rectprism"
     self.size = {width=51, height=77}
-    self.position = Vector2:new(10.5, 10.5)
+    self.position = Vector2:new(10, 10)
     self.velocity = Vector2:new(0, 0)
-    self.bounds = Rect:new(0, 0, 21, 21)
+    self.bounds = Rect:new(0, 0, 21-1, 21-1)
     self.direction = "sw"
 end
 
@@ -40,7 +40,7 @@ function Character:draw (map)
     love.graphics.scale(self.scale)
     local coords = map.position + projection.worldToScreen({x=self.position.x,y=0,z=self.position.y})
     local x = math.floor(coords.x)
-    local y = math.floor(coords.y)
+    local y = math.floor(coords.y-128+projection.vz.y-projection.vx.y)
     if quads then
         local quad = quads[self.direction]
         love.graphics.drawq(image, quad, x, y)
@@ -84,45 +84,32 @@ local function getOrientation(vec)
 end
 
 function Base:update (dt, map)
-    -- set the direction
+    -- adjust speed...
+    local speed = Map.WALK_SPEED
+    if love.keyboard.isDown("lctrl") then
+        speed = Map.SNEAK_SPEED
+    elseif love.keyboard.isDown("lshift") then
+        speed = Map.RUN_SPEED
+    end
+    self.velocity = self.velocity * speed
+
+    -- do not move outside of map...
+    local temp = self.position + self.velocity
+    local b = self.bounds
+    if temp.x < b.position.x or temp.x > b.width then
+        self.velocity.x = 0
+    end
+    if temp.y < b.position.y or temp.y > b.height then
+        self.velocity.y = 0
+    end
+   
+    -- finally determine direction...
     if math.abs(self.velocity.x)+math.abs(self.velocity.y)>0 then
         self.direction = getOrientation(self.velocity)
     end
-    
-    local temp = self.velocity
-    local p = self.position + temp
-    local s = self.scale
-    local b = self.bounds
-    local bp = b.position
-    if p.x < b.position.x or p.x > b.width then
-        -- Move the map along the x axis instead
-        map.velocity.x = -temp.x
-        if self.goal then
-            self.goal.x = self.goal.x - temp.x
-        end
-        temp.x = 0
-    end
-    if p.y < b.position.y or p.y > b.height then
-        -- Move the map along the y axis instead
-        map.velocity.y = -temp.y
-        if self.goal then
-            self.goal.y = self.goal.y - temp.y
-        end
-        temp.y = 0
-    end
-    
-    if not temp:isZero() then
-        -- Get the rate of movement
-        local speed = Map.WALK_SPEED
-        if love.keyboard.isDown("lctrl") then
-            speed = Map.SNEAK_SPEED
-        elseif love.keyboard.isDown("lshift") then
-            speed = Map.RUN_SPEED
-        end
-        temp = temp * speed
-        self.position = self.position + temp
-        temp:zero()
-    end
+
+    --- and position.
+    self.position = self.position + self.velocity
 end
 
 --------------------------------------------------------------------------------
