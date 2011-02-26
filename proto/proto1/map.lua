@@ -59,7 +59,11 @@ function Map:initialize ()
 	self.selectedTile = {x=1, y=1}
 end
 
-function Map:update (dt, character)
+function Map:addCharacter(character, x0, y0)
+	self.character = character
+end
+
+function Map:update (dt)
 	-- Update the map position
 	if self.canDrag and self.mdp then
 		local mx, my = love.mouse.getPosition()
@@ -80,6 +84,7 @@ function Map:update (dt, character)
 		self.position = self.position + self.velocity
 		self.velocity:zero()
 	end
+	self.character:update(dt, self)
 end
 
 function Map:draw ()
@@ -149,6 +154,7 @@ function Map:draw ()
 		love.graphics.printf(string.format("Scale: %s%%", math.floor(100*self.scale)), 10, 25,
 			love.graphics.getWidth()-20, "right")
 	end
+	self.character:draw(self)
 end
 
 function Map:tileIsInView (tx, ty)
@@ -223,6 +229,7 @@ function Map:mousepressed (x, y, button)
 			end
 		end
 	end
+	self.character:mousepressed(x, y, button)
 end
 
 function Map:mousereleased (x, y, button)
@@ -294,6 +301,7 @@ function Map:keypressed (key, unicode)
 			end
 		end
 	end
+	self.character:keypressed (key, unicode)
 end
 
 function Map:keyreleased (key)
@@ -301,5 +309,6 @@ function Map:keyreleased (key)
 		self.canDrag = false
 		self.mdp = nil
 	end
+	self.character:keyreleased (key)
 end
 
