@@ -4,7 +4,7 @@ require("character")
 function love.load (args)
 	title = love.graphics.getCaption()
 	map = Map:new()
-	character = Character:new(10.5,10.5) -- map is 21x21 in world coords
+	character = Character:new()
 	map:addCharacter(character)
 	character:gotoState('ArrowKeysMovement')
 end

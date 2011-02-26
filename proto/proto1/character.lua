@@ -24,14 +24,12 @@ Character.QUADS = {
 
 Character.canDrag = false;
 
-function Character:initialize (x0, y0)
+function Character:initialize ()
     self.image = "rectprism"
     self.size = {width=51, height=77}
-    local w = love.graphics.getWidth()
-    local h = love.graphics.getHeight()
-    self.position = Vector2:new(w/2-self.size.width/2, h/2-self.size.height/2)
+    self.position = Vector2:new(10.5, 10.5)
     self.velocity = Vector2:new(0, 0)
-    self.bounds = Rect:new(200, 200, w-400, h-400)
+    self.bounds = Rect:new(0, 0, 21, 21)
     self.direction = "sw"
 end
 
@@ -40,8 +38,9 @@ function Character:draw (map)
     local quads = Character.QUADS[self.image]
     love.graphics.push()
     love.graphics.scale(self.scale)
-    local x = math.floor(self.position.x)
-    local y = math.floor(self.position.y)
+    local coords = map.position + projection.worldToScreen({x=self.position.x,y=0,z=self.position.y})
+    local x = math.floor(coords.x)
+    local y = math.floor(coords.y)
     if quads then
         local quad = quads[self.direction]
         love.graphics.drawq(image, quad, x, y)
@@ -90,10 +89,8 @@ function Base:update (dt, map)
         self.direction = getOrientation(self.velocity)
     end
     
-    local coords = projection.worldToScreen({x=self.velocity.x,y=0,z=self.velocity.y})
-    local temp = Vector2:new(coords.x,coords.y)
-
-    local p = self.position + Vector2:new(self.size.width/2, self.size.height/2) + temp
+    local temp = self.velocity
+    local p = self.position + temp
     local s = self.scale
     local b = self.bounds
     local bp = b.position/s
