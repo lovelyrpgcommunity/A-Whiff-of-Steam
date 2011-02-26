@@ -50,13 +50,15 @@ function Character:draw (map)
 end
 
 function Character:mousepressed (x, y, button, map)
-    if not self.canDrag then
-      temp =
-Vector2:new(x/map.scale-map.position.x-projection.vx.x*map.scale,y/map.scale-map.position.y)
-      temp2 = projection.screenToWorld(temp)
-      self.goal = Vector2:new(temp2.x, temp2.z)
-      self:gotoState('MoveToPosition')
-    end
+	if not self.canDrag then
+		local temp = Vector2:new(x/map.scale-map.position.x-projection.vx.x*map.scale,y/map.scale-map.position.y)
+		local temp2 = projection.screenToWorld(temp)
+		self.goal = Vector2:new(temp2.x, temp2.z)
+		if not self.bounds:intersectsWithPoint(self.goal) then
+			print("TODO: project goal to map edge")
+		end
+		self:gotoState('MoveToPosition')
+	end
 end
 
 function Character:keyreleased (key)
