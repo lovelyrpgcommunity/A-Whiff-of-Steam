@@ -35,7 +35,7 @@ function Character:initialize ()
     self.direction = "sw"
 end
 
-function Character:draw ()
+function Character:draw (map)
     local image = Character.IMAGES[self.image]
     local quads = Character.QUADS[self.image]
     love.graphics.push()

@@ -16,7 +16,7 @@ end
 function love.draw ()
 	love.graphics.setCaption(title .. " (fps " .. love.timer.getFPS() .. ")")
 	map:draw()
-	character:draw()
+	character:draw(map) -- temporary solution to access map.position
 end
 
 function love.mousepressed (x, y, button)
