@@ -54,9 +54,9 @@ function Character:draw (view)
 	local p = projection.worldToView2(self.position,view)-CHARACTER_SHIFT*view.scale
 	if quads then
 		local quad = quads[self.direction]
-		love.graphics.drawq(image, quad, p.x, p.y)
+		love.graphics.drawq(image, quad, math.floor(p.x), math.floor(p.y))
 	else
-		love.graphics.draw(image, p.x, p.y)
+		love.graphics.draw(image, math.floor(p.x), math.floor(p.y))
 	end
 	love.graphics.pop()
 end
