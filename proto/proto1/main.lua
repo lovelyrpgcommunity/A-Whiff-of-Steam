@@ -1,12 +1,11 @@
 require("map")
 require("character")
 
+local map
+
 function love.load (args)
 	title = love.graphics.getCaption()
 	map = Map:new()
-	character = Character:new()
-	map:addCharacter(character)
-	character:gotoState('ArrowKeysMovement')
 end
 
 function love.update (dt)

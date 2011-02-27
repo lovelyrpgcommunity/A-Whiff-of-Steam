@@ -30,8 +30,10 @@ Map.TILES = {
 
 Map.TILE_WIDTH = projection.vz.x+projection.vx.x
 Map.TILE_HEIGHT = projection.vz.y-projection.vx.y
-Map.TILE_CENTRE_X = (projection.vx.x+projection.vz.x)/2
-Map.TILE_CENTRE_Y = (projection.vx.y+projection.vz.y)/2
+Map.TILE_CENTRE = Vector2:new(
+	(projection.vx.x+projection.vz.x)/2,
+	(projection.vx.y+projection.vz.y)/2
+)
 Map.MAX_SCALE = 2.0
 Map.MIN_SCALE = 0.1
 Map.WALK_SPEED = 1
@@ -51,19 +53,46 @@ Map.IMAGES = {
 
 function Map:initialize ()
 	self.view = {}
-	self.size = {width=21, length=21}
-	self.view.position = Vector2:new(-350, 350)
+	self.view.position = Vector2:new(0,0)
+	self.view.scale = 1
+	self.size = {width=#Map.TILES[1], length=#Map.TILES}
+	self:lookAt3(self.size.width/2,self.size.length/2)
 	self.velocity = Vector2:new(0, 0)
 	self.displayControls = true
 	self.editorEnabled = false
 	self.canDrag = false
 	self.mdp = nil -- mouse down position
-	self.view.scale = 1
-	self.selectedTile = {x=1, y=1}
+	self.selectedTile = {
+		x=math.floor(self.size.width/2)+1,
+		y=math.floor(self.size.length/2)+1
+	}
+	self.character = Character:new()
+	self.character:gotoState('ArrowKeysMovement')
 end
 
-function Map:addCharacter(character)
-	self.character = character
+function Map:lookAt(w)
+	local v = projection.worldToView(w, self.view)
+	local centre = Vector2:new(
+		love.graphics.getWidth()/2,
+		love.graphics.getHeight()/2
+	)
+	self.view.position=self.view.position+centre-v
+end
+
+function Map:lookAt2(d, level)
+	self:lookAt({x=d.x,y=level or 0, z=d.y})
+end
+
+function Map:lookAt3(x, y, level)
+	self:lookAt({x=x, y=level or 0, z=y})
+end
+
+function Map:lookingAt(level)
+	local centre = Vector2:new(
+		love.graphics.getWidth()/2,
+		love.graphics.getHeight()/2
+	)
+	return projection.viewToWorld(centre,self.view,level)
 end
 
 function Map:update (dt)

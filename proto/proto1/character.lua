@@ -41,10 +41,7 @@ function Character:initialize ()
 	self.direction = "sw"
 end
 
-local CHARACTER_SHIFT = Vector2:new(
-	Map.TILE_CENTRE_X,
-	IMAGE_HEIGHT-projection.vz.y+Map.TILE_CENTRE_Y
-)
+local CHARACTER_SHIFT = Vector2:new(0,IMAGE_HEIGHT-projection.vz.y)+Map.TILE_CENTRE
 
 function Character:draw (view)
 	local image = Character.IMAGES[self.image]
