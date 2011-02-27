@@ -101,3 +101,9 @@ function Vector2:min (min)
 		self.y = self.y * min
 	end
 end
+
+function Vector2:clamp (rect)
+	self.x = math.clamp(self.x, rect.position.x, rect.position.x+rect.width)
+	self.y = math.clamp(self.y, rect.position.y, rect.position.y+rect.height)
+end
+
