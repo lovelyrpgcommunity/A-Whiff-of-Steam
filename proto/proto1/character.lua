@@ -10,25 +10,34 @@ Character.IMAGES = {
 }
 
 local IMAGE_HEIGHT = 128
+local IMAGE_WIDTH  = 64
+
+local function createQuad(i)
+	return love.graphics.newQuad(IMAGE_WIDTH*i,0,IMAGE_WIDTH,IMAGE_HEIGHT,IMAGE_WIDTH*8,IMAGE_HEIGHT)
+end
 
 Character.QUADS = {
     rectprism = {
-        se = love.graphics.newQuad(0, 0, 64, 128, 512, 128),
-        ne = love.graphics.newQuad(64, 0, 64, 128, 512, 128),
-        nw = love.graphics.newQuad(128, 0, 64, 128, 512, 128),
-        sw = love.graphics.newQuad(192, 0, 64, 128, 512, 128),
-        s = love.graphics.newQuad(256, 0, 64, 128, 512, 128),
-        e = love.graphics.newQuad(320, 0, 64, 128, 512, 128),
-        n = love.graphics.newQuad(384, 0, 64, 128, 512, 128),
-        w = love.graphics.newQuad(448, 0, 64, 128, 512, 128),
+	se = createQuad(0),
+	ne = createQuad(1),
+	nw = createQuad(2),
+	sw = createQuad(3),
+	s  = createQuad(4),
+	e  = createQuad(5),
+	n  = createQuad(6),
+	w  = createQuad(7),
     }
 }
 
 function Character:initialize ()
+    local x0 = 0
+    local y0 = 0
+    local x1 = #Map.TILES[1]
+    local y1 = #Map.TILES
     self.image = "rectprism"
-    self.position = Vector2:new(21/2, 21/2)
+    self.position = Vector2:new(x1/2, y1/2)
     self.velocity = Vector2:new(0, 0)
-    self.bounds = Rect:new(0+0.5, 0+0.5, 21-0.5, 21-0.5)
+    self.bounds = Rect:new(x0+0.5, y0+0.5, x1-0.5, y1-0.5)
     self.direction = "sw"
 end
 
