@@ -41,22 +41,22 @@ function Character:initialize ()
 	self.direction = "sw"
 end
 
-local SHIFT_X = Map.TILE_CENTRE_X
-local SHIFT_Y = IMAGE_HEIGHT-projection.vz.y+Map.TILE_CENTRE_Y
+local CHARACTER_SHIFT = Vector2:new(
+	Map.TILE_CENTRE_X,
+	IMAGE_HEIGHT-projection.vz.y+Map.TILE_CENTRE_Y
+)
 
 function Character:draw (view)
 	local image = Character.IMAGES[self.image]
 	local quads = Character.QUADS[self.image]
 	love.graphics.push()
 	love.graphics.scale(view.scale)
-	local temp = projection.worldToView2(self.position, view)
-	local x = math.floor(temp.x-SHIFT_X*view.scale)
-	local y = math.floor(temp.y-SHIFT_Y*view.scale)
+	local p = projection.worldToView2(self.position,view)-CHARACTER_SHIFT*view.scale
 	if quads then
 		local quad = quads[self.direction]
-		love.graphics.drawq(image, quad, x, y)
+		love.graphics.drawq(image, quad, p.x, p.y)
 	else
-		love.graphics.draw(image, x, y)
+		love.graphics.draw(image, p.x, p.y)
 	end
 	love.graphics.pop()
 end
@@ -81,7 +81,12 @@ local function getOrientation(vec)
 end
 
 function Base:update (dt)
-	-- adjust speed...
+	-- First determine desired direction...
+	if math.abs(self.velocity.x)+math.abs(self.velocity.y)>0 then
+		self.direction = getOrientation(self.velocity)
+	end
+
+	-- then adjust speed...
 	local speed = Map.WALK_SPEED
 	if love.keyboard.isDown("lctrl") then
 		speed = Map.SNEAK_SPEED
@@ -102,13 +107,11 @@ function Base:update (dt)
 		if self.goal then self.goal.y = self.position.y end
 	end
 
-	-- finally determine direction...
+	-- finally, update direction and postion if we move.
 	if math.abs(self.velocity.x)+math.abs(self.velocity.y)>0 then
 		self.direction = getOrientation(self.velocity)
+		self.position = self.position + self.velocity
 	end
-
-	--- and position.
-	self.position = self.position + self.velocity
 end
 
 --------------------------------------------------------------------------------
