@@ -42,7 +42,7 @@ function Character:initialize ()
 end
 
 local SHIFT_X = Map.TILE_CENTRE_X
-local SHIFT_Y = IMAGE_HEIGHT-Map.TILE_HEIGHT+Map.TILE_CENTRE_Y
+local SHIFT_Y = IMAGE_HEIGHT-projection.vz.y+Map.TILE_CENTRE_Y
 
 function Character:draw (map)
     local image = Character.IMAGES[self.image]

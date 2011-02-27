@@ -187,7 +187,7 @@ end
 
 function Map:tileToCoords (tx, ty)
     local temp = self.position + projection.vx*(tx-1) + projection.vz*(ty-1)
-  	return math.floor(temp.x), math.floor(temp.y)
+  	return math.floor(temp.x), math.floor(temp.y+projection.vx.y)
 end
 
 -- This is inefficient.
