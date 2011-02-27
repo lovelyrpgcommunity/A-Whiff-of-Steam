@@ -50,14 +50,15 @@ Map.IMAGES = {
 }
 
 function Map:initialize ()
+	self.view = {}
 	self.size = {width=21, length=21}
-	self.position = Vector2:new(-350, 350)
+	self.view.position = Vector2:new(-350, 350)
 	self.velocity = Vector2:new(0, 0)
 	self.displayControls = true
 	self.editorEnabled = false
 	self.canDrag = false
 	self.mdp = nil -- mouse down position
-	self.scale = 1
+	self.view.scale = 1
 	self.selectedTile = {x=1, y=1}
 end
 
@@ -70,7 +71,7 @@ function Map:update (dt)
 	if self.canDrag and self.mdp then
 		local mx, my = love.mouse.getPosition()
 		local mp = Vector2:new(mx, my)
-		self.position = self.position - ((self.mdp - mp) / self.scale)
+		self.view.position = self.view.position - ((self.mdp - mp) / self.view.scale)
 		self.mdp = mp	
 	end
 	
@@ -83,7 +84,7 @@ function Map:update (dt)
 			speed = Map.RUN_SPEED
 		end
 		self.velocity = self.velocity * speed
-		self.position = self.position + self.velocity
+		self.view.position = self.view.position + self.velocity
 		self.velocity:zero()
 	end
 	if not self.editorEnabled then
@@ -93,7 +94,7 @@ end
 
 function Map:draw ()
 	love.graphics.push()
-	love.graphics.scale(self.scale)
+	love.graphics.scale(self.view.scale)
 	local mx, my = love.mouse.getPosition()
 	for i = 1,self.size.width do
 		for j = 1,self.size.length do
@@ -155,16 +156,16 @@ function Map:draw ()
 			love.graphics.print("Scale: -/+",15,125)
 		end	
 
-		love.graphics.printf(string.format("Scale: %s%%", math.floor(100*self.scale)), 10, 25,
+		love.graphics.printf(string.format("Scale: %s%%", math.floor(100*self.view.scale)), 10, 25,
 			love.graphics.getWidth()-20, "right")
 	end
 	if not self.editorEnabled then
-		self.character:draw(self)
+		self.character:draw(self.view)
 	end
 end
 
 function Map:tileIsInView (tx, ty)
-	local s = self.scale
+	local s = self.view.scale
 	local t = Map.TILE_WIDTH
 	local tw = Map.TILE_WIDTH
 	local th = Map.TILE_HEIGHT
@@ -186,7 +187,7 @@ function Map:isSelectedTile (x, y, checkEditorEnabled)
 end
 
 function Map:tileToCoords (tx, ty)
-    local temp = self.position + projection.vx*(tx-1) + projection.vz*(ty-1)
+    local temp = self.view.position + projection.vx*(tx-1) + projection.vz*(ty-1)
   	return math.floor(temp.x), math.floor(temp.y+projection.vx.y)
 end
 
@@ -203,7 +204,7 @@ end
 
 -- This function is gross. Gotta find a cleaner way of doing this.
 function Map:coordsIntersectWithTile (px, py, cx, cy)
-	local s = self.scale
+	local s = self.view.scale
 	cx = cx / s
 	cy = cy / s
 	local t = projection.vx
@@ -236,7 +237,7 @@ function Map:mousepressed (x, y, button)
 		end
 	end
 	if not self.editorEnabled and not self.canDrag then
-		self.character:mousepressed(x, y, button, self)
+		self.character:mousepressed(x, y, button, self.view)
 	end
 end
 
@@ -252,12 +253,12 @@ function Map:keypressed (key, unicode)
 	elseif key == "e" then
 		self.editorEnabled = not self.editorEnabled
 	elseif key == "=" then
-		if self.scale <= (Map.MAX_SCALE - 0.09) then
-			self.scale = self.scale + 0.1
+		if self.view.scale <= (Map.MAX_SCALE - 0.09) then
+			self.view.scale = self.view.scale + 0.1
 		end
 	elseif key == "-" then
-		if self.scale >= (Map.MIN_SCALE + 0.09) then
-			self.scale = self.scale - 0.1
+		if self.view.scale >= (Map.MIN_SCALE + 0.09) then
+			self.view.scale = self.view.scale - 0.1
 		end
 	elseif key == " " then
 		self.canDrag = true
@@ -283,29 +284,29 @@ function Map:keypressed (key, unicode)
 
 	if self.editorEnabled then
 		local t = self.selectedTile
-		local m = self.position
+		local m = self.view.position
 		if key == "up" then
 			if t.y-1 >= 1 then
 				self.selectedTile.y = t.y - 1
-        self.position = self.position + projection.vz
+        self.view.position = self.view.position + projection.vz
 			end
 		end
 		if key == "down" then
 			if t.y+1 <= self.size.length then
 				self.selectedTile.y = t.y + 1
-        self.position = self.position - projection.vz
+        self.view.position = self.view.position - projection.vz
 			end
 		end
 		if key == "left" then
 			if t.x-1 >= 1 then
 				self.selectedTile.x = t.x - 1
-        self.position = self.position + projection.vx
+        self.view.position = self.view.position + projection.vx
 			end
 		end
 		if key == "right" then
 			if t.x+1 <= self.size.width then
 				self.selectedTile.x = t.x + 1
-        self.position = self.position - projection.vx
+        self.view.position = self.view.position - projection.vx
 			end
 		end
 	end
