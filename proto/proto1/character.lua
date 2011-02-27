@@ -33,11 +33,8 @@ function Character:initialize ()
     self.canDrag = false;
 end
 
-local TILE_CENTRE_X = (projection.vx.x+projection.vz.x)/2
-local TILE_CENTRE_Y = (projection.vx.y+projection.vz.y)/2
-local TILE_HEIGHT   = projection.vz.y-projection.vx.y
-local SHIFT_X = TILE_CENTRE_X
-local SHIFT_Y = IMAGE_HEIGHT-TILE_HEIGHT+TILE_CENTRE_Y
+local SHIFT_X = Map.TILE_CENTRE_X
+local SHIFT_Y = IMAGE_HEIGHT-Map.TILE_HEIGHT+Map.TILE_CENTRE_Y
 
 function Character:draw (map)
     local image = Character.IMAGES[self.image]
@@ -58,9 +55,11 @@ end
 
 function Character:mousepressed (x, y, button, map)
 	if not self.canDrag then
-		local temp = Vector2:new(x/map.scale-map.position.x-projection.vx.x*map.scale,y/map.scale-map.position.y)
-		local temp2 = projection.screenToWorld(temp)
-		self.goal = Vector2:new(temp2.x, temp2.z)
+		local temp = projection.screenToWorld({
+			x=x/map.scale-map.position.x,
+			y=y/map.scale-map.position.y
+		})
+		self.goal = Vector2:new(temp.x, temp.z)
 		self.goal:clamp(self.bounds)
 		self:gotoState('MoveToPosition')
 	end
@@ -129,26 +128,28 @@ local ArrowKeysMovement = Character:addState('ArrowKeysMovement', Base)
 function ArrowKeysMovement:update (dt, map)
     if map.editorEnabled then return end
 
-    local move = map.BASE_SPEED * dt
+    -- determine direction in world coordinates
     local d = Vector2:new(0,0)
     if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
-        d.y = -move
+        d.y = -1
     end
     if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
-        d.y = move
+        d.y = 1
     end
     if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
-        d.x = -move
+        d.x = -1
     end
     if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
-        d.x = move
+        d.x = 1
     end
     
-    if d.y ~= 0 and d.x ~= 0 then
-        d.x = d.x/math.sqrt(2)
-        d.y = d.y/math.sqrt(2)
-    end
+    -- scale diagonals to make movement speed natual
+    d:normalize()
 
+    -- adjust speed movement
+    d=d*map.BASE_SPEED*dt
+
+    -- rotate to alight movement to screen
     self.velocity.x = (d.x-d.y)/math.sqrt(2)
     self.velocity.y = (d.x+d.y)/math.sqrt(2)
 
@@ -165,18 +166,23 @@ function MoveToPosition:update (dt, map)
     if not self.goal then return end
     
     local p = self.position
-    local test = Rect:new(p.x-0.05, p.y-0.05, 0.1, 0.1)
+    local testWidth = 0.1
+    local test = Rect:new(p.x-testWidth/2, p.y-testWidth/2, testWidth, testWidth)
     
     if test:intersectsWithPoint(self.goal) then
 	self.goal = nil
         self:gotoState('ArrowKeysMovement')
     else
-        local d = (self.goal - self.position)
+        -- determine desired move
+        local d = self.goal - self.position
+
+        -- round angle to align with character images and normalize
         local angle = math.floor(8+math.atan2(d.x,d.y)/math.pi*4)%8*math.pi/4
         d = Vector2:new(math.sin(angle),math.cos(angle))
-        d=d*map.BASE_SPEED*dt
-        self.velocity=d
-        Base.update(self, dt, map)
+
+        -- adjust speed
+        self.velocity=d*map.BASE_SPEED*dt
     end
+    Base.update(self, dt, map)
 end
 

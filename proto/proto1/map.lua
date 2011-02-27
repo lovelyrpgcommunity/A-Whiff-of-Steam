@@ -30,6 +30,8 @@ Map.TILES = {
 
 Map.TILE_WIDTH = projection.vz.x+projection.vx.x
 Map.TILE_HEIGHT = projection.vz.y-projection.vx.y
+Map.TILE_CENTRE_X = (projection.vx.x+projection.vz.x)/2
+Map.TILE_CENTRE_Y = (projection.vx.y+projection.vz.y)/2
 Map.MAX_SCALE = 2.0
 Map.MIN_SCALE = 0.1
 Map.WALK_SPEED = 1
