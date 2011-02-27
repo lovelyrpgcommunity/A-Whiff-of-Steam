@@ -48,7 +48,7 @@ function Character:draw (view)
 	local quads = Character.QUADS[self.image]
 	love.graphics.push()
 	love.graphics.scale(view.scale)
-	local p = projection.worldToView2(self.position,view)-CHARACTER_SHIFT*view.scale
+	local p = projection.worldToView2(self.position,view)/view.scale-CHARACTER_SHIFT
 	if quads then
 		local quad = quads[self.direction]
 		love.graphics.drawq(image, quad, math.floor(p.x), math.floor(p.y))

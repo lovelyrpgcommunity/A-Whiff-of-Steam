@@ -100,11 +100,12 @@ function Map:update (dt)
 	if self.canDrag and self.mdp then
 		local mx, my = love.mouse.getPosition()
 		local mp = Vector2:new(mx, my)
-		self.view.position = self.view.position - ((self.mdp - mp) / self.view.scale)
-		self.mdp = mp	
+		self.view.position = self.view.position + mp - self.mdp
+		self.mdp = mp
 	end
-	
-	if not self.velocity:isZero() then
+
+-- currently broken (map moving code)
+--[[	if not self.velocity:isZero() then
 		-- Get the rate of movement
 		local speed = Map.WALK_SPEED
 		if love.keyboard.isDown("lctrl") then
@@ -115,7 +116,7 @@ function Map:update (dt)
 		self.velocity = self.velocity * speed
 		self.view.position = self.view.position + self.velocity
 		self.velocity:zero()
-	end
+	end]]
 	if not self.editorEnabled then
 		self.character:update(dt)
 	end
@@ -216,7 +217,7 @@ function Map:isSelectedTile (x, y, checkEditorEnabled)
 end
 
 function Map:tileToCoords (tx, ty)
-    local temp = self.view.position + projection.vx*(tx-1) + projection.vz*(ty-1)
+	local temp = projection.worldToView3(tx-1,ty-1,self.view)/self.view.scale
   	return math.floor(temp.x), math.floor(temp.y+projection.vx.y)
 end
 
@@ -276,6 +277,8 @@ function Map:mousereleased (x, y, button)
 	end
 end
 
+local lastView = nil
+
 function Map:keypressed (key, unicode)
 	if key == "h" then
 		self.displayControls = not self.displayControls
@@ -283,32 +286,18 @@ function Map:keypressed (key, unicode)
 		self.editorEnabled = not self.editorEnabled
 	elseif key == "=" then
 		if self.view.scale <= (Map.MAX_SCALE - 0.09) then
+			local temp = self:lookingAt()
 			self.view.scale = self.view.scale + 0.1
+			self:lookAt(temp)
 		end
 	elseif key == "-" then
 		if self.view.scale >= (Map.MIN_SCALE + 0.09) then
+			local temp = self:lookingAt()
 			self.view.scale = self.view.scale - 0.1
+			self:lookAt(temp)
 		end
 	elseif key == " " then
 		self.canDrag = true
-	elseif self.selectedTile and Map.TILES then
-		local s = self.selectedTile
-		if key == "`" or key == "delete" then
-			love.event.push("kp", "backspace")
-		elseif key == "backspace" then
-			if Map.TILES[s.x] then
-				Map.TILES[s.x][s.y] = nil
-			end
-		else
-			local byte = string.byte(key)
-			if byte >= 48 and byte <= 57 then
-				local tile = byte - 48 -- to get numbers 0-9
-				if Map.IMAGES.tiles[tile] and Map.TILES then
-					if not Map.TILES[s.x] then Map.TILES[s.x] = {} end
-					Map.TILES[s.x][s.y] = tile
-				end
-			end
-		end
 	end
 
 	if self.editorEnabled then
@@ -317,25 +306,43 @@ function Map:keypressed (key, unicode)
 		if key == "up" then
 			if t.y-1 >= 1 then
 				self.selectedTile.y = t.y - 1
-        self.view.position = self.view.position + projection.vz
+				self.view.position = self.view.position + projection.vz
 			end
 		end
 		if key == "down" then
 			if t.y+1 <= self.size.length then
 				self.selectedTile.y = t.y + 1
-        self.view.position = self.view.position - projection.vz
+				self.view.position = self.view.position - projection.vz
 			end
 		end
 		if key == "left" then
 			if t.x-1 >= 1 then
 				self.selectedTile.x = t.x - 1
-        self.view.position = self.view.position + projection.vx
+				self.view.position = self.view.position + projection.vx
 			end
 		end
 		if key == "right" then
 			if t.x+1 <= self.size.width then
 				self.selectedTile.x = t.x + 1
-        self.view.position = self.view.position - projection.vx
+				self.view.position = self.view.position - projection.vx
+			end
+		end
+		if t and Map.TILES then
+			if key == "`" or key == "delete" then
+				love.event.push("kp", "backspace")
+			elseif key == "backspace" then
+				if Map.TILES[t.x] then
+					Map.TILES[t.x][t.y] = nil
+				end
+			else
+				local byte = string.byte(key)
+				if byte >= 48 and byte <= 57 then
+					local tile = byte - 48 -- to get numbers 0-9
+					if Map.IMAGES.tiles[tile] and Map.TILES then
+						if not Map.TILES[t.x] then Map.TILES[t.x] = {} end
+						Map.TILES[t.x][t.y] = tile
+					end
+				end
 			end
 		end
 	end
