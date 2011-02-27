@@ -30,7 +30,6 @@ function Character:initialize ()
     self.velocity = Vector2:new(0, 0)
     self.bounds = Rect:new(0+0.5, 0+0.5, 21-0.5, 21-0.5)
     self.direction = "sw"
-    self.canDrag = false;
 end
 
 local SHIFT_X = Map.TILE_CENTRE_X
@@ -54,27 +53,13 @@ function Character:draw (map)
 end
 
 function Character:mousepressed (x, y, button, map)
-	if not self.canDrag then
-		local temp = projection.screenToWorld({
-			x=x/map.scale-map.position.x,
-			y=y/map.scale-map.position.y
-		})
-		self.goal = Vector2:new(temp.x, temp.z)
-		self.goal:clamp(self.bounds)
-		self:gotoState('MoveToPosition')
-	end
-end
-
-function Character:keyreleased (key)
-	if key == " " then
-		self.canDrag = false
-	end
-end
-
-function Character:keypressed (key, unicode)
-	if key == " " then
-		self.canDrag = true
-	end
+	local temp = projection.screenToWorld({
+		x=x/map.scale-map.position.x,
+		y=y/map.scale-map.position.y
+	})
+	self.goal = Vector2:new(temp.x, temp.z)
+	self.goal:clamp(self.bounds)
+	self:gotoState('MoveToPosition')
 end
 
 --------------------------------------------------------------------------------

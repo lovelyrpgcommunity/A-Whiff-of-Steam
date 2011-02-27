@@ -235,7 +235,7 @@ function Map:mousepressed (x, y, button)
 			end
 		end
 	end
-	if not self.editorEnabled then
+	if not self.editorEnabled and not self.canDrag then
 		self.character:mousepressed(x, y, button, self)
 	end
 end
@@ -309,7 +309,6 @@ function Map:keypressed (key, unicode)
 			end
 		end
 	end
-	self.character:keypressed (key, unicode)
 end
 
 function Map:keyreleased (key)
@@ -317,6 +316,5 @@ function Map:keyreleased (key)
 		self.canDrag = false
 		self.mdp = nil
 	end
-	self.character:keyreleased (key)
 end
 
