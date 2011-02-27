@@ -94,16 +94,56 @@ projection.vz = vz
 
 -- World coordinates to screen coordinates conversion
 function projection.worldToScreen(w)
-    local x = vx.x*w.x            + vz.x*w.z
-    local y = vx.y*w.x + vy.y*w.y + vz.y*w.z
-    return {x=x,y=y}
+	local x = vx.x*w.x            + vz.x*w.z
+	local y = vx.y*w.x + vy.y*w.y + vz.y*w.z
+	return Vector2:new(x,y)
 end
 
 -- Screen coordinates to world coordinates conversion assuming y
 function projection.screenToWorld(s, y)
-    local y = y or 0
-    local x = (vz.y*s.x - vz.x*(s.y-vy.y*y))/perpdot
-    local z = (s.x - vx.x*x)/vz.x
-    return {x=x,y=y,z=z}
+	local y = y or 0
+	local x = (vz.y*s.x - vz.x*(s.y-vy.y*y))/perpdot
+	local z = (s.x - vx.x*x)/vz.x
+	return {x=x,y=y,z=z}
+end
+
+-- World coordinates to screen coordinates conversion, using 2D vector
+function projection.worldToScreen2(p, level)
+	return projection.worldToScreen({x=p.x, y=level or 0, z=p.y})
+end
+
+-- World coordinates to screen coordinates conversion, using separate values
+function projection.worldToScreen3(x, z, level)
+	return projection.worldToScreen({x=x, y=level or 0, z=z})
+end
+
+-- Screen coordinates to world coordinates conversion assuming y, using separate values
+function projection.screenToWorld2(x, y, level)
+	return projection.screenToWorld({x=x,y=y}, level)
+end
+
+-- World coordinates to view coordinates conversion
+function projection.worldToView(w, view)
+	return view.position+projection.worldToScreen(w)*view.scale
+end
+
+-- World coordinates to view coordinates conversion, using 2D vector
+function projection.worldToView2(p, view, level)
+	return view.position+projection.worldToScreen2(p,level)*view.scale
+end
+
+-- World coordinates to view coordinates conversion, using separate values
+function projection.worldToView3(x, y, view, level)
+	return view.position+projection.worldToScreen3(x,y,level)*view.scale
+end
+
+-- View coordinates to world coordinates conversion
+function projection.viewToWorld(v, view, y)
+	return projection.screenToWorld((v-view.position)/view.scale,y)
+end
+
+-- View coordinates to world coordinates conversion, using separate values
+function projection.viewToWorld2(x, y, view, level)
+	return projection.screenToWorld((Vector2:new(x,y)-view.position)/view.scale,level)
 end
 
