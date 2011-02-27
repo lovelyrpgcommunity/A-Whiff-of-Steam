@@ -89,7 +89,7 @@ local function getOrientation(vec)
     return dict[dir]
 end
 
-function Base:update (dt, map)
+function Base:update (dt)
     -- adjust speed...
     local speed = Map.WALK_SPEED
     if love.keyboard.isDown("lctrl") then
@@ -125,9 +125,7 @@ end
 
 local ArrowKeysMovement = Character:addState('ArrowKeysMovement', Base)
 
-function ArrowKeysMovement:update (dt, map)
-    if map.editorEnabled then return end
-
+function ArrowKeysMovement:update (dt)
     -- determine direction in world coordinates
     local d = Vector2:new(0,0)
     if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
@@ -147,13 +145,13 @@ function ArrowKeysMovement:update (dt, map)
     d:normalize()
 
     -- adjust speed movement
-    d=d*map.BASE_SPEED*dt
+    d=d*Map.BASE_SPEED*dt
 
     -- rotate to alight movement to screen
     self.velocity.x = (d.x-d.y)/math.sqrt(2)
     self.velocity.y = (d.x+d.y)/math.sqrt(2)
 
-    Base.update(self, dt, map)
+    Base.update(self, dt)
 end
 
 --------------------------------------------------------------------------------
@@ -161,8 +159,7 @@ end
 
 local MoveToPosition = Character:addState('MoveToPosition', Base)
 
-function MoveToPosition:update (dt, map)
-    if map.editorEnabled then return end
+function MoveToPosition:update (dt)
     if not self.goal then return end
     
     local p = self.position
@@ -181,8 +178,8 @@ function MoveToPosition:update (dt, map)
         d = Vector2:new(math.sin(angle),math.cos(angle))
 
         -- adjust speed
-        self.velocity=d*map.BASE_SPEED*dt
+        self.velocity=d*Map.BASE_SPEED*dt
     end
-    Base.update(self, dt, map)
+    Base.update(self, dt)
 end
 

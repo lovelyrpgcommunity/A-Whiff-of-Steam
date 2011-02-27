@@ -86,7 +86,9 @@ function Map:update (dt)
 		self.position = self.position + self.velocity
 		self.velocity:zero()
 	end
-	self.character:update(dt, self)
+	if not self.editorEnabled then
+		self.character:update(dt)
+	end
 end
 
 function Map:draw ()
@@ -156,7 +158,9 @@ function Map:draw ()
 		love.graphics.printf(string.format("Scale: %s%%", math.floor(100*self.scale)), 10, 25,
 			love.graphics.getWidth()-20, "right")
 	end
-	self.character:draw(self)
+	if not self.editorEnabled then
+		self.character:draw(self)
+	end
 end
 
 function Map:tileIsInView (tx, ty)
@@ -231,7 +235,9 @@ function Map:mousepressed (x, y, button)
 			end
 		end
 	end
-	self.character:mousepressed(x, y, button, self)
+	if not self.editorEnabled then
+		self.character:mousepressed(x, y, button, self)
+	end
 end
 
 function Map:mousereleased (x, y, button)
