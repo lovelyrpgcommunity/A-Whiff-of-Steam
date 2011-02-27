@@ -22,14 +22,13 @@ Character.QUADS = {
     }
 }
 
-Character.canDrag = false;
-
 function Character:initialize ()
     self.image = "rectprism"
     self.position = Vector2:new(10, 10)
     self.velocity = Vector2:new(0, 0)
     self.bounds = Rect:new(0, 0, 21-1, 21-1)
     self.direction = "sw"
+    self.canDrag = false;
 end
 
 function Character:draw (map)
