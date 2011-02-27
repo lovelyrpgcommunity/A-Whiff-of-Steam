@@ -9,6 +9,8 @@ Character.IMAGES = {
     rectprism = love.graphics.newImage("resources/images/characters/rectprism.png"),
 }
 
+local IMAGE_HEIGHT = 128
+
 Character.QUADS = {
     rectprism = {
         se = love.graphics.newQuad(0, 0, 64, 128, 512, 128),
@@ -24,12 +26,18 @@ Character.QUADS = {
 
 function Character:initialize ()
     self.image = "rectprism"
-    self.position = Vector2:new(10, 10)
+    self.position = Vector2:new(21/2, 21/2)
     self.velocity = Vector2:new(0, 0)
-    self.bounds = Rect:new(0, 0, 21-1, 21-1)
+    self.bounds = Rect:new(0+0.5, 0+0.5, 21-0.5, 21-0.5)
     self.direction = "sw"
     self.canDrag = false;
 end
+
+local TILE_CENTRE_X = (projection.vx.x+projection.vz.x)/2
+local TILE_CENTRE_Y = (projection.vx.y+projection.vz.y)/2
+local TILE_HEIGHT   = projection.vz.y-projection.vx.y
+local SHIFT_X = TILE_CENTRE_X
+local SHIFT_Y = IMAGE_HEIGHT-TILE_HEIGHT+TILE_CENTRE_Y
 
 function Character:draw (map)
     local image = Character.IMAGES[self.image]
@@ -37,8 +45,8 @@ function Character:draw (map)
     love.graphics.push()
     love.graphics.scale(map.scale)
     local temp = projection.worldToScreen({x=self.position.x,y=0,z=self.position.y})
-    local x = math.floor(map.position.x+temp.x*map.scale)
-    local y = math.floor(map.position.y+(temp.y-128+projection.vz.y-projection.vx.y)*map.scale)
+    local x = math.floor(map.position.x+(temp.x-SHIFT_X)*map.scale)
+    local y = math.floor(map.position.y+(temp.y-SHIFT_Y)*map.scale)
     if quads then
         local quad = quads[self.direction]
         love.graphics.drawq(image, quad, x, y)
