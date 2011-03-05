@@ -202,14 +202,11 @@ function Map:draw ()
 end
 
 function Map:tileIsInView (tx, ty)
-	local s = self.view.scale
-	local t = Map.TILE_WIDTH
-	local tw = Map.TILE_WIDTH
-	local th = Map.TILE_HEIGHT
-	local cx, cy = self:tileToCoords(tx, ty)
-	local w = love.graphics.getWidth()
-	local h = love.graphics.getHeight()
-	return cx >= (-t-tw) and cy >= (-t-th) and cx <= ((w/s)+t) and cy <= ((h/s)+t)
+	local temp = projection.worldToView3(tx-1,ty-1,self.view)
+	return 	temp.x+Map.TILE_WIDTH*self.view.scale>0 and
+		temp.x<love.graphics.getWidth() and
+		temp.y+projection.vx.y*self.view.scale<love.graphics.getHeight() and
+		temp.y+projection.vz.y*self.view.scale>0
 end
 
 function Map:isSelectedTile (x, y, checkEditorEnabled)
@@ -256,12 +253,21 @@ function Map:mousereleased (x, y, button)
 	end
 end
 
-local lastView = nil
+local lastView = {}
 
 function Map:keypressed (key, unicode)
 	if key == "h" then
 		self.displayControls = not self.displayControls
 	elseif key == "e" then
+		if self.editorEnabled then
+			self.view.position.x = lastView.x
+			self.view.position.y = lastView.y
+			self.view.scale = lastView.scale
+		else
+			lastView.x = self.view.position.x
+			lastView.y = self.view.position.y
+			lastView.scale = self.view.scale
+		end
 		self.editorEnabled = not self.editorEnabled
 	elseif key == "=" then
 		if self.view.scale <= (Map.MAX_SCALE - 0.09) then
