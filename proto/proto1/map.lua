@@ -168,31 +168,31 @@ function Map:draw ()
 	if self.displayControls then
 		if self.editorEnabled then
 			love.graphics.setColor(255,255,255,80)
-			love.graphics.rectangle("fill",10,10,200,252)
+			love.graphics.rectangle("fill",10,10,250,252)
 			love.graphics.setColor(255,255,255,255)
 			love.graphics.print("Toggle help: h",15,25)
 			love.graphics.print("Toggle editor: e",15,45)
-			love.graphics.print("Move: w/a/s/d or arrows",15,65)
+			love.graphics.print("Move: w/a/s/d, arrows or LMB click",15,65)
 			love.graphics.print("Run: lshift + move",15,85)
 			love.graphics.print("Sneak: lctrl + move",15,105)
-			love.graphics.print("Map drag: space + drag",15,125)
+			love.graphics.print("Move map: space + LMB drag",15,125)
 			love.graphics.print("Scale: -/+",15,145)
 			love.graphics.print("Edit: click a tile and press",15,165)
-			love.graphics.print("   `/backspace - remove tile",15,185)
+			love.graphics.print("   backspace, delete or ` - remove tile",15,185)
 			love.graphics.print("   1 - Concrete",15,200)
 			love.graphics.print("   2 - Grass (dark)",15,215)
 			love.graphics.print("   3 - Grass (light)",15,230)
 			love.graphics.print("   4 - Grass (fall)",15,245)
 		else
 			love.graphics.setColor(255,255,255,80)
-			love.graphics.rectangle("fill",10,10,200,157)
+			love.graphics.rectangle("fill",10,10,250,157)
 			love.graphics.setColor(255,255,255,255)
 			love.graphics.print("Toggle help: h",15,25)
 			love.graphics.print("Toggle editor: e",15,45)
-			love.graphics.print("Move: w/a/s/d or arrows",15,65)
+			love.graphics.print("Move: w/a/s/d, arrows or LMB click",15,65)
 			love.graphics.print("Run: lshift + move",15,85)
 			love.graphics.print("Sneak: lctrl + move",15,105)
-			love.graphics.print("Map drag: space + drag",15,125)
+			love.graphics.print("Move map: space + LMB drag",15,125)
 			love.graphics.print("Scale: -/+",15,145)
 		end	
 
@@ -293,25 +293,25 @@ function Map:keypressed (key, unicode)
 	if self.editorEnabled then
 		local t = self.selectedTile
 		local m = self.view.position
-		if key == "up" then
+		if key == "up" or key=="w" then
 			if t.y-1 >= 1 then
 				self.selectedTile.y = t.y - 1
 				self.view.position = self.view.position + projection.vz
 			end
 		end
-		if key == "down" then
+		if key == "down" or key=="s" then
 			if t.y+1 <= self.size.length then
 				self.selectedTile.y = t.y + 1
 				self.view.position = self.view.position - projection.vz
 			end
 		end
-		if key == "left" then
+		if key == "left" or key=="a" then
 			if t.x-1 >= 1 then
 				self.selectedTile.x = t.x - 1
 				self.view.position = self.view.position + projection.vx
 			end
 		end
-		if key == "right" then
+		if key == "right" or key=="d" then
 			if t.x+1 <= self.size.width then
 				self.selectedTile.x = t.x + 1
 				self.view.position = self.view.position - projection.vx

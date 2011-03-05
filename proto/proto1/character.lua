@@ -161,7 +161,7 @@ function MoveToPosition:update (dt)
 	if not self.goal then return end
 
 	local p = self.position
-	local testWidth = 0.1
+	local testWidth = 0.1*self.speed
 	local test = Rect:new(p.x-testWidth/2, p.y-testWidth/2, testWidth, testWidth)
 
 	if test:intersectsWithPoint(self.goal) then
