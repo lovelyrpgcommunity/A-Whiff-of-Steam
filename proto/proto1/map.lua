@@ -95,6 +95,8 @@ function Map:lookingAt(level)
 	return projection.viewToWorld(centre,self.view,level)
 end
 
+local border = 100
+
 function Map:update (dt)
 	-- Update the map position
 	if self.canDrag and self.mdp then
@@ -104,19 +106,24 @@ function Map:update (dt)
 		self.mdp = mp
 	end
 
--- currently broken (map moving code)
---[[	if not self.velocity:isZero() then
-		-- Get the rate of movement
-		local speed = Map.WALK_SPEED
-		if love.keyboard.isDown("lctrl") then
-			speed = Map.SNEAK_SPEED
-		elseif love.keyboard.isDown("lshift") then
-			speed = Map.RUN_SPEED
+	local temp = projection.worldToView2(self.character.position, self.view)
+	if temp.x<border then
+		self.view.position.x = self.view.position.x + border - temp.x
+	else
+		local right = love.graphics.getWidth()-border
+		if temp.x>right then
+			self.view.position.x = self.view.position.x +right-temp.x
 		end
-		self.velocity = self.velocity * speed
-		self.view.position = self.view.position + self.velocity
-		self.velocity:zero()
-	end]]
+	end
+	if temp.y<border then
+		self.view.position.y = self.view.position.y + border - temp.y
+	else
+		local bottom = love.graphics.getHeight()-border
+		if temp.y>bottom then
+			self.view.position.y = self.view.position.y + bottom - temp.y
+		end
+	end
+
 	if not self.editorEnabled then
 		self.character:update(dt)
 	end
