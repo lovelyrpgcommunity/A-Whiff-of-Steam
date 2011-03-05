@@ -162,6 +162,7 @@ function Map:draw ()
 			end
 		end
 	end
+	love.graphics.setColor(255,255,255)
 	love.graphics.pop()
 	
 	if self.displayControls then
