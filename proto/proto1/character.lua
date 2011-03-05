@@ -39,6 +39,7 @@ function Character:initialize ()
 	self.velocity = Vector2:new(0, 0)
 	self.bounds = Rect:new(x0+0.5, y0+0.5, x1-0.5, y1-0.5)
 	self.direction = "sw"
+	self.speed = Map.WALK_SPEED
 end
 
 local CHARACTER_SHIFT = Vector2:new(0,IMAGE_HEIGHT-projection.vz.y)+Map.TILE_CENTRE
@@ -59,6 +60,12 @@ function Character:draw (view)
 end
 
 function Character:mousepressed (x, y, button, view)
+	self.speed = Map.WALK_SPEED
+	if love.keyboard.isDown("lctrl") then
+		self.speed = Map.SNEAK_SPEED
+	elseif love.keyboard.isDown("lshift") then
+		self.speed = Map.RUN_SPEED
+	end
 	local temp = projection.viewToWorld2(x, y, view)
 	self.goal = Vector2:new(temp.x, temp.z)
 	self.goal:clamp(self.bounds)
@@ -82,15 +89,6 @@ function Base:update (dt)
 	if math.abs(self.velocity.x)+math.abs(self.velocity.y)>0 then
 		self.direction = getOrientation(self.velocity)
 	end
-
-	-- then adjust speed...
-	local speed = Map.WALK_SPEED
-	if love.keyboard.isDown("lctrl") then
-		speed = Map.SNEAK_SPEED
-	elseif love.keyboard.isDown("lshift") then
-		speed = Map.RUN_SPEED
-	end
-	self.velocity = self.velocity * speed
 
 	-- do not move outside of map...
 	local temp = self.position + self.velocity
@@ -142,6 +140,15 @@ function ArrowKeysMovement:update (dt)
 	self.velocity.x = (d.x-d.y)/math.sqrt(2)
 	self.velocity.y = (d.x+d.y)/math.sqrt(2)
 
+	-- then adjust speed
+	local speed = Map.WALK_SPEED
+	if love.keyboard.isDown("lctrl") then
+		speed = Map.SNEAK_SPEED
+	elseif love.keyboard.isDown("lshift") then
+		speed = Map.RUN_SPEED
+	end
+	self.velocity = self.velocity * speed
+
 	Base.update(self, dt)
 end
 
@@ -169,7 +176,7 @@ function MoveToPosition:update (dt)
 		d = Vector2:new(math.sin(angle),math.cos(angle))
 
 		-- adjust speed
-		self.velocity=d*Map.BASE_SPEED*dt
+		self.velocity=d*Map.BASE_SPEED*dt*self.speed
 	end
 	Base.update(self, dt)
 end
