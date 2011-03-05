@@ -40,6 +40,7 @@ Map.WALK_SPEED = 1
 Map.RUN_SPEED = 2
 Map.SNEAK_SPEED = 0.5
 Map.BASE_SPEED = 3 -- m/s in world coords
+Map.BORDER = 100
 
 Map.IMAGES = {
 	gridsquare = love.graphics.newImage("resources/mapeditor/gridsquare.png"),
@@ -95,8 +96,6 @@ function Map:lookingAt(level)
 	return projection.viewToWorld(centre,self.view,level)
 end
 
-local border = 100
-
 function Map:update (dt)
 	-- Update the map position
 	if self.canDrag and self.mdp then
@@ -106,25 +105,25 @@ function Map:update (dt)
 		self.mdp = mp
 	end
 
-	local temp = projection.worldToView2(self.character.position, self.view)
-	if temp.x<border then
-		self.view.position.x = self.view.position.x + border - temp.x
-	else
-		local right = love.graphics.getWidth()-border
-		if temp.x>right then
-			self.view.position.x = self.view.position.x +right-temp.x
-		end
-	end
-	if temp.y<border then
-		self.view.position.y = self.view.position.y + border - temp.y
-	else
-		local bottom = love.graphics.getHeight()-border
-		if temp.y>bottom then
-			self.view.position.y = self.view.position.y + bottom - temp.y
-		end
-	end
-
 	if not self.editorEnabled then
+		local temp = projection.worldToView2(self.character.position, self.view)
+		if temp.x<Map.BORDER then
+			self.view.position.x = self.view.position.x + Map.BORDER - temp.x
+		else
+			local right = love.graphics.getWidth()-Map.BORDER
+			if temp.x>right then
+				self.view.position.x = self.view.position.x + right - temp.x
+			end
+		end
+		if temp.y<Map.BORDER then
+			self.view.position.y = self.view.position.y + Map.BORDER - temp.y
+		else
+			local bottom = love.graphics.getHeight()-Map.BORDER
+			if temp.y>bottom then
+				self.view.position.y = self.view.position.y + bottom - temp.y
+			end
+		end
+
 		self.character:update(dt)
 	end
 end
