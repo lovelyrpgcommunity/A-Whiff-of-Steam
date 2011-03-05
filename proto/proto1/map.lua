@@ -133,11 +133,12 @@ function Map:draw ()
 	love.graphics.push()
 	love.graphics.scale(self.view.scale)
 	local mx, my = love.mouse.getPosition()
+	local mouseover = self:coordsToTile(mx,my)
 	for i = 1,self.size.width do
 		for j = 1,self.size.length do
 			if self:tileIsInView(i, j) then
 				if self.editorEnabled and not self.canDrag and
-				   self:coordsIntersectWithTile(i, j, mx, my) then
+				   mouseover.x==i and mouseover.y==j then
 					if self:isSelectedTile(i, j) then
 						love.graphics.setColor(230,210,255)
 					else
@@ -228,37 +229,9 @@ function Map:tileToCoords (tx, ty)
   	return math.floor(temp.x), math.floor(temp.y+projection.vx.y)
 end
 
--- This is inefficient.
 function Map:coordsToTile (cx, cy)
-	for i = 1,self.size.width do
-		for j = 1,self.size.length do
-			if self:coordsIntersectWithTile(i, j, cx, cy) then
-				return {x=i, y=j}
-			end
-		end
-	end
-end
-
--- This function is gross. Gotta find a cleaner way of doing this.
-function Map:coordsIntersectWithTile (px, py, cx, cy)
-	local s = self.view.scale
-	cx = cx / s
-	cy = cy / s
-	local t = projection.vx
-	local r = projection.vx+projection.vz
-	local b = projection.vz
-	local acx, acy = self:tileToCoords(px, py) -- actual coords x and y of the tile
-	local at = Vector2:new(acx+t.x, acy+t.y) -- actual mid point
-	local ar = Vector2:new(acx+r.x, acy+r.y) -- actual mid point
-	local ab = Vector2:new(acx+b.x, acy+b.y) -- actual mid point
-	local al = Vector2:new(acx, acy) -- actual mid point
-	local m = Vector2:new(cx, cy) -- the position to test
-	local vt = at - m
-	local vr = ar - m
-	local vb = ab - m
-	local vl = al - m
-	local total = vt:angle(vr) + vr:angle(vb) + vb:angle(vl) + vl:angle(vt) -- the total of the angles
-	return math.abs(360-total) < .1
+	local temp = projection.viewToWorld2(cx,cy,self.view)
+	return {x=math.ceil(temp.x),y=math.ceil(temp.z)}
 end
 
 function Map:mousepressed (x, y, button)
