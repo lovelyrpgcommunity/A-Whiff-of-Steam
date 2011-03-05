@@ -271,15 +271,17 @@ function Map:keypressed (key, unicode)
 		self.editorEnabled = not self.editorEnabled
 	elseif key == "=" then
 		if self.view.scale <= (Map.MAX_SCALE - 0.09) then
-			local temp = self:lookingAt()
+			local before = projection.worldToView2(self.character.position,self.view)
 			self.view.scale = self.view.scale + 0.1
-			self:lookAt(temp)
+			local after = projection.worldToView2(self.character.position,self.view)
+			self.view.position = self.view.position+before-after
 		end
 	elseif key == "-" then
 		if self.view.scale >= (Map.MIN_SCALE + 0.09) then
-			local temp = self:lookingAt()
+			local before = projection.worldToView2(self.character.position,self.view)
 			self.view.scale = self.view.scale - 0.1
-			self:lookAt(temp)
+			local after = projection.worldToView2(self.character.position,self.view)
+			self.view.position = self.view.position+before-after
 		end
 	elseif key == " " then
 		self.canDrag = true
