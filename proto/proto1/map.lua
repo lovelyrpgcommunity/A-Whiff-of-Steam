@@ -52,6 +52,12 @@ Map.IMAGES = {
 	}
 }
 
+Map.IMAGES.gridsquare:setFilter("nearest","nearest")
+Map.IMAGES.tiles[1]:setFilter("nearest","nearest")
+Map.IMAGES.tiles[2]:setFilter("nearest","nearest")
+Map.IMAGES.tiles[3]:setFilter("nearest","nearest")
+Map.IMAGES.tiles[4]:setFilter("nearest","nearest")
+
 function Map:initialize ()
 	self.view = {}
 	self.view.position = Vector2:new(0,0)
