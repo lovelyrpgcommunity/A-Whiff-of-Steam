@@ -67,6 +67,7 @@ function Map:initialize ()
 	self.velocity = Vector2:new(0, 0)
 	self.displayControls = true
 	self.editorEnabled = false
+	self.editorSelecting = false
 	self.canDrag = false
 	self.mdp = nil -- mouse down position
 	self.selectedTiles = {}
@@ -109,7 +110,21 @@ function Map:update (dt)
 		self.mdp = mp
 	end
 
-	if not self.editorEnabled then
+	if self.editorEnabled then
+		if self.editorSelecting then
+			local x, y = love.mouse.getPosition()
+			local t = self:coordsToTile(x, y)
+			if t.x>=1 and t.y>=1 and t.x<=self.size.width and t.y<=self.size.length then
+				if self.selectedTiles[t.x] and self.selectedTiles[t.x][t.y] then
+					self.selectedTilesCount = self.selectedTilesCount-1
+				else
+					self.selectedTiles[t.x]=self.selectedTiles[t.x] or {}
+					self.selectedTiles[t.x][t.y]=true
+					self.selectedTilesCount = self.selectedTilesCount+1
+				end
+			end
+		end
+	else
 		local temp = projection.worldToView2(self.character.position, self.view)
 		if temp.x<Map.BORDER then
 			self.view.position.x = self.view.position.x + Map.BORDER - temp.x
@@ -239,7 +254,6 @@ end
 function Map:mousepressed (x, y, button)
 	if button == "l" then
 		if self.canDrag then
-			local x, y = love.mouse.getPosition()
 			self.mdp = Vector2:new(x, y)
 		elseif self.editorEnabled then
 			local t = self:coordsToTile(x, y)
@@ -248,6 +262,7 @@ function Map:mousepressed (x, y, button)
 					self.selectedTiles[t.x][t.y]=nil
 					self.selectedTilesCount = self.selectedTilesCount-1
 				else
+					self.editorSelecting = true
 					self.selectedTiles[t.x]=self.selectedTiles[t.x] or {}
 					self.selectedTiles[t.x][t.y]=true
 					self.selectedTilesCount = self.selectedTilesCount+1
@@ -264,6 +279,7 @@ function Map:mousereleased (x, y, button)
 	if self.canDrag and button == "l" then
 		self.mdp = nil
 	end
+	self.editorSelecting = false
 end
 
 local lastView = {}
