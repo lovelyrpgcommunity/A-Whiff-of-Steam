@@ -63,10 +63,8 @@ function Map:initialize ()
 	self.editorEnabled = false
 	self.canDrag = false
 	self.mdp = nil -- mouse down position
-	self.selectedTile = {
-		x=math.floor(self.size.width/2)+1,
-		y=math.floor(self.size.length/2)+1
-	}
+	self.selectedTiles = {}
+	self.selectedTilesCount = 0
 	self.character = Character:new()
 	self.character:gotoState('ArrowKeysMovement')
 end
@@ -168,7 +166,7 @@ function Map:draw ()
 	if self.displayControls then
 		if self.editorEnabled then
 			love.graphics.setColor(255,255,255,80)
-			love.graphics.rectangle("fill",10,10,250,252)
+			love.graphics.rectangle("fill",10,10,250,267)
 			love.graphics.setColor(255,255,255,255)
 			love.graphics.print("Toggle help: h",15,25)
 			love.graphics.print("Toggle editor: e",15,45)
@@ -183,6 +181,7 @@ function Map:draw ()
 			love.graphics.print("   2 - Grass (dark)",15,215)
 			love.graphics.print("   3 - Grass (light)",15,230)
 			love.graphics.print("   4 - Grass (fall)",15,245)
+			love.graphics.print("   c - Clear selection",15,260)
 		else
 			love.graphics.setColor(255,255,255,80)
 			love.graphics.rectangle("fill",10,10,250,157)
@@ -218,9 +217,7 @@ function Map:isSelectedTile (x, y, checkEditorEnabled)
 		return false
 	end
 	return (checkEditorEnabled and self.editorEnabled or true) and
-		   self.selectedTile and
-		   self.selectedTile.x == x and
-		   self.selectedTile.y == y
+		self.selectedTiles[x] and self.selectedTiles[x][y]
 end
 
 function Map:tileToCoords (tx, ty)
@@ -230,7 +227,7 @@ end
 
 function Map:coordsToTile (cx, cy)
 	local temp = projection.viewToWorld2(cx,cy,self.view)
-	return {x=math.ceil(temp.x),y=math.ceil(temp.z)}
+	return {x=1+math.floor(temp.x),y=1+math.floor(temp.z)}
 end
 
 function Map:mousepressed (x, y, button)
@@ -240,8 +237,15 @@ function Map:mousepressed (x, y, button)
 			self.mdp = Vector2:new(x, y)
 		elseif self.editorEnabled then
 			local t = self:coordsToTile(x, y)
-			if t then
-				self.selectedTile = t
+			if t.x>=1 and t.y>=1 and t.x<=self.size.width and t.y<=self.size.length then
+				if self.selectedTiles[t.x] and self.selectedTiles[t.x][t.y] then
+					self.selectedTiles[t.x][t.y]=nil
+					self.selectedTilesCount = self.selectedTilesCount-1
+				else
+					self.selectedTiles[t.x]=self.selectedTiles[t.x] or {}
+					self.selectedTiles[t.x][t.y]=true
+					self.selectedTilesCount = self.selectedTilesCount+1
+				end
 			end
 		end
 	end
@@ -286,51 +290,78 @@ function Map:keypressed (key, unicode)
 			local after = projection.worldToView2(self.character.position,self.view)
 			self.view.position = self.view.position+before-after
 		end
+	elseif key == "c" then
+		self.selectedTiles = {}
+		self.selectedTilesCount=0
 	elseif key == " " then
 		self.canDrag = true
 	end
 
 	if self.editorEnabled then
-		local t = self.selectedTile
-		local m = self.view.position
-		if key == "up" or key=="w" then
-			if t.y-1 >= 1 then
-				self.selectedTile.y = t.y - 1
-				self.view.position = self.view.position + projection.vz
-			end
-		end
-		if key == "down" or key=="s" then
-			if t.y+1 <= self.size.length then
-				self.selectedTile.y = t.y + 1
-				self.view.position = self.view.position - projection.vz
-			end
-		end
-		if key == "left" or key=="a" then
-			if t.x-1 >= 1 then
-				self.selectedTile.x = t.x - 1
-				self.view.position = self.view.position + projection.vx
-			end
-		end
-		if key == "right" or key=="d" then
-			if t.x+1 <= self.size.width then
-				self.selectedTile.x = t.x + 1
-				self.view.position = self.view.position - projection.vx
-			end
+		local t = self.selectedTiles
+		if self.selectedTilesCount==1 then
+			local moved = false
+			for x,ylist in pairs(t) do if not moved then
+				for y,selected in pairs(ylist) do if not moved then
+					if selected then moved=true
+						if key == "up" or key=="w" then
+							if y-1 >= 1 then
+								self.selectedTiles[x][y]=nil
+								self.selectedTiles[x][y-1]=true
+								self.view.position = self.view.position + projection.vz
+							end
+						end
+						if key == "down" or key=="s" then
+							if y+1 <= self.size.length then
+								self.selectedTiles[x][y]=nil
+								self.selectedTiles[x][y+1]=true
+								self.view.position = self.view.position - projection.vz
+							end
+						end
+						if key == "left" or key=="a" then
+							if x-1 >= 1 then
+								self.selectedTiles[x][y]=nil
+								self.selectedTiles[x-1]={}
+								self.selectedTiles[x-1][y]=true
+								self.view.position = self.view.position + projection.vx
+							end
+						end
+						if key == "right" or key=="d" then
+							if x+1 <= self.size.width then
+								self.selectedTiles[x][y]=nil
+								self.selectedTiles[x+1]={}
+								self.selectedTiles[x+1][y]=true
+								self.view.position = self.view.position - projection.vx
+							end
+						end
+					end
+				end end
+			end end
 		end
 		if t and Map.TILES then
 			if key == "`" or key == "delete" then
 				love.event.push("kp", "backspace")
 			elseif key == "backspace" then
-				if Map.TILES[t.x] then
-					Map.TILES[t.x][t.y] = nil
+				for x,ylist in pairs(t) do
+					for y,selected in pairs(ylist) do
+						if selected and Map.TILES[x] then
+							Map.TILES[x][y]=nil
+						end
+					end
 				end
 			else
 				local byte = string.byte(key)
 				if byte >= 48 and byte <= 57 then
 					local tile = byte - 48 -- to get numbers 0-9
 					if Map.IMAGES.tiles[tile] and Map.TILES then
-						if not Map.TILES[t.x] then Map.TILES[t.x] = {} end
-						Map.TILES[t.x][t.y] = tile
+						for x,ylist in pairs(t) do
+							for y,selected in pairs(ylist) do
+								if selected then
+									if not Map.TILES[x] then Map.TILES[x] = {} end
+									Map.TILES[x][y] = tile
+								end
+							end
+						end
 					end
 				end
 			end
