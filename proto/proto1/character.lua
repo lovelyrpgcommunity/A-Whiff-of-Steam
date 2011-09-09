@@ -6,28 +6,41 @@ Character = class("Character")
 Character:include(Stateful)
 
 Character.IMAGES = {
-	rectprism = love.graphics.newImage("resources/images/characters/rectprism.png"),
+	rectprism = love.graphics.newImage("resources/images/characters/hatter.png"),
 }
 
-local IMAGE_HEIGHT = 128
-local IMAGE_WIDTH  = 64
+local IMAGE_HEIGHT   = 128
+local IMAGE_WIDTH    = 64
+local FRAMES         = 13
+local FRAME_DURATION = 0.06
 
-local function createQuad(i)
-	return love.graphics.newQuad(IMAGE_WIDTH*i,0,IMAGE_WIDTH,IMAGE_HEIGHT,IMAGE_WIDTH*8,IMAGE_HEIGHT)
+local function createQuad(i,f)
+	return love.graphics.newQuad(IMAGE_WIDTH*i,IMAGE_HEIGHT*f,IMAGE_WIDTH,IMAGE_HEIGHT,IMAGE_WIDTH*FRAMES,IMAGE_HEIGHT*8)
 end
 
 Character.QUADS = {
 	rectprism = {
-		se = createQuad(0),
-		ne = createQuad(1),
-		nw = createQuad(2),
-		sw = createQuad(3),
-		s  = createQuad(4),
-		e  = createQuad(5),
-		n  = createQuad(6),
-		w  = createQuad(7),
+		se = {},
+		ne = {},
+		nw = {},
+		sw = {},
+		s  = {},
+		e  = {},
+		n  = {},
+		w  = {},
 	}
 }
+
+for i = 1,13 do
+	Character.QUADS.rectprism.se[i] = createQuad(i, 7)
+	Character.QUADS.rectprism.ne[i] = createQuad(i, 5)
+	Character.QUADS.rectprism.nw[i] = createQuad(i, 3)
+	Character.QUADS.rectprism.sw[i] = createQuad(i, 1)
+	Character.QUADS.rectprism.s[i]  = createQuad(i, 0)
+	Character.QUADS.rectprism.e[i]  = createQuad(i, 6)
+	Character.QUADS.rectprism.n[i]  = createQuad(i, 4)
+	Character.QUADS.rectprism.w[i]  = createQuad(i, 2)
+end
 
 function Character:initialize ()
 	local x0 = 0
@@ -40,6 +53,8 @@ function Character:initialize ()
 	self.bounds = Rect:new(x0+0.5, y0+0.5, x1-0.5, y1-0.5)
 	self.direction = "sw"
 	self.speed = Map.WALK_SPEED
+	self.frame = 1
+	self.next_frame = FRAME_DURATION
 end
 
 local CHARACTER_SHIFT = Vector2:new(0,IMAGE_HEIGHT-projection.vz.y)+Map.TILE_CENTRE
@@ -51,7 +66,7 @@ function Character:draw (view)
 	love.graphics.scale(view.scale)
 	local p = projection.worldToView2(self.position,view)/view.scale-CHARACTER_SHIFT
 	if quads then
-		local quad = quads[self.direction]
+		local quad = quads[self.direction][self.frame]
 		love.graphics.drawq(image, quad, math.floor(p.x), math.floor(p.y))
 	else
 		love.graphics.draw(image, math.floor(p.x), math.floor(p.y))
@@ -106,6 +121,18 @@ function Base:update (dt)
 	if math.abs(self.velocity.x)+math.abs(self.velocity.y)>0 then
 		self.direction = getOrientation(self.velocity)
 		self.position = self.position + self.velocity
+
+		self.next_frame = self.next_frame - dt
+		if self.next_frame < 0 then
+			self.frame = self.frame + 1
+			if self.frame == FRAMES then
+				self.frame = 1
+			end
+			self.next_frame = FRAME_DURATION
+		end
+	else
+		self.frame = 1
+		self.next_frame = FRAME_DURATION
 	end
 end
 
