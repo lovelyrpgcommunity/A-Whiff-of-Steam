@@ -44,57 +44,160 @@ Stateful = {}
 ------------------------------------
 -- PRIVATE ATTRIBUTES AND METHODS
 ------------------------------------
-local _stacks = setmetatable({}, {__mode = "k"})   -- weak table storing private state stacks
-
 -- helper function used to call state callbacks (enterState, exitState, etc)
-local _invokeCallback = function(self, state, callbackName, ... )
-  if state==nil then return end
+local function _invokeCallback(self, state, callbackName, ... )
+  if state == nil then return end
   local callback = state[callbackName]
   if(type(callback)=='function') then callback(self, ...) end
 end
 
--- gets creates the state stack of one instance
-local _getOrCreateStack=function(instance)
-  if _stacks[instance] == nil then
-    _stacks[instance] = {}
-  end
-  return _stacks[instance]
-end
-
 -- returns the instance's state with the given name. Errors if state not found
-local _getState=function(instance, stateName)
-  local state = instance.class.states[stateName]
+local function _getStateFromClass(self, stateName)
+  if stateName == nil then return nil end
+  local state = self.class.states[stateName]
   assert(state~=nil, "State '" .. tostring(stateName) .. "' not found")
   return state
+end
+
+-- looks for a state on the instance stack. Returns the state + position on the stack
+-- if stateName is nil, it returns the top of the stack + stackSize
+local function _getStateFromStack(self, stateName)
+  local stack = self._stateStack
+  local stackSize = #stack
+  if stateName then
+    local state
+    for i=1, stackSize do
+      state = stack[i]
+      if state.name == stateName then 
+        return state, i
+      end
+    end
+  end
+  return stack[stackSize], stackSize
+end
+
+local function _assertString(value, name)
+  assert(type(value)=='string', name .. " must be either a string")
+end
+
+local function _assertStringOrNil(value, name)
+  local tvalue = type(value)
+  assert(tvalue=='string' or tvalue=='nil', name .. " must be either a string or nil")
+end
+
+-- looks for a method "going up" on the stack
+local function _lookUpMethodstatefully(self, methodName)
+  local stack = rawget(self, '_stateStack') -- needs rawget here, else infinite loop with class methods
+  if stack then
+    for i = #stack,1,-1 do -- reversal loop
+      local method = stack[i][methodName]
+      if method ~= nil then return method end
+    end
+  end
+end
+
+-- makes instances to use the stack before "moving up" on the ladder
+local function _modifyClassDictionaryLookup(theClass)
+  local classDict = theClass.__classDict
+  local prevIndex = classDict.__index
+  local tpi = type(prevIndex)
+  classDict.__index = function(instance, methodName)
+    local method = _lookUpMethodstatefully(instance, methodName)
+    if method then return method end
+    if tpi=='function' then return prevIndex(instance, methodName) end
+    return prevIndex[methodName]
+  end
+end
+
+-- adds a _stateStack method to instances, before calling initialize
+local function _modifyClassAllocate(theClass)
+  local oldAllocate = theClass.allocate
+  function theClass.allocate(theClass, ...)
+    local instance = oldAllocate(theClass, ...)
+    instance._stateStack = {} -- adds a stateStack to all instances
+    return instance
+  end
 end
 
 -- Changes a class by:
 -- * adding a 'states' field to it
 -- * re-defining the class __index method so it looks on the state stack before 'going up'
-local function makeStateful(theClass)
-
-  -- add the states
+local function _modifyClass(theClass)
   theClass.states = {}
+  _modifyClassDictionaryLookup(theClass)
+  _modifyClassAllocate(theClass)
+end
 
-  -- modify the dictionary lookup
-  local classDict = theClass.__classDict
-  local prevIndex = classDict.__index
-  classDict.__index = function(instance, methodName)
-    -- look up on the stack to see if the method is re-defined on one state
-    local stack = _getOrCreateStack(instance)
-    for i = #stack,1,-1 do -- reversal loop
-      local method = stack[i][methodName]
-      if method ~= nil then return method end
+-- makes sure that the subclasses are stateful, and they inherit states
+local function _modifySubclassMethod(theClass)
+  local prevSubclass = theClass.subclass
+  theClass.subclass = function(aClass, name)
+    local theSubClass = prevSubclass(aClass, name)
+
+    _modifyClass(theSubClass)
+
+    -- the states of the subclass are subclasses of the superclass' states
+    for stateName,state in pairs(aClass.states) do
+      theSubClass:addState(stateName, state)
     end
-    --if not found on the state stack, look it up on the regular class dict
-    local tpi = type(prevIndex)
-    if tpi=='table' then
-      return prevIndex[methodName]
-    else
-      return prevIndex(instance, methodName)
-    end
+
+    return theSubClass
   end
+end
 
+-- re-define includes so it accepts 'stateful mixins'
+-- stateful mixins can add states to a class. They must have a 'states' field, with mixins inside them.
+-- for each key,value inside mixin.state:
+--   if the class has a state called 'key', make it implement value
+--   else create a new state called 'key' and make it implement value
+local function _modifyIncludeMethod(theClass)
+  local oldInclude = theClass.include
+  theClass.include = function(theClass, module, ...)
+    local states = module.states -- make sure that states are not overriden
+    module.states = nil          -- temporarily removing states from the module
+    oldInclude(theClass, module, ...)
+    if type(states)=="table" then
+      for stateName,moduleState in pairs(states) do 
+        local state = theClass.states[stateName]
+        if state == nil then state = theClass:addState(stateName) end
+        state:include(moduleState, ...)
+      end
+    end
+    module.states = states       -- add states back to module
+    return theClass
+  end
+end
+
+-- true if state is on the stack, false otherwise
+local function _inStack(self, stateName)
+  for i=1, #self._stateStack do
+    local state = self._stateStack[i]
+    if state.name == stateName then return true end
+  end
+  return false
+end
+
+-- the state at the top of the stack
+local function _getTopState(self)
+  return self._stateStack[#self._stateStack]
+end
+
+local function _setTopStateWithoutCallbacks(self, nextState)
+  local stackSize = #self._stateStack
+  local position = stackSize == 0 and 1 or stackSize
+  self._stateStack[position] = nextState
+end
+
+local function _setTopState(self, newStateName)
+  local prevState = _getTopState(self)
+
+  local prevStateName = prevState~=nil and prevState.name or nil
+  _invokeCallback(self, prevState, 'exitState', newStateName)
+
+  local nextState = _getStateFromClass(self, newStateName)
+  _setTopStateWithoutCallbacks(self, nextState)
+
+  _invokeCallback(self, nextState, 'enterState', prevStateName)
 end
 
 ------------------------------------
@@ -102,35 +205,7 @@ end
 ------------------------------------
 
 -- The State class; is the father of all State objects
-Stateful.State = class('Stateful.State', Object)
-
--- Extra parameter theRootClass is the class where the state is being added. It is used for method lookup
-function Stateful.State.subclass(theClass, name, theRootClass)
-  assert(type(name) == 'string', "Must provide a name for the new state")
-  assert(includes(Stateful, theRootClass), tostring(theRootClass) .. ' must include the Stateful mixin')
-
-  local theSubClass = Object.subclass(theClass, name)
-  theSubClass.subclass = theRootClass.State.subclass
-
-  -- Modify super so it points to :
-  --  a) the superState, if we still have 'States up' (parent is not State)
-  --  b) theRootClass's superclass if we have 'run out of states' (parent of this class is State)
-  local superDict = theClass.__classDict
-  if theClass == theRootClass.State then
-    superDict = theRootClass.superclass.__classDict
-  end
-  local mt = getmetatable(theSubClass)
-  mt.__newindex = function(_, methodName, method)
-    if type(method) == 'function' then
-      local fenv = getfenv(method)
-      local newenv = setmetatable( {super = superDict},  {__index = fenv, __newindex = fenv} )
-      setfenv( method, newenv )
-    end
-    rawset(theSubClass.__classDict, methodName, method)
-  end
-
-  return theSubClass
-end
+Stateful.State = class('Stateful.State')
 
 ------------------------------------
 -- INSTANCE METHODS
@@ -141,36 +216,16 @@ end
   If the "next" state exists and has a method called onExitState, it will be called, with the instance as a parameter.
   use gotoState(nil) for setting states to nothing
   This method invokes the exitState and enterState functions if they exist on the current state
-  Second parameter is optional. If true, the stack will be conserved. Otherwise, it will be popped.
+  Second parameter is optional. If true, the stack will be conserved (the top state will be replaced).
+  Otherwise, all the states on the stack will be popped (with the corresponding callbacks being executed).
 ]]
 function Stateful:gotoState(newStateName, keepStack)
-  local tnsn = type(newStateName)
-  assert(tnsn=='string' or tnsn=='nil', "newStateName must be either a string or nil")
-  -- If we're trying to go to a state in which we already are, return (do nothing)
-  local stack = _getOrCreateStack(self)
-  for _,state in ipairs(stack) do 
-    if(state.name == newStateName) then return end
-  end
+  _assertStringOrNil(newStateName, 'newStateName')
+  if(_inStack(self, newStateName)) then return end
 
-  local stackSize = #stack
-  local prevState = stack[stackSize] -- need this variable for the last call on this func
+  if not keepStack then self:popAllStates() end
 
-  -- Either empty completely the stack, or just call the exitstate callback on current state
-  if keepStack==true then
-    _invokeCallback(self, prevState, 'exitState', newStateName)
-  else
-    self:popAllStates()
-  end
-
-  if newStateName ~= nil then
-    local nextState = _getState(self, newStateName)
-
-    -- replace the top of the stack with the new state
-    stack[stackSize == 0 and 1 or stackSize] = nextState
-
-    -- Invoke enterState on the new state. 2nd parameter is the name of the previous state, or nil
-    _invokeCallback(self, nextState, 'enterState', prevState~=nil and prevState.name or nil)
-  end
+  _setTopState(self, newStateName)
 end
 
 --[[ Changes the current state, by pushing a new state on the stack.
@@ -180,23 +235,13 @@ end
   Invokes 'pushedState' and 'enterState' on the new state, if existing
 ]]
 function Stateful:pushState(newStateName)
-  assert(type(newStateName)=='string', "newStateName must be a string.")
+  _assertString(newStateName, 'newStateName')
+  if(_inStack(self, newStateName)) then return end
 
-  local nextState = _getState(self, newStateName)
+  _invokeCallback(self, _getTopState(self), 'pausedState')
 
-  -- If we attempt to push a state and the state is already in the pile then return (do nothing)
-  local stack = _getOrCreateStack(self)
-  for _,state in ipairs(stack) do
-    if state.name == newStateName then return end
-  end
-
-  -- Invoke pausedState on the previous state
-  _invokeCallback(self, stack[#stack], 'pausedState')
-
-  -- Do the push
-  table.insert(stack, nextState)
-
-  -- Invoke pushedState & enterState on the next state
+  local nextState = _getStateFromClass(self, newStateName)
+  table.insert(self._stateStack, nextState)
   _invokeCallback(self, nextState, 'pushedState')
   _invokeCallback(self, nextState, 'enterState')
 
@@ -210,38 +255,22 @@ end
    Returns the length of the state stack after the pop
 ]]
 function Stateful:popState(stateName)
-  local tsn = type(stateName)
-  assert(tsn=='string' or tsn=='nil', "stateName must be either a string or nil.")
+  _assertStringOrNil(stateName, 'stateName')
 
-  -- Calculate the position of the state to be removed
-  local stack, position = _getOrCreateStack(self), 0
-  local stackSize = #stack
-  if tsn == 'string' then
-    for i,state in ipairs(stack) do 
-      if state.name == stateName then
-        position = i
-        break
-      end
-    end
-  else
-    position = stackSize
-  end
+  local prevState, position = _getStateFromStack(self, stateName)
 
-  local prevState = stack[position]
-
-  if prevState~=nil then -- if a state to be removed is found (either the top or a named one)
-    -- Invoke exitstate & poppedState on the state being popped out
+  if prevState ~= nil then
     _invokeCallback(self, prevState, 'exitState')
     _invokeCallback(self, prevState, 'poppedState')
 
-    -- Remove the state from the stack
-    table.remove(stack, position)
+    table.remove(self._stateStack, position)
 
-    -- If the state on the top of the stack has been popped, invoke continuedState on the new top
-    if position == stackSize then _invokeCallback(self, stack[stackSize-1], 'continuedState') end
+    if position == #self._stateStack + 1 then
+      _invokeCallback(self, _getTopState(self), 'continuedState')
+    end
   end
 
-  return #stack
+  return #self._stateStack
 end
 
 --[[ Empties the state stack
@@ -257,25 +286,15 @@ end
   If testStack true, this method returns true if the state is on the stack instead
 ]]
 function Stateful:isInState(stateName, testStack)
-  local stack = _getOrCreateStack(self)
-
-  if testStack == true then
-    for _,state in ipairs(stack) do 
-      if state.name == stateName then return true end
-    end
-  else --testStack==false
-    local state = stack[#stack]
-    if state~=nil and state.name == stateName then return true end
-  end
-
+  local state = testStack and _getStateFromStack(self, stateName) or _getTopState(self)
+  if state~=nil and state.name == stateName then return true end
   return false
 end
 
 -- Returns the name of the state on top of the stack or nil if no state
 function Stateful:getCurrentStateName()
-  local stack = _getOrCreateStack(self)
-  local currState = stack[#stack]
-  return currState ~= nil and currState.name or nil
+  local state = _getTopState(self)
+  return state ~= nil and state.name or nil
 end
 
 ------------------------------------
@@ -290,9 +309,8 @@ function Stateful.addState(theClass, stateName, superState)
   assert(includes(Stateful, theClass), "Invalid class. Make sure you used class:addState instead of class.addState")
   assert(type(stateName)=="string", "stateName must be a string")
 
-  local prevState = rawget(theClass.states, stateName)
-
-  if prevState~=nil then return prevState end
+  local existingState = theClass.states[stateName]
+  if existingState then return existingState end
 
   -- states are just regular classes. If superState is nil, this uses State as superClass
   local superState = superState or theClass.State
@@ -307,52 +325,9 @@ end
 
 -- When the mixin is included by a class, modify it properly
 function Stateful:included(theClass)
-  -- do nothing if the mixin is already included
   if includes(Stateful, theClass) then return end
   
-  -- add states to theClass and use the state stack on its __index
-  makeStateful(theClass)
-
-  -- re-define subclass so it:
-  -- * makes sure that the subclasses are stateful
-  -- * subclasses must inherit states from superclasses
-  local prevSubclass = theClass.subclass
-  theClass.subclass = function(aClass, name)
-    local theSubClass = prevSubclass(aClass, name)
-
-    makeStateful(theSubClass)
-
-    -- the states of the subclass are subclasses of the superclass' states
-    for stateName,state in pairs(aClass.states) do
-      theSubClass:addState(stateName, state)
-    end
-
-    return theSubClass
-  end
-  
-  -- re-define includes so it accepts 'stateful mixins'
-  -- stateful mixins can add states to a class. They must have a 'states' field, with mixins inside them.
-  -- for each key,value inside mixin.state:
-  --   if the class has a state called 'key', make it implement value
-  --   else create a new state called 'key' and make it implement value
-  theClass.include = function(theClass, module, ...)
-    assert(includes(Stateful, theClass), "Use class:includes instead of class.includes")
-    assert(type(module)=='table', "module must be a table")
-    for methodName,method in pairs(module) do
-      if methodName ~="included" and methodName ~= "states" then
-        theClass[methodName] = method
-      end
-    end
-    if type(module.included)=="function" then module:included(theClass, ...) end
-    if type(module.states)=="table" then
-      for stateName,moduleState in pairs(module.states) do 
-        local state = theClass.states[stateName]
-        if state == nil then state = theClass:addState(stateName) end
-        state:include(moduleState, ...)
-      end
-    end
-    theClass.__modules[module] = module
-    return theClass
-  end
-
+  _modifyClass(theClass)
+  _modifySubclassMethod(theClass)
+  _modifyIncludeMethod(theClass)
 end
